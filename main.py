@@ -107,7 +107,7 @@ class ActionStartNode(Node):
 
 class MetaDataNode(Node):
 	name = "MetaData"
-	attributes = ("timestamp", "meta", "data", "info")
+	attributes = ("meta", "data", "info")
 
 	def __init__(self, timestamp, meta, data, info):
 		super().__init__(timestamp)
