@@ -42,10 +42,10 @@ def pretty_xml(xml):
 
 
 class Node:
-	attributes = ["timestamp"]
+	attributes = ["ts"]
 
-	def __init__(self, timestamp):
-		self.timestamp = timestamp
+	def __init__(self, ts):
+		self.ts = ts
 		self.nodes = []
 
 	def append(self, node):
@@ -70,8 +70,8 @@ class GameNode(Node):
 
 
 class EntityDefNode(Node):
-	def __init__(self, timestamp, id, cardID=None):
-		super().__init__(timestamp)
+	def __init__(self, ts, id, cardID=None):
+		super().__init__(ts)
 		self.id = id
 		self.cardID = cardID
 
@@ -98,10 +98,10 @@ class ShowEntityNode(EntityDefNode):
 
 class ActionStartNode(Node):
 	name = "Action"
-	attributes = ("timestamp", "entity", "type", "index", "target")
+	attributes = ("ts", "entity", "type", "index", "target")
 
-	def __init__(self, timestamp, entity, type, index, target):
-		super().__init__(timestamp)
+	def __init__(self, ts, entity, type, index, target):
+		super().__init__(ts)
 		self.entity = entity
 		self.type = type
 		self.index = index
@@ -112,8 +112,8 @@ class MetaDataNode(Node):
 	name = "MetaData"
 	attributes = ("meta", "data", "info")
 
-	def __init__(self, timestamp, meta, data, info):
-		super().__init__(timestamp)
+	def __init__(self, ts, meta, data, info):
+		super().__init__(ts)
 		self.meta = meta
 		self.data = data
 		self.info = info
@@ -133,8 +133,8 @@ class TagChangeNode(Node):
 	name = "TagChange"
 	attributes = ("entity", "tag", "value")
 
-	def __init__(self, timestamp, entity, tag, value):
-		super().__init__(timestamp)
+	def __init__(self, ts, entity, tag, value):
+		super().__init__(ts)
 		self.entity = entity
 		self.tag = tag
 		self.value = value
@@ -142,10 +142,10 @@ class TagChangeNode(Node):
 
 class HideEntityNode(Node):
 	name = "HideEntity"
-	attributes = ("timestamp", "entity", "tag", "value")
+	attributes = ("ts", "entity", "tag", "value")
 
-	def __init__(self, timestamp, entity, tag, value):
-		super().__init__(timestamp)
+	def __init__(self, ts, entity, tag, value):
+		super().__init__(ts)
 		self.entity = entity
 		self.tag = tag
 		self.value = value
@@ -156,10 +156,10 @@ class HideEntityNode(Node):
 
 class ChoicesNode(Node):
 	name = "Choices"
-	attributes = ("timestamp", "id", "playerID", "type", "min", "max", "source")
+	attributes = ("ts", "id", "playerID", "type", "min", "max", "source")
 
-	def __init__(self, timestamp, id, playerID, type, min, max):
-		super().__init__(timestamp)
+	def __init__(self, ts, id, playerID, type, min, max):
+		super().__init__(ts)
 		self.id = id
 		self.playerID = playerID
 		self.type = type
@@ -180,10 +180,10 @@ class ChoiceNode(Node):
 
 class SendChoicesNode(Node):
 	name = "SendChoices"
-	attributes = ("timestamp", "id", "type")
+	attributes = ("ts", "id", "type")
 
-	def __init__(self, timestamp, id, type):
-		super().__init__(timestamp)
+	def __init__(self, ts, id, type):
+		super().__init__(ts)
 		self.id = id
 		self.type = type
 
@@ -192,11 +192,11 @@ class SendChoicesNode(Node):
 # Options
 
 class OptionsNode(Node):
-	attributes = ("timestamp", "id")
+	attributes = ("ts", "id")
 	name = "Options"
 
-	def __init__(self, timestamp, id):
-		super().__init__(timestamp)
+	def __init__(self, ts, id):
+		super().__init__(ts)
 		self.id = id
 
 
@@ -235,8 +235,8 @@ class SendOptionNode(Node):
 	attributes = ("option", "subOption", "target", "position")
 	name = "SendOption"
 
-	def __init__(self, timestamp, option, subOption, target, position):
-		super().__init__(timestamp)
+	def __init__(self, ts, option, subOption, target, position):
+		super().__init__(ts)
 		self.option = option
 		self.subOption = subOption
 		self.target = target
@@ -283,26 +283,26 @@ class PowerLogParser:
 
 			self.add_data(*sre.groups())
 
-	def add_data(self, timestamp, method, data):
+	def add_data(self, ts, method, data):
 		# if method == "PowerTaskList.DebugPrintPower":
 		if method == "GameState.DebugPrintPower":
-			self.handle_data(timestamp, data)
+			self.handle_data(ts, data)
 		elif method == "GameState.SendChoices":
-			self.handle_send_choices(timestamp, data)
+			self.handle_send_choices(ts, data)
 		elif method == "GameState.DebugPrintChoices":
-			self.handle_choices(timestamp, data)
+			self.handle_choices(ts, data)
 		elif method == "GameState.DebugPrintOptions":
-			self.handle_options(timestamp, data)
+			self.handle_options(ts, data)
 		elif method == "GameState.SendOption":
-			self.handle_send_option(timestamp, data)
+			self.handle_send_option(ts, data)
 
-	def handle_send_choices(self, timestamp, data):
+	def handle_send_choices(self, ts, data):
 		data = data.lstrip()
 
 		sre = SEND_CHOICES_CHOICETYPE_RE.match(data)
 		if sre:
 			id, type = sre.groups()
-			node = SendChoicesNode(timestamp, id, type)
+			node = SendChoicesNode(ts, id, type)
 			self.current_node.append(node)
 			self.current_send_choice_node = node
 			return
@@ -317,13 +317,13 @@ class PowerLogParser:
 
 		sys.stderr.write("Warning: Unhandled sent choices: %r\n" % (data))
 
-	def handle_choices(self, timestamp, data):
+	def handle_choices(self, ts, data):
 		data = data.lstrip()
 
 		sre = CHOICES_CHOICE_RE.match(data)
 		if sre:
 			id, playerID, type, min, max = sre.groups()
-			node = ChoicesNode(timestamp, id, playerID, type, min, max)
+			node = ChoicesNode(ts, id, playerID, type, min, max)
 			self.current_node.append(node)
 			self.current_choice_node = node
 			return
@@ -342,7 +342,7 @@ class PowerLogParser:
 			node = ChoiceNode(index, id)
 			self.current_choice_node.append(node)
 
-	def handle_data(self, timestamp, data):
+	def handle_data(self, ts, data):
 		# print(data)
 		stripped_data = data.lstrip()
 		indent_level = len(data) - len(stripped_data)
@@ -361,7 +361,7 @@ class PowerLogParser:
 			self.entity_def = None
 			entity, tag, value = sre.groups()
 			entity = self._parse_entity(entity)
-			node = TagChangeNode(timestamp, entity, tag, value)
+			node = TagChangeNode(ts, entity, tag, value)
 
 			if self.current_node.indent_level > indent_level:
 				# mismatched indent levels - closing the node
@@ -377,7 +377,7 @@ class PowerLogParser:
 		if sre:
 			entity, cardid = sre.groups()
 			entity = self._parse_entity(entity)
-			node = FullEntityNode(timestamp, entity, cardid)
+			node = FullEntityNode(ts, entity, cardid)
 			self.entity_def = node
 			self.current_node.append(node)
 			return
@@ -386,7 +386,7 @@ class PowerLogParser:
 		if sre:
 			entity, cardid = sre.groups()
 			entity = self._parse_entity(entity)
-			node = ShowEntityNode(timestamp, entity, cardid)
+			node = ShowEntityNode(ts, entity, cardid)
 			self.entity_def = node
 			self.current_node.append(node)
 			return
@@ -395,7 +395,7 @@ class PowerLogParser:
 		if sre:
 			entity, tag, value = sre.groups()
 			entity = self._parse_entity(entity)
-			node = HideEntityNode(timestamp, entity, tag, value)
+			node = HideEntityNode(ts, entity, tag, value)
 			self.current_node.append(node)
 			return
 
@@ -404,7 +404,7 @@ class PowerLogParser:
 			entity, type, index, target = sre.groups()
 			entity = self._parse_entity(entity)
 			target = self._parse_entity(target)
-			node = ActionStartNode(timestamp, entity, type, index, target)
+			node = ActionStartNode(ts, entity, type, index, target)
 			self.current_node.append(node)
 			node.parent = self.current_node
 			self.current_node = node
@@ -414,7 +414,7 @@ class PowerLogParser:
 		sre = ACTION_METADATA_RE.match(data)
 		if sre:
 			meta, data, info = sre.groups()
-			node = MetaDataNode(timestamp, meta, data, info)
+			node = MetaDataNode(ts, meta, data, info)
 			self.current_node.append(node)
 			return
 
@@ -422,7 +422,7 @@ class PowerLogParser:
 		if sre:
 			id, = sre.groups()
 			assert id == "1"
-			node = GameEntityNode(timestamp, id)
+			node = GameEntityNode(ts, id)
 			self.current_node.append(node)
 			self.entity_def = node
 			return
@@ -431,7 +431,7 @@ class PowerLogParser:
 		# Player EntityID=2 PlayerID=1 GameAccountId=[hi=144115193835963207 lo=43136213]
 		if sre:
 			id, playerID, accountHi, accountLo = sre.groups()
-			node = PlayerNode(timestamp, id)
+			node = PlayerNode(ts, id)
 			node.playerID = playerID
 			node.accountHi = accountHi
 			node.accountLo = accountLo
@@ -440,7 +440,7 @@ class PowerLogParser:
 			return
 
 		if data == "CREATE_GAME":
-			self.create_game(timestamp)
+			self.create_game(ts)
 			return
 
 		if data == "ACTION_END":
@@ -453,19 +453,19 @@ class PowerLogParser:
 
 		sys.stderr.write("Warning: Unhandled data: %r\n" % (data))
 
-	def create_game(self, timestamp):
-		self.game = GameNode(timestamp=timestamp)
+	def create_game(self, ts):
+		self.game = GameNode(ts)
 		self.current_node = self.game
 		self.current_node.indent_level = 0
 		self.ast.append(self.game)
 
-	def handle_options(self, timestamp, data):
+	def handle_options(self, ts, data):
 		data = data.lstrip()
 
 		sre = OPTIONS_ENTITY_RE.match(data)
 		if sre:
 			id, = sre.groups()
-			node = OptionsNode(timestamp, id)
+			node = OptionsNode(ts, id)
 			self.current_options_node = node
 			self.current_node.append(node)
 			return
@@ -497,13 +497,13 @@ class PowerLogParser:
 
 		sys.stderr.write("Warning: Unimplemented options: %r\n" % (data))
 
-	def handle_send_option(self, timestamp, data):
+	def handle_send_option(self, ts, data):
 		data = data.lstrip()
 
 		sre = SEND_OPTION_RE.match(data)
 		if sre:
 			option, suboption, target, position = sre.groups()
-			node = SendOptionNode(timestamp, option, suboption, target, position)
+			node = SendOptionNode(ts, option, suboption, target, position)
 			self.current_node.append(node)
 
 	def toxml(self):
