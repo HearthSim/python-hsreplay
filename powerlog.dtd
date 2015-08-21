@@ -1,0 +1,122 @@
+<!ENTITY % entity 'NMTOKEN'>
+<!ENTITY % gameTag 'NMTOKEN'>
+
+<!ELEMENT HearthstoneReplay (Game*)>
+
+<!ELEMENT Game (Action| Choices | FullEntity | GameEntity | Options | Player | SendChoices | SendOption | TagChange)*>
+<!ATTLIST Game ts NMTOKEN #IMPLIED>
+
+<!ELEMENT GameEntity ( Tag* )>
+<!ATTLIST GameEntity id %entity; #REQUIRED>
+
+<!ELEMENT Player (Tag*)>
+<!ATTLIST Player
+	id NMTOKEN #REQUIRED
+	playerID NMTOKEN #REQUIRED
+	name CDATA #REQUIRED
+	accountHi NMTOKEN #IMPLIED
+	accountLo NMTOKEN #IMPLIED
+	ts NMTOKEN #IMPLIED>
+
+<!ELEMENT Tag EMPTY>
+<!ATTLIST Tag
+	tag %gameTag; #REQUIRED
+	value NMTOKEN #REQUIRED
+	ts NMTOKEN #IMPLIED>
+
+<!ELEMENT TagChange EMPTY>
+<!ATTLIST TagChange
+	entity %entity; #REQUIRED
+	tag %gameTag; #REQUIRED
+	value NMTOKEN #REQUIRED
+	ts NMTOKEN #IMPLIED>
+
+<!-- Child elements must be one of Action, FullEntity, TagChange, MetaData, ShowEntity -->
+<!ELEMENT Action ANY>
+<!ATTLIST Action
+	entity %entity; #REQUIRED
+	index NMTOKEN #IMPLIED
+	target NMTOKEN #IMPLIED
+	type NMTOKEN #REQUIRED
+	ts NMTOKEN #IMPLIED>
+
+<!ELEMENT FullEntity (Tag*)>
+<!ATTLIST FullEntity
+	cardID NMTOKEN #IMPLIED
+	id %gameTag; #REQUIRED
+	ts NMTOKEN #IMPLIED>
+
+<!ELEMENT ShowEntity (Tag*)>
+<!ATTLIST ShowEntity
+	cardID NMTOKEN #IMPLIED
+	entity %entity; #REQUIRED
+	ts NMTOKEN #IMPLIED>
+
+<!ELEMENT HideEntity EMPTY>
+<!ATTLIST HideEntity
+	entity %entity; #REQUIRED
+	tag %gameTag; #REQUIRED
+	value NMTOKEN #REQUIRED
+	ts NMTOKEN #IMPLIED>
+
+<!ELEMENT MetaData EMPTY>
+<!ATTLIST MetaData
+	meta NMTOKEN #REQUIRED
+	data %entity; #IMPLIED
+	info NMTOKEN #REQUIRED
+	ts NMTOKEN #IMPLIED>
+
+<!ELEMENT Choice EMPTY>
+<!ATTLIST Choice
+	entity %entity; #REQUIRED
+	index NMTOKEN #REQUIRED
+	ts NMTOKEN #IMPLIED>
+
+<!-- Not sending a choice is valid, eg. in Mulligan -->
+<!ELEMENT SendChoices (Choice*)>
+<!ATTLIST SendChoices
+	entity %entity; #REQUIRED
+	type NMTOKEN #REQUIRED
+	ts NMTOKEN #IMPLIED>
+
+<!ELEMENT Choices (Choice+)>
+<!ATTLIST Choices
+	entity %entity; #REQUIRED
+	playerID NMTOKEN #REQUIRED
+	source NMTOKEN #REQUIRED
+	type NMTOKEN #REQUIRED
+	min NMTOKEN #IMPLIED
+	max NMTOKEN #IMPLIED
+	ts NMTOKEN #IMPLIED>
+
+<!ELEMENT Option (SubOption*|Target*)>
+<!ATTLIST Option
+	entity %entity; #IMPLIED
+	index NMTOKEN #REQUIRED
+	type NMTOKEN #REQUIRED
+	ts NMTOKEN #IMPLIED>
+
+<!ELEMENT SubOption (Target*)>
+<!ATTLIST SubOption
+	entity %entity; #REQUIRED
+	index NMTOKEN #REQUIRED
+	ts NMTOKEN #IMPLIED>
+
+<!ELEMENT Target EMPTY>
+<!ATTLIST Target
+	entity %entity; #REQUIRED
+	index NMTOKEN #REQUIRED
+	ts NMTOKEN #IMPLIED>
+
+<!ELEMENT Options (Option+)>
+<!ATTLIST Options
+	id NMTOKEN #REQUIRED
+	ts NMTOKEN #IMPLIED>
+
+<!ELEMENT SendOption EMPTY>
+<!ATTLIST SendOption
+	option NMTOKEN #REQUIRED
+	subOption NMTOKEN #IMPLIED
+	position NMTOKEN #IMPLIED
+	target NMTOKEN #IMPLIED
+	ts NMTOKEN #IMPLIED>
