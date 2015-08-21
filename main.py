@@ -148,6 +148,9 @@ class HideEntityNode(Node):
 		self.value = value
 
 
+##
+# Choices
+
 class ChoicesNode(Node):
 	name = "Choices"
 	attributes = ("timestamp", "id", "playerID", "type", "min", "max", "source")
@@ -180,6 +183,49 @@ class SendChoicesNode(Node):
 		super().__init__(timestamp)
 		self.id = id
 		self.type = type
+
+
+##
+# Options
+
+class OptionsNode(Node):
+	attributes = ("timestamp", "id")
+	name = "Options"
+
+	def __init__(self, timestamp, id):
+		super().__init__(timestamp)
+		self.id = id
+
+
+class OptionNode(Node):
+	attributes = ("index", "type", "entity")
+	name = "Option"
+
+	def __init__(self, index, type, entity):
+		super().__init__(None)
+		self.index = index
+		self.type = type
+		self.entity = entity
+
+
+class SubOptionNode(Node):
+	attributes = ("index", "entity")
+	name = "SubOption"
+
+	def __init__(self, index, entity):
+		super().__init__(None)
+		self.index = index
+		self.entity = entity
+
+
+class OptionTargetNode(Node):
+	attributes = ("index", "entity")
+	name = "Target"
+
+	def __init__(self, index, entity):
+		super().__init__(None)
+		self.index = index
+		self.entity = entity
 
 
 class PowerLogParser:
@@ -389,19 +435,35 @@ class PowerLogParser:
 		data = data.lstrip()
 		sre = OPTIONS_ENTITY_RE.match(data)
 		if sre:
-			entityid, = sre.groups()
+			id, = sre.groups()
+			node = OptionsNode(timestamp, id)
+			self.current_options_node = node
+			self.current_node.append(node)
 			return
 
 		sre = OPTIONS_OPTION_RE.match(data)
 		if sre:
-			id, type, entity = sre.groups()
+			index, type, entity = sre.groups()
 			entity = self._parse_entity(entity)
+			node = OptionNode(index, type, entity)
+			self.current_options_node.append(node)
+			self.current_option_node = node
+			# last_option_node lets us differenciate between
+			# target for option and target for suboption
+			self.last_option_node = node
 			return
 
 		sre = OPTIONS_SUBOPTION_RE.match(data)
 		if sre:
-			subop_type, id, entity = sre.groups()
+			subop_type, index, entity = sre.groups()
 			entity = self._parse_entity(entity)
+			if subop_type == "subOption":
+				node = SubOptionNode(index, entity)
+				self.current_option_node.append(node)
+				self.last_option_node = node
+			else:  # subop_type == "target"
+				node = OptionTargetNode(index, entity)
+				self.last_option_node.append(node)
 			return
 
 		sys.stderr.write("Warning: Unimplemented options: %r\n" % (data))
