@@ -52,7 +52,7 @@ class Node:
 		self.nodes.append(node)
 
 	def xml(self):
-		element = ElementTree.Element(self.name)
+		element = ElementTree.Element(self.tagname)
 		for node in self.nodes:
 			element.append(node.xml())
 		for attr in self.attributes:
@@ -66,7 +66,7 @@ class Node:
 
 
 class GameNode(Node):
-	name = "Game"
+	tagname = "Game"
 
 
 class EntityDefNode(Node):
@@ -77,22 +77,22 @@ class EntityDefNode(Node):
 
 
 class GameEntityNode(EntityDefNode):
-	name = "GameEntity"
+	tagname = "GameEntity"
 	attributes = ("id", )
 
 
 class PlayerNode(EntityDefNode):
-	name = "Player"
-	attributes = ("id", "playerID", "accountHi", "accountLo")
+	tagname = "Player"
+	attributes = ("id", "playerID", "name", "accountHi", "accountLo")
 
 
 class FullEntityNode(EntityDefNode):
-	name = "FullEntity"
+	tagname = "FullEntity"
 	attributes = ("id", "cardID")
 
 
 class ShowEntityNode(Node):
-	name = "ShowEntity"
+	tagname = "ShowEntity"
 	attributes = ("entity", "cardID")
 
 	def __init__(self, ts, entity, cardID):
@@ -102,7 +102,7 @@ class ShowEntityNode(Node):
 
 
 class ActionNode(Node):
-	name = "Action"
+	tagname = "Action"
 	attributes = ("ts", "entity", "type", "index", "target")
 
 	def __init__(self, ts, entity, type, index, target):
@@ -114,7 +114,7 @@ class ActionNode(Node):
 
 
 class MetaDataNode(Node):
-	name = "MetaData"
+	tagname = "MetaData"
 	attributes = ("meta", "data", "info")
 
 	def __init__(self, ts, meta, data, info):
@@ -125,7 +125,7 @@ class MetaDataNode(Node):
 
 
 class TagNode(Node):
-	name = "Tag"
+	tagname = "Tag"
 	attributes = ("tag", "value")
 
 	def __init__(self, tag, value):
@@ -135,7 +135,7 @@ class TagNode(Node):
 
 
 class TagChangeNode(Node):
-	name = "TagChange"
+	tagname = "TagChange"
 	attributes = ("entity", "tag", "value")
 
 	def __init__(self, ts, entity, tag, value):
@@ -146,7 +146,7 @@ class TagChangeNode(Node):
 
 
 class HideEntityNode(Node):
-	name = "HideEntity"
+	tagname = "HideEntity"
 	attributes = ("ts", "entity", "tag", "value")
 
 	def __init__(self, ts, entity, tag, value):
@@ -160,7 +160,7 @@ class HideEntityNode(Node):
 # Choices
 
 class ChoicesNode(Node):
-	name = "Choices"
+	tagname = "Choices"
 	attributes = ("ts", "entity", "playerID", "type", "min", "max", "source")
 
 	def __init__(self, ts, entity, playerID, type, min, max):
@@ -174,7 +174,7 @@ class ChoicesNode(Node):
 
 
 class ChoiceNode(Node):
-	name = "Choice"
+	tagname = "Choice"
 	attributes = ("index", "entity")
 
 	def __init__(self, index, entity):
@@ -184,7 +184,7 @@ class ChoiceNode(Node):
 
 
 class SendChoicesNode(Node):
-	name = "SendChoices"
+	tagname = "SendChoices"
 	attributes = ("ts", "entity", "type")
 
 	def __init__(self, ts, entity, type):
@@ -198,7 +198,7 @@ class SendChoicesNode(Node):
 
 class OptionsNode(Node):
 	attributes = ("ts", "id")
-	name = "Options"
+	tagname = "Options"
 
 	def __init__(self, ts, id):
 		super().__init__(ts)
@@ -207,7 +207,7 @@ class OptionsNode(Node):
 
 class OptionNode(Node):
 	attributes = ("index", "type", "entity")
-	name = "Option"
+	tagname = "Option"
 
 	def __init__(self, index, type, entity):
 		super().__init__(None)
@@ -218,7 +218,7 @@ class OptionNode(Node):
 
 class SubOptionNode(Node):
 	attributes = ("index", "entity")
-	name = "SubOption"
+	tagname = "SubOption"
 
 	def __init__(self, index, entity):
 		super().__init__(None)
@@ -228,7 +228,7 @@ class SubOptionNode(Node):
 
 class OptionTargetNode(Node):
 	attributes = ("index", "entity")
-	name = "Target"
+	tagname = "Target"
 
 	def __init__(self, index, entity):
 		super().__init__(None)
@@ -238,7 +238,7 @@ class OptionTargetNode(Node):
 
 class SendOptionNode(Node):
 	attributes = ("option", "subOption", "target", "position")
-	name = "SendOption"
+	tagname = "SendOption"
 
 	def __init__(self, ts, option, subOption, target, position):
 		super().__init__(ts)
@@ -306,6 +306,7 @@ class PowerLogParser:
 		# Power.log sucks, the entity IDs for players are not reliable.
 		# We convert them to actual entity IDs...
 		self.game.players[entity] = id
+		self.game.playernodes[id].name = entity
 
 	def add_data(self, ts, method, data):
 		# if method == "PowerTaskList.DebugPrintPower":
@@ -455,7 +456,6 @@ class PowerLogParser:
 			return
 
 		sre = ACTION_CREATEGAME_PLAYER_RE.match(data)
-		# Player EntityID=2 PlayerID=1 GameAccountId=[hi=144115193835963207 lo=43136213]
 		if sre:
 			id, playerID, accountHi, accountLo = sre.groups()
 			node = PlayerNode(ts, id)
@@ -464,6 +464,7 @@ class PowerLogParser:
 			node.accountLo = accountLo
 			self.entity_def = node
 			self.current_node.append(node)
+			self.game.playernodes[id] = node
 			return
 
 		if data == "CREATE_GAME":
@@ -483,6 +484,7 @@ class PowerLogParser:
 	def create_game(self, ts):
 		self.game = GameNode(ts)
 		self.game.players = {}
+		self.game.playernodes = {}
 		self.current_node = self.game
 		self.current_node.indent_level = 0
 		self.ast.append(self.game)
