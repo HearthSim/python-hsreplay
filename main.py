@@ -161,11 +161,11 @@ class HideEntityNode(Node):
 
 class ChoicesNode(Node):
 	name = "Choices"
-	attributes = ("ts", "id", "playerID", "type", "min", "max", "source")
+	attributes = ("ts", "entity", "playerID", "type", "min", "max", "source")
 
-	def __init__(self, ts, id, playerID, type, min, max):
+	def __init__(self, ts, entity, playerID, type, min, max):
 		super().__init__(ts)
-		self.id = id
+		self.entity = entity
 		self.playerID = playerID
 		self.type = type
 		self.min = min
@@ -175,21 +175,21 @@ class ChoicesNode(Node):
 
 class ChoiceNode(Node):
 	name = "Choice"
-	attributes = ("index", "id")
+	attributes = ("index", "entity")
 
-	def __init__(self, index, id):
+	def __init__(self, index, entity):
 		super().__init__(None)
 		self.index = index
-		self.id = id
+		self.entity = entity
 
 
 class SendChoicesNode(Node):
 	name = "SendChoices"
-	attributes = ("ts", "id", "type")
+	attributes = ("ts", "entity", "type")
 
-	def __init__(self, ts, id, type):
+	def __init__(self, ts, entity, type):
 		super().__init__(ts)
-		self.id = id
+		self.entity = entity
 		self.type = type
 
 
@@ -314,9 +314,9 @@ class PowerLogParser:
 
 		sre = SEND_CHOICES_ENTITIES_RE.match(data)
 		if sre:
-			index, id = sre.groups()
-			id = self._parse_entity(id)
-			node = ChoiceNode(index, id)
+			index, entity = sre.groups()
+			entity = self._parse_entity(entity)
+			node = ChoiceNode(index, entity)
 			self.current_send_choice_node.append(node)
 			return
 
@@ -327,8 +327,8 @@ class PowerLogParser:
 
 		sre = CHOICES_CHOICE_RE.match(data)
 		if sre:
-			id, playerID, type, min, max = sre.groups()
-			node = ChoicesNode(ts, id, playerID, type, min, max)
+			entity, playerID, type, min, max = sre.groups()
+			node = ChoicesNode(ts, entity, playerID, type, min, max)
 			self.current_node.append(node)
 			self.current_choice_node = node
 			return
@@ -342,9 +342,9 @@ class PowerLogParser:
 
 		sre = CHOICES_ENTITIES_RE.match(data)
 		if sre:
-			index, id = sre.groups()
-			id = self._parse_entity(id)
-			node = ChoiceNode(index, id)
+			index, entity = sre.groups()
+			entity = self._parse_entity(entity)
+			node = ChoiceNode(index, entity)
 			self.current_choice_node.append(node)
 
 	def handle_data(self, ts, data):
