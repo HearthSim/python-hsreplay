@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import re
 import sys
+from xml.etree import ElementTree
+from xml.dom import minidom
 
 
 POWERLOG_LINE_RE = re.compile(r"^D ([\d:.]+) ([^(]+)\(\) - (.+)$")
@@ -14,7 +16,7 @@ OPTIONS_ENTITY_RE = re.compile(r"id=(\d+)$")
 OPTIONS_OPTION_RE = re.compile(r"option (\d+) type=(\w+) mainEntity=(.*)$")
 OPTIONS_SUBOPTION_RE = re.compile(r"(subOption|target) (\d+) entity=(.*)$")
 
-ACTION_SHOWENTITY_TAG_RE = re.compile(r"tag=(\w+) value=(\w+)")
+ACTION_TAG_RE = re.compile(r"tag=(\w+) value=(\w+)")
 ACTION_FULLENTITY_RE_1 = re.compile(r"FULL_ENTITY - Updating (\[.+\]) CardID=(\w+)?$")
 ACTION_FULLENTITY_RE_2 = re.compile(r"FULL_ENTITY - Creating ID=(\d+) CardID=(\w+)?$")
 ACTION_SHOWENTITY_RE = re.compile(r"SHOW_ENTITY - Updating Entity=(\[?.+\]?) CardID=(\w+)$")
@@ -26,6 +28,122 @@ ACTION_CREATEGAME_RE = re.compile(r"GameEntity EntityID=(\d+)")
 ACTION_CREATEGAME_PLAYER_RE = re.compile(r"Player EntityID=(\d+) PlayerID=(\d+) GameAccountId=\[hi=(\d+) lo=(\d+)\]$")
 
 
+def pretty_xml(xml):
+	ret = ElementTree.tostring(xml)
+	ret = minidom.parseString(ret).toprettyxml(indent="\t")
+	return "\n".join(line for line in ret.split("\n") if line.strip())
+
+
+class Node:
+	attributes = ["timestamp"]
+
+	def __init__(self, timestamp):
+		self.timestamp = timestamp
+		self.nodes = []
+
+	def append(self, node):
+		self.nodes.append(node)
+
+	def xml(self):
+		element = ElementTree.Element(self.name)
+		for node in self.nodes:
+			element.append(node.xml())
+		for attr in self.attributes:
+			attrib = getattr(self, attr)
+			if attrib is not None:
+				element.attrib[attr] = attrib
+		return element
+
+	def __repr__(self):
+		return "<%s>" % (self.__class__.__name__)
+
+
+class GameNode(Node):
+	name = "Game"
+
+
+class EntityDefNode(Node):
+	def __init__(self, timestamp, id, cardID=None):
+		super().__init__(timestamp)
+		self.id = id
+		self.cardID = cardID
+
+
+class GameEntityNode(EntityDefNode):
+	name = "GameEntity"
+	attributes = ("id", )
+
+
+class PlayerNode(EntityDefNode):
+	name = "Player"
+	attributes = ("id", "playerID", "accountHi", "accountLo")
+
+
+class FullEntityNode(EntityDefNode):
+	name = "FullEntity"
+	attributes = ("id", "cardID")
+
+
+class ShowEntityNode(EntityDefNode):
+	name = "ShowEntity"
+	attributes = ("id", "cardID")
+
+
+class ActionStartNode(Node):
+	name = "Action"
+	attributes = ("timestamp", "entity", "blocktype", "index", "target")
+
+	def __init__(self, timestamp, entity, blocktype, index, target):
+		super().__init__(timestamp)
+		self.entity = entity
+		self.blocktype = blocktype
+		self.index = index
+		self.target = target
+
+
+class MetaDataNode(Node):
+	name = "MetaData"
+	attributes = ("timestamp", "meta", "data", "info")
+
+	def __init__(self, timestamp, meta, data, info):
+		super().__init__(timestamp)
+		self.meta = meta
+		self.data = data
+		self.info = info
+
+
+class TagNode(Node):
+	name = "Tag"
+	attributes = ("tag", "value")
+
+	def __init__(self, tag, value):
+		self.tag = tag
+		self.value = value
+		super().__init__(None)
+
+
+class TagChangeNode(Node):
+	name = "TagChange"
+	attributes = ("entity", "tag", "value")
+
+	def __init__(self, timestamp, entity, tag, value):
+		super().__init__(timestamp)
+		self.entity = entity
+		self.tag = tag
+		self.value = value
+
+
+class HideEntityNode(Node):
+	name = "HideEntity"
+	attributes = ("timestamp", "entity", "tag", "value")
+
+	def __init__(self, timestamp, entity, tag, value):
+		super().__init__(timestamp)
+		self.entity = entity
+		self.tag = tag
+		self.value = value
+
+
 class PowerLogParser:
 	def __init__(self):
 		self.ast = []
@@ -35,7 +153,7 @@ class PowerLogParser:
 			return None
 		sre = ENTITY_RE.match(data)
 		if sre:
-			id = int(sre.groups()[0])
+			id = sre.groups()[0]
 			return id
 
 		if data == "0":
@@ -65,6 +183,7 @@ class PowerLogParser:
 			self.handle_options(timestamp, data)
 
 	def handle_choices(self, timestamp, data):
+		data = data.lstrip()
 		sre = CHOICES_CHOICETYPE_RE.match(data)
 		if sre:
 			entityid, choicetype = sre.groups()
@@ -76,18 +195,35 @@ class PowerLogParser:
 			entity = self._parse_entity(entity)
 			return
 
+		sys.stderr.write("Warning: Unhandled choices: %r\n" % (data))
+
 	def handle_data(self, timestamp, data):
-		data = data.lstrip()
-		sre = ACTION_SHOWENTITY_TAG_RE.match(data)
+		# print(data)
+		stripped_data = data.lstrip()
+		indent_level = len(data) - len(stripped_data)
+		data = stripped_data
+
+		sre = ACTION_TAG_RE.match(data)
 		if sre:
 			tag, value = sre.groups()
-			# print("Setting %r = %r" % (tag, value))
+			node = TagNode(tag, value)
+			assert self.entity_def
+			self.entity_def.append(node)
 			return
 
 		sre = ACTION_TAGCHANGE_RE.match(data)
 		if sre:
+			self.entity_def = None
 			entity, tag, value = sre.groups()
 			entity = self._parse_entity(entity)
+			node = TagChangeNode(timestamp, entity, tag, value)
+
+			if self.current_node.indent_level > indent_level:
+				# mismatched indent levels - closing the node
+				# this can happen eg. during mulligans
+				self.current_node = self.current_node.parent
+			self.current_node.append(node)
+			self.current_node.indent_level = indent_level
 			return
 
 		sre = ACTION_FULLENTITY_RE_1.match(data)
@@ -96,20 +232,25 @@ class PowerLogParser:
 		if sre:
 			entity, cardid = sre.groups()
 			entity = self._parse_entity(entity)
-			# print("full:", entity, cardid)
+			node = FullEntityNode(timestamp, entity, cardid)
+			self.entity_def = node
+			self.current_node.append(node)
 			return
 
 		sre = ACTION_SHOWENTITY_RE.match(data)
 		if sre:
 			entity, cardid = sre.groups()
 			entity = self._parse_entity(entity)
-			# print("show:", entity, cardid)
+			node = FullEntityNode(timestamp, entity, cardid)
+			self.entity_def = node
 			return
 
 		sre = ACTION_HIDEENTITY_RE.match(data)
 		if sre:
 			entity, tag, value = sre.groups()
 			entity = self._parse_entity(entity)
+			node = HideEntityNode(timestamp, entity, tag, value)
+			self.current_node.append(node)
 			return
 
 		sre = ACTION_START_RE.match(data)
@@ -117,39 +258,63 @@ class PowerLogParser:
 			entity, blocktype, index, target = sre.groups()
 			entity = self._parse_entity(entity)
 			target = self._parse_entity(target)
-
-			# print(entity, blocktype, index, target)
+			node = ActionStartNode(timestamp, entity, blocktype, index, target)
+			self.current_node.append(node)
+			node.parent = self.current_node
+			self.current_node = node
+			self.current_node.indent_level = indent_level
 			return
 
 		sre = ACTION_METADATA_RE.match(data)
 		if sre:
 			meta, data, info = sre.groups()
+			node = MetaDataNode(timestamp, meta, data, info)
+			self.current_node.append(node)
 			return
 
 		sre = ACTION_CREATEGAME_RE.match(data)
 		if sre:
 			id, = sre.groups()
 			assert id == "1"
+			node = GameEntityNode(timestamp, id)
+			self.current_node.append(node)
+			self.entity_def = node
 			return
 
 		sre = ACTION_CREATEGAME_PLAYER_RE.match(data)
+		# Player EntityID=2 PlayerID=1 GameAccountId=[hi=144115193835963207 lo=43136213]
 		if sre:
-			id, playerid, account_hi, account_lo = sre.groups()
+			id, playerID, accountHi, accountLo = sre.groups()
+			node = PlayerNode(timestamp, id)
+			node.playerID = playerID
+			node.accountHi = accountHi
+			node.accountLo = accountLo
+			self.entity_def = node
+			self.current_node.append(node)
 			return
 
 		if data == "CREATE_GAME":
-			# print("<Game>")
+			self.create_game(timestamp)
 			return
 
 		if data == "ACTION_END":
-			# print("</Action>")
+			if not hasattr(self.current_node, "parent"):
+				# Urgh, this happens all the time with mulligans :(
+				# sys.stderr.write("Warning: Node %r has no parent\n" % (self.current_node))
+				return
+			self.current_node = self.current_node.parent
 			return
 
-		print(data)
+		sys.stderr.write("Warning: Unhandled data: %r\n" % (data))
 
-		pass
+	def create_game(self, timestamp):
+		self.game = GameNode(timestamp=timestamp)
+		self.current_node = self.game
+		self.current_node.indent_level = 0
+		self.ast.append(self.game)
 
 	def handle_options(self, timestamp, data):
+		data = data.lstrip()
 		sre = OPTIONS_ENTITY_RE.match(data)
 		if sre:
 			entityid, = sre.groups()
@@ -166,10 +331,14 @@ class PowerLogParser:
 			subop_type, id, entity = sre.groups()
 			entity = self._parse_entity(entity)
 			return
-		pass
+
+		sys.stderr.write("Warning: Unimplemented options: %r\n" % (data))
 
 	def toxml(self):
-		return ""
+		root = ElementTree.Element("HearthstoneReplay")
+		for game in self.ast:
+			root.append(game.xml())
+		return pretty_xml(root)
 
 
 def main():
