@@ -101,7 +101,7 @@ class ShowEntityNode(Node):
 		self.cardID = cardID
 
 
-class ActionStartNode(Node):
+class ActionNode(Node):
 	name = "Action"
 	attributes = ("ts", "entity", "type", "index", "target")
 
@@ -409,7 +409,7 @@ class PowerLogParser:
 			entity, type, index, target = sre.groups()
 			entity = self._parse_entity(entity)
 			target = self._parse_entity(target)
-			node = ActionStartNode(ts, entity, type, index, target)
+			node = ActionNode(ts, entity, type, index, target)
 			self.current_node.append(node)
 			node.parent = self.current_node
 			self.current_node = node
