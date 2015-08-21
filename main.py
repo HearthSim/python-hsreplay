@@ -441,6 +441,7 @@ class PowerLogParser:
 		sre = ACTION_METADATA_RE.match(data)
 		if sre:
 			meta, data, info = sre.groups()
+			data = self._parse_entity(data)
 			node = MetaDataNode(ts, meta, data, info)
 			self.current_node.append(node)
 			return
