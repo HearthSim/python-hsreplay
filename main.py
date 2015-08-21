@@ -312,8 +312,9 @@ class PowerLogParser:
 		if sre:
 			entity, cardid = sre.groups()
 			entity = self._parse_entity(entity)
-			node = FullEntityNode(timestamp, entity, cardid)
+			node = ShowEntityNode(timestamp, entity, cardid)
 			self.entity_def = node
+			self.current_node.append(node)
 			return
 
 		sre = ACTION_HIDEENTITY_RE.match(data)
