@@ -148,8 +148,8 @@ class HideEntityNode(Node):
 		self.value = value
 
 
-class ChoiceNode(Node):
-	name = "Choice"
+class ChoicesNode(Node):
+	name = "Choices"
 	attributes = ("timestamp", "id", "playerID", "type", "min", "max", "source")
 
 	def __init__(self, timestamp, id, playerID, type, min, max):
@@ -162,14 +162,24 @@ class ChoiceNode(Node):
 		self.source = "UNKNOWN"
 
 
-class ChoiceEntityNode(Node):
-	name = "ChoiceEntity"
+class ChoiceNode(Node):
+	name = "Choice"
 	attributes = ("index", "id")
 
 	def __init__(self, index, id):
 		super().__init__(None)
 		self.index = index
 		self.id = id
+
+
+class SendChoicesNode(Node):
+	name = "SendChoices"
+	attributes = ("timestamp", "id", "type")
+
+	def __init__(self, timestamp, id, type):
+		super().__init__(timestamp)
+		self.id = id
+		self.type = type
 
 
 class PowerLogParser:
@@ -217,13 +227,18 @@ class PowerLogParser:
 
 		sre = SEND_CHOICES_CHOICETYPE_RE.match(data)
 		if sre:
-			entityid, choicetype = sre.groups()
+			id, type = sre.groups()
+			node = SendChoicesNode(timestamp, id, type)
+			self.current_node.append(node)
+			self.current_send_choice_node = node
 			return
 
 		sre = SEND_CHOICES_ENTITIES_RE.match(data)
 		if sre:
-			choiceid, entity = sre.groups()
-			entity = self._parse_entity(entity)
+			index, id = sre.groups()
+			id = self._parse_entity(id)
+			node = ChoiceNode(index, id)
+			self.current_send_choice_node.append(node)
 			return
 
 		sys.stderr.write("Warning: Unhandled sent choices: %r\n" % (data))
@@ -234,7 +249,7 @@ class PowerLogParser:
 		sre = CHOICES_CHOICE_RE.match(data)
 		if sre:
 			id, playerID, type, min, max = sre.groups()
-			node = ChoiceNode(timestamp, id, playerID, type, min, max)
+			node = ChoicesNode(timestamp, id, playerID, type, min, max)
 			self.current_node.append(node)
 			self.current_choice_node = node
 			return
@@ -250,7 +265,7 @@ class PowerLogParser:
 		if sre:
 			index, id = sre.groups()
 			id = self._parse_entity(id)
-			node = ChoiceEntityNode(index, id)
+			node = ChoiceNode(index, id)
 			self.current_choice_node.append(node)
 
 	def handle_data(self, timestamp, data):
