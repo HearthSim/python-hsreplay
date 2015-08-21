@@ -6,6 +6,7 @@ from xml.dom import minidom
 
 
 POWERLOG_LINE_RE = re.compile(r"^D ([\d:.]+) ([^(]+)\(\) - (.+)$")
+OUTPUTLOG_LINE_RE = re.compile(r"\[Power\] ()([^(]+)\(\) - (.+)$")
 
 ENTITY_RE = re.compile("\[.*\s*id=(\d+)\s*.*\]")
 
@@ -264,8 +265,19 @@ class PowerLogParser:
 		return data
 
 	def read(self, f):
+		regex = None
 		for line in f.readlines():
-			sre = POWERLOG_LINE_RE.match(line)
+			if regex is None:
+				sre = POWERLOG_LINE_RE.match(line)
+				if sre:
+					regex = POWERLOG_LINE_RE
+				else:
+					sre = OUTPUTLOG_LINE_RE.match(line)
+					if sre:
+						regex = OUTPUTLOG_LINE_RE
+			else:
+				sre = regex.match(line)
+
 			if not sre:
 				continue
 
