@@ -9,8 +9,12 @@ POWERLOG_LINE_RE = re.compile(r"^D ([\d:.]+) ([^(]+)\(\) - (.+)$")
 
 ENTITY_RE = re.compile("\[.*\s*id=(\d+)\s*.*\]")
 
-CHOICES_CHOICETYPE_RE = re.compile(r"^id=(\d+) ChoiceType=(.+)$")
-CHOICES_ENTITIES_RE = re.compile(r"m_chosenEntities\[(\d+)\]=(\[.+\])$")
+CHOICES_CHOICE_RE = re.compile(r"id=(\d+) PlayerId=(\d+) ChoiceType=(\w+) CountMin=(\d+) CountMax=(\d+)$")
+CHOICES_SOURCE_RE = re.compile(r"Source=(\[?.+\]?)$")
+CHOICES_ENTITIES_RE = re.compile(r"Entities\[(\d+)\]=(\[.+\])$")
+
+SEND_CHOICES_CHOICETYPE_RE = re.compile(r"id=(\d+) ChoiceType=(.+)$")
+SEND_CHOICES_ENTITIES_RE = re.compile(r"m_chosenEntities\[(\d+)\]=(\[.+\])$")
 
 OPTIONS_ENTITY_RE = re.compile(r"id=(\d+)$")
 OPTIONS_OPTION_RE = re.compile(r"option (\d+) type=(\w+) mainEntity=(.*)$")
@@ -144,6 +148,30 @@ class HideEntityNode(Node):
 		self.value = value
 
 
+class ChoiceNode(Node):
+	name = "Choice"
+	attributes = ("timestamp", "id", "playerID", "type", "min", "max", "source")
+
+	def __init__(self, timestamp, id, playerID, type, min, max):
+		super().__init__(timestamp)
+		self.id = id
+		self.playerID = playerID
+		self.type = type
+		self.min = min
+		self.max = max
+		self.source = "UNKNOWN"
+
+
+class ChoiceEntityNode(Node):
+	name = "ChoiceEntity"
+	attributes = ("index", "id")
+
+	def __init__(self, index, id):
+		super().__init__(None)
+		self.index = index
+		self.id = id
+
+
 class PowerLogParser:
 	def __init__(self):
 		self.ast = []
@@ -178,24 +206,52 @@ class PowerLogParser:
 		if method == "GameState.DebugPrintPower":
 			self.handle_data(timestamp, data)
 		elif method == "GameState.SendChoices":
+			self.handle_send_choices(timestamp, data)
+		elif method == "GameState.DebugPrintChoices":
 			self.handle_choices(timestamp, data)
 		elif method == "GameState.DebugPrintOptions":
 			self.handle_options(timestamp, data)
 
-	def handle_choices(self, timestamp, data):
+	def handle_send_choices(self, timestamp, data):
 		data = data.lstrip()
-		sre = CHOICES_CHOICETYPE_RE.match(data)
+
+		sre = SEND_CHOICES_CHOICETYPE_RE.match(data)
 		if sre:
 			entityid, choicetype = sre.groups()
 			return
 
-		sre = CHOICES_ENTITIES_RE.match(data)
+		sre = SEND_CHOICES_ENTITIES_RE.match(data)
 		if sre:
 			choiceid, entity = sre.groups()
 			entity = self._parse_entity(entity)
 			return
 
-		sys.stderr.write("Warning: Unhandled choices: %r\n" % (data))
+		sys.stderr.write("Warning: Unhandled sent choices: %r\n" % (data))
+
+	def handle_choices(self, timestamp, data):
+		data = data.lstrip()
+
+		sre = CHOICES_CHOICE_RE.match(data)
+		if sre:
+			id, playerID, type, min, max = sre.groups()
+			node = ChoiceNode(timestamp, id, playerID, type, min, max)
+			self.current_node.append(node)
+			self.current_choice_node = node
+			return
+
+		sre = CHOICES_SOURCE_RE.match(data)
+		if sre:
+			entity, = sre.groups()
+			entity = self._parse_entity(entity)
+			self.current_choice_node.source = entity
+			return
+
+		sre = CHOICES_ENTITIES_RE.match(data)
+		if sre:
+			index, id = sre.groups()
+			id = self._parse_entity(id)
+			node = ChoiceEntityNode(index, id)
+			self.current_choice_node.append(node)
 
 	def handle_data(self, timestamp, data):
 		# print(data)
