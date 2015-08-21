@@ -57,7 +57,7 @@ class Node:
 			element.append(node.xml())
 		for attr in self.attributes:
 			attrib = getattr(self, attr)
-			if attrib is not None:
+			if attrib:
 				element.attrib[attr] = attrib
 		return element
 
