@@ -385,8 +385,9 @@ class PowerLogParser:
 		if sre:
 			self.entity_def = None
 			entity, tag, value = sre.groups()
-			if tag == "ENTITY_ID" and not entity.isdigit() and entity != "GameEntity":
-				self.register_player_id(entity, value)
+			if tag == "ENTITY_ID":
+				if not entity.isdigit() and not entity.startswith("[") and entity != "GameEntity":
+					self.register_player_id(entity, value)
 			entity = self._parse_entity(entity)
 			node = TagChangeNode(ts, entity, tag, value)
 
