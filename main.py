@@ -95,12 +95,12 @@ class ShowEntityNode(EntityDefNode):
 
 class ActionStartNode(Node):
 	name = "Action"
-	attributes = ("timestamp", "entity", "blocktype", "index", "target")
+	attributes = ("timestamp", "entity", "type", "index", "target")
 
-	def __init__(self, timestamp, entity, blocktype, index, target):
+	def __init__(self, timestamp, entity, type, index, target):
 		super().__init__(timestamp)
 		self.entity = entity
-		self.blocktype = blocktype
+		self.type = type
 		self.index = index
 		self.target = target
 
@@ -311,10 +311,10 @@ class PowerLogParser:
 
 		sre = ACTION_START_RE.match(data)
 		if sre:
-			entity, blocktype, index, target = sre.groups()
+			entity, type, index, target = sre.groups()
 			entity = self._parse_entity(entity)
 			target = self._parse_entity(target)
-			node = ActionStartNode(timestamp, entity, blocktype, index, target)
+			node = ActionStartNode(timestamp, entity, type, index, target)
 			self.current_node.append(node)
 			node.parent = self.current_node
 			self.current_node = node
