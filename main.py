@@ -259,7 +259,7 @@ class PowerLogParser:
 			return None
 
 		if data == "GameEntity":
-			return "GameEntity"
+			return self.game.id
 
 		# TODO handle <AccountName>
 		return data
@@ -422,6 +422,7 @@ class PowerLogParser:
 		if sre:
 			id, = sre.groups()
 			assert id == "1"
+			self.game.id = id
 			node = GameEntityNode(ts, id)
 			self.current_node.append(node)
 			self.entity_def = node
