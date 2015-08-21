@@ -248,6 +248,18 @@ class SendOptionNode(Node):
 		self.position = position
 
 
+class PlayerID:
+	def __init__(self, game, data):
+		self.game = game
+		self.data = data
+
+	def __contains__(self, other):
+		return str(self).__contains__(other)
+
+	def __str__(self):
+		return self.game.players.get(self.data, "UNKNOWN PLAYER: %r" % (self.data))
+
+
 class PowerLogParser:
 	def __init__(self):
 		self.ast = []
@@ -266,8 +278,10 @@ class PowerLogParser:
 		if data == "GameEntity":
 			return self.game.id
 
-		# TODO handle <AccountName>
-		return data
+		if data.isdigit():
+			return data
+
+		return self.game.players.get(data, PlayerID(self.game, data))
 
 	def read(self, f):
 		regex = None
@@ -287,6 +301,11 @@ class PowerLogParser:
 				continue
 
 			self.add_data(*sre.groups())
+
+	def register_player_id(self, entity, id):
+		# Power.log sucks, the entity IDs for players are not reliable.
+		# We convert them to actual entity IDs...
+		self.game.players[entity] = id
 
 	def add_data(self, ts, method, data):
 		# if method == "PowerTaskList.DebugPrintPower":
@@ -365,6 +384,8 @@ class PowerLogParser:
 		if sre:
 			self.entity_def = None
 			entity, tag, value = sre.groups()
+			if tag == "ENTITY_ID" and not entity.isdigit() and entity != "GameEntity":
+				self.register_player_id(entity, value)
 			entity = self._parse_entity(entity)
 			node = TagChangeNode(ts, entity, tag, value)
 
@@ -461,6 +482,7 @@ class PowerLogParser:
 
 	def create_game(self, ts):
 		self.game = GameNode(ts)
+		self.game.players = {}
 		self.current_node = self.game
 		self.current_node.indent_level = 0
 		self.ast.append(self.game)
