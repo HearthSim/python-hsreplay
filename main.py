@@ -20,6 +20,8 @@ OPTIONS_ENTITY_RE = re.compile(r"id=(\d+)$")
 OPTIONS_OPTION_RE = re.compile(r"option (\d+) type=(\w+) mainEntity=(.*)$")
 OPTIONS_SUBOPTION_RE = re.compile(r"(subOption|target) (\d+) entity=(.*)$")
 
+SEND_OPTION_RE = re.compile(r"selectedOption=(\d+) selectedSubOption=(-1|\d+) selectedTarget=(\d+) selectedPosition=(\d+)")
+
 ACTION_TAG_RE = re.compile(r"tag=(\w+) value=(\w+)")
 ACTION_FULLENTITY_RE_1 = re.compile(r"FULL_ENTITY - Updating (\[.+\]) CardID=(\w+)?$")
 ACTION_FULLENTITY_RE_2 = re.compile(r"FULL_ENTITY - Creating ID=(\d+) CardID=(\w+)?$")
@@ -228,6 +230,18 @@ class OptionTargetNode(Node):
 		self.entity = entity
 
 
+class SendOptionNode(Node):
+	attributes = ("option", "subOption", "target", "position")
+	name = "SendOption"
+
+	def __init__(self, timestamp, option, subOption, target, position):
+		super().__init__(timestamp)
+		self.option = option
+		self.subOption = subOption
+		self.target = target
+		self.position = position
+
+
 class PowerLogParser:
 	def __init__(self):
 		self.ast = []
@@ -267,6 +281,8 @@ class PowerLogParser:
 			self.handle_choices(timestamp, data)
 		elif method == "GameState.DebugPrintOptions":
 			self.handle_options(timestamp, data)
+		elif method == "GameState.SendOption":
+			self.handle_send_option(timestamp, data)
 
 	def handle_send_choices(self, timestamp, data):
 		data = data.lstrip()
@@ -433,6 +449,7 @@ class PowerLogParser:
 
 	def handle_options(self, timestamp, data):
 		data = data.lstrip()
+
 		sre = OPTIONS_ENTITY_RE.match(data)
 		if sre:
 			id, = sre.groups()
@@ -467,6 +484,15 @@ class PowerLogParser:
 			return
 
 		sys.stderr.write("Warning: Unimplemented options: %r\n" % (data))
+
+	def handle_send_option(self, timestamp, data):
+		data = data.lstrip()
+
+		sre = SEND_OPTION_RE.match(data)
+		if sre:
+			option, suboption, target, position = sre.groups()
+			node = SendOptionNode(timestamp, option, suboption, target, position)
+			self.current_node.append(node)
 
 	def toxml(self):
 		root = ElementTree.Element("HearthstoneReplay")
