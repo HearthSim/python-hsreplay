@@ -91,9 +91,14 @@ class FullEntityNode(EntityDefNode):
 	attributes = ("id", "cardID")
 
 
-class ShowEntityNode(EntityDefNode):
+class ShowEntityNode(Node):
 	name = "ShowEntity"
-	attributes = ("id", "cardID")
+	attributes = ("entity", "cardID")
+
+	def __init__(self, ts, entity, cardID):
+		super().__init__(ts)
+		self.entity = entity
+		self.cardID = cardID
 
 
 class ActionStartNode(Node):
