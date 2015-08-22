@@ -42,11 +42,12 @@ def pretty_xml(xml):
 
 
 class Node:
-	attributes = ["ts"]
+	attributes = ()
 
-	def __init__(self, ts):
-		self.ts = ts
+	def __init__(self, *args):
 		self.nodes = []
+		for k, arg in zip(("ts", ) + self.attributes, args):
+			setattr(self, k, arg)
 
 	def append(self, node):
 		self.nodes.append(node)
@@ -56,6 +57,8 @@ class Node:
 		for node in self.nodes:
 			element.append(node.xml())
 		for attr in self.attributes:
+			if attr == "ts" and not self.timestamp:
+				continue
 			attrib = getattr(self, attr)
 			if attrib:
 				element.attrib[attr] = attrib
@@ -89,91 +92,58 @@ class GameNode(Node):
 			self.second_player = None
 
 
-class EntityDefNode(Node):
-	def __init__(self, ts, id, cardID=None):
-		super().__init__(ts)
-		self.id = id
-		self.cardID = cardID
-
-
-class GameEntityNode(EntityDefNode):
+class GameEntityNode(Node):
 	tagname = "GameEntity"
 	attributes = ("id", )
+	timestamp = False
 
 
-class PlayerNode(EntityDefNode):
+class PlayerNode(Node):
 	tagname = "Player"
-	attributes = ("id", "playerID", "name", "accountHi", "accountLo")
+	attributes = ("id", "playerID", "accountHi", "accountLo", "name")
+	timestamp = False
 
 
-class FullEntityNode(EntityDefNode):
+class FullEntityNode(Node):
 	tagname = "FullEntity"
 	attributes = ("id", "cardID")
+	timestamp = False
 
 
 class ShowEntityNode(Node):
 	tagname = "ShowEntity"
 	attributes = ("entity", "cardID")
-
-	def __init__(self, ts, entity, cardID):
-		super().__init__(ts)
-		self.entity = entity
-		self.cardID = cardID
+	timestamp = False
 
 
 class ActionNode(Node):
 	tagname = "Action"
-	attributes = ("ts", "entity", "type", "index", "target")
-
-	def __init__(self, ts, entity, type, index, target):
-		super().__init__(ts)
-		self.entity = entity
-		self.type = type
-		self.index = index
-		self.target = target
+	attributes = ("entity", "type", "index", "target")
+	timestamp = True
 
 
 class MetaDataNode(Node):
 	tagname = "MetaData"
 	attributes = ("meta", "data", "info")
-
-	def __init__(self, ts, meta, data, info):
-		super().__init__(ts)
-		self.meta = meta
-		self.data = data
-		self.info = info
+	timestamp = False
 
 
 class TagNode(Node):
 	tagname = "Tag"
 	attributes = ("tag", "value")
-
-	def __init__(self, tag, value):
-		self.tag = tag
-		self.value = value
-		super().__init__(None)
+	timestamp = False
 
 
 class TagChangeNode(Node):
 	tagname = "TagChange"
 	attributes = ("entity", "tag", "value")
-
-	def __init__(self, ts, entity, tag, value):
-		super().__init__(ts)
-		self.entity = entity
-		self.tag = tag
-		self.value = value
+	timestamp = False
 
 
 class HideEntityNode(Node):
 	tagname = "HideEntity"
-	attributes = ("ts", "entity", "tag", "value")
-
-	def __init__(self, ts, entity, tag, value):
-		super().__init__(ts)
-		self.entity = entity
-		self.tag = tag
-		self.value = value
+	attributes = ("entity", "tag", "value")
+	timestamp = True
 
 
 ##
@@ -181,91 +151,53 @@ class HideEntityNode(Node):
 
 class ChoicesNode(Node):
 	tagname = "Choices"
-	attributes = ("ts", "entity", "playerID", "type", "min", "max", "source")
-
-	def __init__(self, ts, entity, playerID, type, min, max):
-		super().__init__(ts)
-		self.entity = entity
-		self.playerID = playerID
-		self.type = type
-		self.min = min
-		self.max = max
-		self.source = "UNKNOWN"
+	attributes = ("entity", "playerID", "type", "min", "max", "source")
+	timestamp = True
 
 
 class ChoiceNode(Node):
 	tagname = "Choice"
 	attributes = ("index", "entity")
-
-	def __init__(self, index, entity):
-		super().__init__(None)
-		self.index = index
-		self.entity = entity
+	timestamp = False
 
 
 class SendChoicesNode(Node):
 	tagname = "SendChoices"
-	attributes = ("ts", "entity", "type")
-
-	def __init__(self, ts, entity, type):
-		super().__init__(ts)
-		self.entity = entity
-		self.type = type
+	attributes = ("entity", "type")
+	timestamp = True
 
 
 ##
 # Options
 
 class OptionsNode(Node):
-	attributes = ("ts", "id")
 	tagname = "Options"
-
-	def __init__(self, ts, id):
-		super().__init__(ts)
-		self.id = id
+	attributes = ("id", )
+	timestamp = True
 
 
 class OptionNode(Node):
-	attributes = ("index", "type", "entity")
 	tagname = "Option"
-
-	def __init__(self, index, type, entity):
-		super().__init__(None)
-		self.index = index
-		self.type = type
-		self.entity = entity
+	attributes = ("index", "type", "entity")
+	timestamp = False
 
 
 class SubOptionNode(Node):
-	attributes = ("index", "entity")
 	tagname = "SubOption"
-
-	def __init__(self, index, entity):
-		super().__init__(None)
-		self.index = index
-		self.entity = entity
+	attributes = ("index", "entity")
+	timestamp = False
 
 
 class OptionTargetNode(Node):
-	attributes = ("index", "entity")
 	tagname = "Target"
-
-	def __init__(self, index, entity):
-		super().__init__(None)
-		self.index = index
-		self.entity = entity
+	attributes = ("index", "entity")
+	timestamp = False
 
 
 class SendOptionNode(Node):
-	attributes = ("option", "subOption", "target", "position")
 	tagname = "SendOption"
-
-	def __init__(self, ts, option, subOption, target, position):
-		super().__init__(ts)
-		self.option = option
-		self.subOption = subOption
-		self.target = target
-		self.position = position
+	attributes = ("option", "subOption", "target", "position")
+	timestamp = False
 
 
 class PlayerID:
@@ -350,7 +282,7 @@ class PowerLogParser:
 		if sre:
 			index, entity = sre.groups()
 			entity = self._parse_entity(entity)
-			node = ChoiceNode(index, entity)
+			node = ChoiceNode(ts, index, entity)
 			self.current_send_choice_node.append(node)
 			return
 
@@ -362,7 +294,7 @@ class PowerLogParser:
 		sre = CHOICES_CHOICE_RE.match(data)
 		if sre:
 			entity, playerID, type, min, max = sre.groups()
-			node = ChoicesNode(ts, entity, playerID, type, min, max)
+			node = ChoicesNode(ts, entity, playerID, type, min, max, source=None)
 			self.current_node.append(node)
 			self.current_choice_node = node
 			return
@@ -378,7 +310,7 @@ class PowerLogParser:
 		if sre:
 			index, entity = sre.groups()
 			entity = self._parse_entity(entity)
-			node = ChoiceNode(index, entity)
+			node = ChoiceNode(ts, index, entity)
 			self.current_choice_node.append(node)
 
 	def handle_data(self, ts, data):
@@ -393,7 +325,7 @@ class PowerLogParser:
 			if tag == "CURRENT_PLAYER":
 				assert isinstance(self.entity_def, PlayerNode)
 				self.game.first_player = self.entity_def.id
-			node = TagNode(tag, value)
+			node = TagNode(ts, tag, value)
 			assert self.entity_def
 			self.entity_def.append(node)
 			return
@@ -479,10 +411,7 @@ class PowerLogParser:
 		sre = ACTION_CREATEGAME_PLAYER_RE.match(data)
 		if sre:
 			id, playerID, accountHi, accountLo = sre.groups()
-			node = PlayerNode(ts, id)
-			node.playerID = playerID
-			node.accountHi = accountHi
-			node.accountLo = accountLo
+			node = PlayerNode(ts, id, playerID, accountHi, accountLo, None)
 			self.entity_def = node
 			self.current_node.append(node)
 			self.game.playernodes[id] = node
@@ -525,7 +454,7 @@ class PowerLogParser:
 		if sre:
 			index, type, entity = sre.groups()
 			entity = self._parse_entity(entity)
-			node = OptionNode(index, type, entity)
+			node = OptionNode(ts, index, type, entity)
 			self.current_options_node.append(node)
 			self.current_option_node = node
 			# last_option_node lets us differenciate between
@@ -538,11 +467,11 @@ class PowerLogParser:
 			subop_type, index, entity = sre.groups()
 			entity = self._parse_entity(entity)
 			if subop_type == "subOption":
-				node = SubOptionNode(index, entity)
+				node = SubOptionNode(ts, index, entity)
 				self.current_option_node.append(node)
 				self.last_option_node = node
 			else:  # subop_type == "target"
-				node = OptionTargetNode(index, entity)
+				node = OptionTargetNode(ts, index, entity)
 				self.last_option_node.append(node)
 			return
 
