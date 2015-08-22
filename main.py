@@ -68,6 +68,26 @@ class Node:
 class GameNode(Node):
 	tagname = "Game"
 
+	def __init__(self, ts):
+		super().__init__(ts)
+		self.first_player = None
+		self.second_player = None
+
+	def register_player_id(self, entity, id):
+		# Power.log sucks, the entity IDs for players are not reliable.
+		# We convert them to actual entity IDs...
+		self.players[entity] = id
+		self.playernodes[id].name = entity
+
+	def update_current_player(self, entity, value):
+		# 2nd method of figuring out the player ids: through the CURRENT_PLAYER tag
+		if value == "0" and self.first_player:
+			self.register_player_id(entity, self.first_player)
+			self.second_player = [p for p in self.playernodes if p != self.first_player][0]
+		elif value == "1" and self.second_player:
+			self.register_player_id(entity, self.second_player)
+			self.second_player = None
+
 
 class EntityDefNode(Node):
 	def __init__(self, ts, id, cardID=None):
@@ -302,12 +322,6 @@ class PowerLogParser:
 
 			self.add_data(*sre.groups())
 
-	def register_player_id(self, entity, id):
-		# Power.log sucks, the entity IDs for players are not reliable.
-		# We convert them to actual entity IDs...
-		self.game.players[entity] = id
-		self.game.playernodes[id].name = entity
-
 	def add_data(self, ts, method, data):
 		# if method == "PowerTaskList.DebugPrintPower":
 		if method == "GameState.DebugPrintPower":
@@ -376,6 +390,9 @@ class PowerLogParser:
 		sre = ACTION_TAG_RE.match(data)
 		if sre:
 			tag, value = sre.groups()
+			if tag == "CURRENT_PLAYER":
+				assert isinstance(self.entity_def, PlayerNode)
+				self.game.first_player = self.entity_def.id
 			node = TagNode(tag, value)
 			assert self.entity_def
 			self.entity_def.append(node)
@@ -387,7 +404,9 @@ class PowerLogParser:
 			entity, tag, value = sre.groups()
 			if tag == "ENTITY_ID":
 				if not entity.isdigit() and not entity.startswith("[") and entity != "GameEntity":
-					self.register_player_id(entity, value)
+					self.game.register_player_id(entity, value)
+			elif tag == "CURRENT_PLAYER":
+				self.game.update_current_player(entity, value)
 			entity = self._parse_entity(entity)
 			node = TagChangeNode(ts, entity, tag, value)
 
