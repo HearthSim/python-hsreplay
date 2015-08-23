@@ -3,7 +3,7 @@
 
 <!ELEMENT HearthstoneReplay (Game*)>
 
-<!ELEMENT Game (Action| Choices | FullEntity | GameEntity | Options | Player | SendChoices | SendOption | TagChange)*>
+<!ELEMENT Game (Action | Choices | FullEntity | GameEntity | HideEntity | Options | Player | SendChoices | SendOption | ShowEntity | TagChange)*>
 <!ATTLIST Game ts NMTOKEN #IMPLIED>
 
 <!ELEMENT GameEntity ( Tag* )>
