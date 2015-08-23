@@ -209,12 +209,13 @@ class PlayerID:
 		return str(self).__contains__(other)
 
 	def __str__(self):
-		return self.game.players.get(self.data, "UNKNOWN PLAYER: %r" % (self.data))
+		return self.game.players.get(self.data, self.data)
 
 
 class PowerLogParser:
 	def __init__(self):
 		self.ast = []
+		self.current_node = None
 
 	def _parse_entity(self, data):
 		if not data:
@@ -254,6 +255,12 @@ class PowerLogParser:
 
 			self.add_data(*sre.groups())
 
+	def update_node(self, node):
+		if self.current_node is None:
+			# Incomplete game
+			self.create_game(ts=None)
+		self.current_node.append(node)
+
 	def add_data(self, ts, method, data):
 		# if method == "PowerTaskList.DebugPrintPower":
 		if method == "GameState.DebugPrintPower":
@@ -274,7 +281,7 @@ class PowerLogParser:
 		if sre:
 			id, type = sre.groups()
 			node = SendChoicesNode(ts, id, type)
-			self.current_node.append(node)
+			self.update_node(node)
 			self.current_send_choice_node = node
 			return
 
@@ -295,7 +302,7 @@ class PowerLogParser:
 		if sre:
 			entity, playerID, type, min, max = sre.groups()
 			node = ChoicesNode(ts, entity, playerID, type, min, max, None)
-			self.current_node.append(node)
+			self.update_node(node)
 			self.current_choice_node = node
 			return
 
@@ -346,7 +353,7 @@ class PowerLogParser:
 				# mismatched indent levels - closing the node
 				# this can happen eg. during mulligans
 				self.current_node = self.current_node.parent
-			self.current_node.append(node)
+			self.update_node(node)
 			self.current_node.indent_level = indent_level
 			return
 
@@ -358,7 +365,7 @@ class PowerLogParser:
 			entity = self._parse_entity(entity)
 			node = FullEntityNode(ts, entity, cardid)
 			self.entity_def = node
-			self.current_node.append(node)
+			self.update_node(node)
 			return
 
 		sre = ACTION_SHOWENTITY_RE.match(data)
@@ -367,7 +374,7 @@ class PowerLogParser:
 			entity = self._parse_entity(entity)
 			node = ShowEntityNode(ts, entity, cardid)
 			self.entity_def = node
-			self.current_node.append(node)
+			self.update_node(node)
 			return
 
 		sre = ACTION_HIDEENTITY_RE.match(data)
@@ -375,7 +382,7 @@ class PowerLogParser:
 			entity, tag, value = sre.groups()
 			entity = self._parse_entity(entity)
 			node = HideEntityNode(ts, entity, tag, value)
-			self.current_node.append(node)
+			self.update_node(node)
 			return
 
 		sre = ACTION_START_RE.match(data)
@@ -384,7 +391,7 @@ class PowerLogParser:
 			entity = self._parse_entity(entity)
 			target = self._parse_entity(target)
 			node = ActionNode(ts, entity, type, index, target)
-			self.current_node.append(node)
+			self.update_node(node)
 			node.parent = self.current_node
 			self.current_node = node
 			self.current_node.indent_level = indent_level
@@ -395,7 +402,7 @@ class PowerLogParser:
 			meta, data, info = sre.groups()
 			data = self._parse_entity(data)
 			node = MetaDataNode(ts, meta, data, info)
-			self.current_node.append(node)
+			self.update_node(node)
 			return
 
 		sre = ACTION_CREATEGAME_RE.match(data)
@@ -404,7 +411,7 @@ class PowerLogParser:
 			assert id == "1"
 			self.game.id = id
 			node = GameEntityNode(ts, id)
-			self.current_node.append(node)
+			self.update_node(node)
 			self.entity_def = node
 			return
 
@@ -413,7 +420,7 @@ class PowerLogParser:
 			id, playerID, accountHi, accountLo = sre.groups()
 			node = PlayerNode(ts, id, playerID, accountHi, accountLo, None)
 			self.entity_def = node
-			self.current_node.append(node)
+			self.update_node(node)
 			self.game.playernodes[id] = node
 			return
 
@@ -447,7 +454,7 @@ class PowerLogParser:
 			id, = sre.groups()
 			node = OptionsNode(ts, id)
 			self.current_options_node = node
-			self.current_node.append(node)
+			self.update_node(node)
 			return
 
 		sre = OPTIONS_OPTION_RE.match(data)
@@ -484,7 +491,7 @@ class PowerLogParser:
 		if sre:
 			option, suboption, target, position = sre.groups()
 			node = SendOptionNode(ts, option, suboption, target, position)
-			self.current_node.append(node)
+			self.update_node(node)
 
 	def toxml(self):
 		root = ElementTree.Element("HearthstoneReplay")
