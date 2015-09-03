@@ -59,11 +59,17 @@
 	value NMTOKEN #REQUIRED
 	ts NMTOKEN #IMPLIED>
 
-<!ELEMENT MetaData EMPTY>
+<!ELEMENT MetaData (Info*)>
 <!ATTLIST MetaData
 	meta NMTOKEN #REQUIRED
 	data %entity; #IMPLIED
 	info NMTOKEN #REQUIRED
+	ts NMTOKEN #IMPLIED>
+
+<!ELEMENT Info EMPTY>
+<!ATTLIST Info
+	index NMTOKEN #REQUIRED
+	id %entity; #REQUIRED
 	ts NMTOKEN #IMPLIED>
 
 <!ELEMENT Choice EMPTY>

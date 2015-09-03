@@ -31,6 +31,7 @@ ACTION_HIDEENTITY_RE = re.compile(r"HIDE_ENTITY - Entity=(\[.+\]) tag=(\w+) valu
 ACTION_TAGCHANGE_RE = re.compile(r"TAG_CHANGE Entity=(\[?.+\]?) tag=(\w+) value=(\w+)")
 ACTION_START_RE = re.compile(r"ACTION_START Entity=(\[?.+\]?) (?:SubType|BlockType)=(\w+) Index=(-1|\d+) Target=(\[?.+\]?)$")
 ACTION_METADATA_RE = re.compile(r"META_DATA - Meta=(\w+) Data=(\[?.+\]?) Info=(\d+)")
+ACTION_METADATA_INFO_RE = re.compile(r"Info\[(\d+)\] = (\[?.+\]?)")
 ACTION_CREATEGAME_RE = re.compile(r"GameEntity EntityID=(\d+)")
 ACTION_CREATEGAME_PLAYER_RE = re.compile(r"Player EntityID=(\d+) PlayerID=(\d+) GameAccountId=\[hi=(\d+) lo=(\d+)\]$")
 
@@ -128,6 +129,12 @@ class MetaDataNode(Node):
 	timestamp = False
 
 
+class MetaDataInfoNode(Node):
+	tagname = "Info"
+	attributes = ("index", "id")
+	timestamp = False
+
+
 class TagNode(Node):
 	tagname = "Tag"
 	attributes = ("tag", "value")
@@ -216,6 +223,7 @@ class PowerLogParser:
 	def __init__(self):
 		self.ast = []
 		self.current_node = None
+		self.metadata_node = None
 
 	def _parse_entity(self, data):
 		if not data:
@@ -403,6 +411,15 @@ class PowerLogParser:
 			data = self._parse_entity(data)
 			node = MetaDataNode(ts, meta, data, info)
 			self.update_node(node)
+			self.metadata_node = node
+			return
+
+		sre = ACTION_METADATA_INFO_RE.match(data)
+		if sre:
+			index, entity = sre.groups()
+			entity = self._parse_entity(entity)
+			node = MetaDataInfoNode(ts, index, entity)
+			self.metadata_node.append(node)
 			return
 
 		sre = ACTION_CREATEGAME_RE.match(data)
