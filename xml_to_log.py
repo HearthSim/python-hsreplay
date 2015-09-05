@@ -79,7 +79,8 @@ class Tag(Packet):
 
 class ShowEntity(Packet):
 	def __str__(self):
-		return "SHOW_ENTITY - Updating Entity=%s CardID=%s" % self.args()
+		ret = "SHOW_ENTITY - Updating Entity=%s CardID=%s\n" % self.args()
+		return ret + indented(self.packets)
 
 	def args(self):
 		return self.entity, self.cardID
