@@ -310,7 +310,7 @@ class PowerLogParser:
 		if sre:
 			entity, playerID, type, min, max = sre.groups()
 			node = ChoicesNode(ts, entity, playerID, type, min, max, None)
-			self.update_node(node)
+			self.game.append(node)
 			self.current_choice_node = node
 			return
 
