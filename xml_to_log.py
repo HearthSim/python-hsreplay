@@ -15,9 +15,10 @@ def get_packet_class(element):
 
 
 class Packet:
-	def __init__(self, element):
-		self.packets = [get_packet_class(e)(e) for e in element]
+	def __init__(self, game, element):
+		self.packets = [get_packet_class(e)(game, e) for e in element]
 		self.name = element.tag
+		self.game = game
 
 		for k, v in element.attrib.items():
 			setattr(self, k, v)
@@ -25,22 +26,43 @@ class Packet:
 	def __repr__(self):
 		return "<%s>" % (self.name)
 
+	def format_entity(self, entity):
+		if entity == 1:
+			return "GameEntity"
+		if entity in self.game.state:
+			e = self.game.state[entity]
+			cardID = getattr(e, "cardID", None)
+			if cardID:
+				return "[name=%s id=%i cardId=%s]" % ("", e.id, cardID)
+		return str(entity)
+
+
+class _EntityPacket(Packet):
+	def __init__(self, *args):
+		super().__init__(*args)
+		self.id = int(self.id)
+		self.game.state[self.id] = self
+
 
 class Game(Packet):
+	def __init__(self, element):
+		self.state = {}
+		super().__init__(self, element)
+
 	def __str__(self):
 		return "CREATE_GAME\n" + indented(self.packets)
 
 
-class GameEntity(Packet):
+class GameEntity(_EntityPacket):
 	def __str__(self):
 		ret = "GameEntity EntityID=%i\n" % self.args()
 		return ret + indented(self.packets)
 
 	def args(self):
-		return int(self.id)
+		return self.id
 
 
-class Player(Packet):
+class Player(_EntityPacket):
 	def __str__(self):
 		ret = "Player EntityID=%i PlayerID=%i GameAccountId=[hi=%i lo=%i]" % self.args()
 		# Adding the name to our own logs because Blizzard's format sucks
@@ -48,7 +70,7 @@ class Player(Packet):
 		return ret + indented(self.packets)
 
 	def args(self):
-		return int(self.id), int(self.playerID), int(self.accountHi), int(self.accountLo)
+		return self.id, int(self.playerID), int(self.accountHi), int(self.accountLo)
 
 
 class Action(Packet):
@@ -60,13 +82,13 @@ class Action(Packet):
 		return self.entity, self.type, int(self.index), getattr(self, "target", 0)
 
 
-class FullEntity(Packet):
+class FullEntity(_EntityPacket):
 	def __str__(self):
 		ret = "FULL_ENTITY - Creating ID=%i CardID=%s\n" % self.args()
 		return ret + indented(self.packets)
 
 	def args(self):
-		return int(self.id), getattr(self, "cardID", "")
+		return self.id, getattr(self, "cardID", "")
 
 
 class Tag(Packet):
@@ -83,7 +105,7 @@ class ShowEntity(Packet):
 		return ret + indented(self.packets)
 
 	def args(self):
-		return self.entity, self.cardID
+		return self.format_entity(self.entity), self.cardID
 
 
 class HideEntity(Packet):
@@ -91,7 +113,7 @@ class HideEntity(Packet):
 		return "HIDE_ENTITY - Entity=%s tag=%s value=%s" % self.args()
 
 	def args(self):
-		return self.entity, self.tag, self.value
+		return self.format_entity(self.entity), self.tag, self.value
 
 
 class TagChange(Packet):
@@ -99,7 +121,7 @@ class TagChange(Packet):
 		return "TAG_CHANGE Entity=%s tag=%s value=%s" % self.args()
 
 	def args(self):
-		return self.entity, self.tag, self.value
+		return self.format_entity(int(self.entity)), self.tag, self.value
 
 
 class Choices(Packet):
