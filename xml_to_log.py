@@ -50,7 +50,7 @@ class Game(Packet):
 		super().__init__(self, element)
 
 	def __str__(self):
-		return "CREATE_GAME\n" + indented(self.packets)
+		return "CREATE_GAME\n" + indented(self.packets, 0)
 
 
 class GameEntity(_EntityPacket):
