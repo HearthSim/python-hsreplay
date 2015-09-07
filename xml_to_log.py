@@ -17,14 +17,14 @@ def get_packet_class(element):
 class Packet:
 	def __init__(self, game, element):
 		self.packets = [get_packet_class(e)(game, e) for e in element]
-		self.name = element.tag
+		self.tagname = element.tag
 		self.game = game
 
 		for k, v in element.attrib.items():
 			setattr(self, k, v)
 
 	def __repr__(self):
-		return "<%s>" % (self.name)
+		return "<%s>" % (self.tagname)
 
 	def format_entity(self, entity):
 		if entity == 1:
