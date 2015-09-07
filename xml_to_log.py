@@ -31,6 +31,9 @@ class Packet:
 			return "GameEntity"
 		if entity in self.game.state:
 			e = self.game.state[entity]
+			if isinstance(e, Player):
+				return "[name=%s id=%s playerId=%s]" % (e.name, e.id, e.playerID)
+
 			cardID = getattr(e, "cardID", None)
 			if cardID:
 				return "[name=%s id=%i cardId=%s]" % ("", e.id, cardID)
