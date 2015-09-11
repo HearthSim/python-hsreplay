@@ -2,6 +2,7 @@
 <!ENTITY % gameTag 'NMTOKEN'>
 
 <!ELEMENT HearthstoneReplay (Game*)>
+<!ATTLIST HearthstoneReplay build NMTOKEN #IMPLIED>
 
 <!ELEMENT Game (Action | Choices | FullEntity | GameEntity | HideEntity | Options | Player | SendChoices | SendOption | ShowEntity | TagChange)*>
 <!ATTLIST Game ts NMTOKEN #IMPLIED>
