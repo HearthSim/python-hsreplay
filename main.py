@@ -226,6 +226,7 @@ class PlayerID:
 
 TAG_TYPES = {
 	GameTag.CARDTYPE: enums.CardType,
+	GameTag.CLASS: enums.CardClass,
 	GameTag.FACTION: enums.Faction,
 	GameTag.PLAYSTATE: enums.PlayState,
 	GameTag.RARITY: enums.Rarity,
