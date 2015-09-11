@@ -62,6 +62,9 @@ class Node:
 				continue
 			attrib = getattr(self, attr)
 			if attrib:
+				if isinstance(attrib, int):
+					# Check for enums
+					attrib = str(int(attrib))
 				element.attrib[attr] = attrib
 		return element
 
