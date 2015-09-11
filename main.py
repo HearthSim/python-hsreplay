@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import re
 import sys
+from hearthstone import enums
+from hearthstone.enums import GameTag
 from xml.etree import ElementTree
 from xml.dom import minidom
 
@@ -222,6 +224,40 @@ class PlayerID:
 		return self.game.players.get(self.data, self.data)
 
 
+TAG_TYPES = {
+	GameTag.CARDTYPE: enums.CardType,
+	GameTag.FACTION: enums.Faction,
+	GameTag.PLAYSTATE: enums.PlayState,
+	GameTag.RARITY: enums.Rarity,
+	GameTag.MULLIGAN_STATE: enums.Mulligan,
+	GameTag.NEXT_STEP: enums.Step,
+	GameTag.STATE: enums.State,
+	GameTag.STEP: enums.Step,
+	GameTag.ZONE: enums.Zone,
+}
+
+
+def parse_enum(enum, value):
+	if value.isdigit():
+		value = int(value)
+	elif hasattr(enum, value):
+		value = getattr(enum, value)
+	else:
+		sys.stderr.write("Warning: Unhandled %s: %r\n" % (enum, value))
+	return value
+
+
+def parse_tag(tag, value):
+	tag = parse_enum(GameTag, tag)
+	if tag in TAG_TYPES:
+		value = parse_enum(TAG_TYPES[tag], value)
+	elif value.isdigit():
+		value = int(value)
+	else:
+		sys.stderr.write("Unhandled string value: %r = %r" % (tag, value))
+	return tag, value
+
+
 class PowerLogParser:
 	def __init__(self):
 		self.ast = []
@@ -340,7 +376,8 @@ class PowerLogParser:
 		sre = ACTION_TAG_RE.match(data)
 		if sre:
 			tag, value = sre.groups()
-			if tag == "CURRENT_PLAYER":
+			tag, value = parse_tag(tag, value)
+			if tag == GameTag.CURRENT_PLAYER:
 				assert isinstance(self.entity_def, PlayerNode)
 				self.game.first_player = self.entity_def.id
 			node = TagNode(ts, tag, value)
@@ -352,11 +389,12 @@ class PowerLogParser:
 		if sre:
 			self.entity_def = None
 			entity, tag, value = sre.groups()
-			if tag == "ENTITY_ID":
+			tag, value = parse_tag(tag, value)
+			if tag == GameTag.ENTITY_ID:
 				if not entity.isdigit() and not entity.startswith("[") and entity != "GameEntity":
-					self.game.register_player_id(entity, value)
-			elif tag == "CURRENT_PLAYER":
-				self.game.update_current_player(entity, value)
+					self.game.register_player_id(entity, str(value))
+			elif tag == GameTag.CURRENT_PLAYER:
+				self.game.update_current_player(entity, str(value))
 			entity = self._parse_entity(entity)
 			node = TagChangeNode(ts, entity, tag, value)
 
