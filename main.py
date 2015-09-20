@@ -80,6 +80,7 @@ class Node:
 
 class GameNode(Node):
 	tagname = "Game"
+	timestamp = True
 
 	def __init__(self, ts):
 		super().__init__(ts)
