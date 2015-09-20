@@ -63,10 +63,10 @@ class Node:
 			if attr == "ts" and not self.timestamp:
 				continue
 			attrib = getattr(self, attr)
+			if isinstance(attrib, int):
+				# Check for enums
+				attrib = str(int(attrib))
 			if attrib:
-				if isinstance(attrib, int):
-					# Check for enums
-					attrib = str(int(attrib))
 				element.attrib[attr] = attrib
 		return element
 
