@@ -1,8 +1,8 @@
 <!ENTITY % entity 'NMTOKEN'>
 <!ENTITY % gameTag 'NMTOKEN'>
 
-<!ELEMENT HearthstoneReplay (Game*)>
-<!ATTLIST HearthstoneReplay
+<!ELEMENT HSReplay (Game*)>
+<!ATTLIST HSReplay
 	build NMTOKEN #IMPLIED
 	version NMTOKEN #REQUIRED>
 
