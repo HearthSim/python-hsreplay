@@ -90,11 +90,20 @@ class GameNode(Node):
 	def register_player_id(self, entity, id):
 		# Power.log sucks, the entity IDs for players are not reliable.
 		# We convert them to actual entity IDs...
+		if entity == "UNKNOWN HUMAN PLAYER":
+			# Never register unknown players, for our own sanity
+			return
+		if entity in self.players:
+			# Just making sure we're not corrupting data...
+			assert self.players[entity] == id
 		self.players[entity] = id
 		self.playernodes[id].name = entity
 
 	def update_current_player(self, entity, value):
 		# 2nd method of figuring out the player ids: through the CURRENT_PLAYER tag
+		if len(self.players) == 2:
+			# Skip it if we already have both players
+			return
 		if value == "0" and self.first_player:
 			self.register_player_id(entity, self.first_player)
 			self.second_player = [p for p in self.playernodes if p != self.first_player][0]
