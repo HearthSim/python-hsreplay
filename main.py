@@ -431,6 +431,7 @@ class PowerLogParser:
 		if sre:
 			entity, tag, value = sre.groups()
 			entity = self._parse_entity(entity)
+			tag, value = parse_tag(tag, value)
 			node = HideEntityNode(ts, entity, tag, value)
 			self.update_node(node)
 			return
