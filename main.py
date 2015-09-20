@@ -519,6 +519,7 @@ class PowerLogParser:
 		sre = OPTIONS_OPTION_RE.match(data)
 		if sre:
 			index, type, entity = sre.groups()
+			type = parse_enum(enums.OptionType, type)
 			entity = self._parse_entity(entity)
 			node = OptionNode(ts, index, type, entity)
 			self.current_options_node.append(node)
