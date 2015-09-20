@@ -440,6 +440,7 @@ class PowerLogParser:
 		if sre:
 			entity, type, index, target = sre.groups()
 			entity = self._parse_entity(entity)
+			type = parse_enum(enums.PowSubType, type)
 			target = self._parse_entity(target)
 			node = ActionNode(ts, entity, type, index, target)
 			self.update_node(node)
@@ -451,6 +452,7 @@ class PowerLogParser:
 		sre = ACTION_METADATA_RE.match(data)
 		if sre:
 			meta, data, info = sre.groups()
+			meta = parse_enum(enums.MetaDataType, meta)
 			data = self._parse_entity(data)
 			node = MetaDataNode(ts, meta, data, info)
 			self.update_node(node)
