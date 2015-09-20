@@ -1,0 +1,22 @@
+﻿#region
+
+using System.Collections.Generic;
+using System.Xml.Serialization;
+
+#endregion
+
+namespace HearthstoneReplays.GameActions
+{
+	public class ShowEntity : GameData
+
+	{
+		[XmlAttribute("cardID")]
+		public string CardId { get; set; }
+
+		[XmlAttribute("entity")]
+		public string Entity { get; set; }
+
+		[XmlElement("Tag", typeof(Tag))]
+		public List<Tag> Tags { get; set; }
+	}
+}

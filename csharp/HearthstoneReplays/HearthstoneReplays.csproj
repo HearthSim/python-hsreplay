@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{47CD4647-790B-428D-B4E4-8B3267C63469}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HearthstoneReplays</RootNamespace>
+    <AssemblyName>HearthstoneReplays</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Hearthstone\Enums\METADATA_TYPE.cs" />
+    <Compile Include="Hearthstone\Enums\TAG_CARD_SET.cs" />
+    <Compile Include="Hearthstone\Enums\TAG_CLASS.cs" />
+    <Compile Include="Hearthstone\Enums\TAG_ENCHANTMENT_VISUAL.cs" />
+    <Compile Include="Hearthstone\Enums\TAG_FACTION.cs" />
+    <Compile Include="Hearthstone\Enums\TAG_GOLD_REWARD_STATE.cs" />
+    <Compile Include="Hearthstone\Enums\TAG_RACE.cs" />
+    <Compile Include="Hearthstone\Enums\TAG_RARITY.cs" />
+    <Compile Include="Hearthstone\Enums\TAG_STATE.cs" />
+    <Compile Include="Hearthstone\Enums\TAG_STEP.cs" />
+    <Compile Include="Hearthstone\Enums\TAG_TYPE.cs" />
+    <Compile Include="Hearthstone\Enums\POWER_SUBTYPE.cs" />
+    <Compile Include="Parser\Handlers\ChoicesHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler.cs" />
+    <Compile Include="Parser\Handlers\OptionsHandler.cs" />
+    <Compile Include="Parser\Handlers\SendChoicesHandler.cs" />
+    <Compile Include="Parser\Handlers\SendOptionHandler.cs" />
+    <Compile Include="Parser\Helper.cs" />
+    <Compile Include="Parser\Node.cs" />
+    <Compile Include="Parser\ParserState.cs" />
+    <Compile Include="Parser\Regexes.cs" />
+    <Compile Include="Parser\ReplayParser.cs" />
+    <Compile Include="ReplayData\Meta\Info.cs" />
+    <Compile Include="Replay\Entity.cs" />
+    <Compile Include="Replay\GameState.cs" />
+    <Compile Include="Hearthstone\Enums\GAME_TAG.cs" />
+    <Compile Include="Replay\GameStateType.cs" />
+    <Compile Include="Replay\Replay.cs" />
+    <Compile Include="ReplayData\GameActions\Action.cs" />
+    <Compile Include="ReplayData\Entities\BaseEntity.cs" />
+    <Compile Include="ReplayData\GameActions\HideEntity.cs" />
+    <Compile Include="ReplayData\GameActions\ShowEntity.cs" />
+    <Compile Include="ReplayData\Meta\Choice.cs" />
+    <Compile Include="ReplayData\Meta\Choices.cs" />
+    <Compile Include="ReplayData\Entities\FullEntity.cs" />
+    <Compile Include="ReplayData\Game.cs" />
+    <Compile Include="ReplayData\GameActions\GameAction.cs" />
+    <Compile Include="ReplayData\GameData.cs" />
+    <Compile Include="ReplayData\Entities\GameEntity.cs" />
+    <Compile Include="ReplayData\HearthstoneReplay.cs" />
+    <Compile Include="ReplayData\Entities\PlayerEntity.cs" />
+    <Compile Include="ReplayData\Meta\MetaData.cs" />
+    <Compile Include="ReplayData\Meta\Options\Option.cs" />
+    <Compile Include="ReplayData\Meta\Options\OptionItem.cs" />
+    <Compile Include="ReplayData\Meta\Options\Options.cs" />
+    <Compile Include="ReplayData\Meta\Options\SendOption.cs" />
+    <Compile Include="ReplayData\Meta\Options\SubOption.cs" />
+    <Compile Include="ReplayData\Meta\Options\Target.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReplayData\Meta\SendChoices.cs" />
+    <Compile Include="ReplayData\GameActions\Tag.cs" />
+    <Compile Include="ReplayData\GameActions\TagChange.cs" />
+    <Compile Include="ReplaySerializer.cs" />
+    <Compile Include="Hearthstone\Enums\TAG_ZONE.cs" />
+    <Compile Include="Hearthstone\Enums\TAG_CARDTYPE.cs" />
+    <Compile Include="Hearthstone\Enums\TAG_MULLIGAN.cs" />
+    <Compile Include="Hearthstone\Enums\TAG_PLAYSTATE.cs" />
+    <Compile Include="Utility.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

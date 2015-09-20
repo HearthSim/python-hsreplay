@@ -1,0 +1,1311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HSReplay xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Game>
+    <GameEntity id="1">
+      <Tag tag="10" value="85" />
+      <Tag tag="20" value="1" />
+      <Tag tag="49" value="1" />
+      <Tag tag="53" value="1" />
+      <Tag tag="198" value="4" />
+      <Tag tag="202" value="1" />
+      <Tag tag="204" value="2" />
+    </GameEntity>
+    <Player id="2" accountHi="144115198130930503" accountLo="60717152" playerID="1" name="camcam411">
+      <Tag tag="7" value="75" />
+      <Tag tag="17" value="1" />
+      <Tag tag="27" value="4" />
+      <Tag tag="28" value="10" />
+      <Tag tag="29" value="4" />
+      <Tag tag="30" value="1" />
+      <Tag tag="31" value="1" />
+      <Tag tag="49" value="1" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="2" />
+      <Tag tag="176" value="10" />
+      <Tag tag="202" value="2" />
+      <Tag tag="272" value="1" />
+      <Tag tag="399" value="4" />
+    </Player>
+    <Player id="3" accountHi="144115198130930503" accountLo="15856412" playerID="2" name="Epix">
+      <Tag tag="7" value="75" />
+      <Tag tag="17" value="1" />
+      <Tag tag="23" value="1" />
+      <Tag tag="24" value="1" />
+      <Tag tag="27" value="36" />
+      <Tag tag="28" value="10" />
+      <Tag tag="29" value="4" />
+      <Tag tag="30" value="2" />
+      <Tag tag="31" value="2" />
+      <Tag tag="49" value="1" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="3" />
+      <Tag tag="176" value="10" />
+      <Tag tag="202" value="2" />
+      <Tag tag="272" value="1" />
+      <Tag tag="399" value="3" />
+    </Player>
+    <FullEntity id="4" cardID="HERO_04">
+      <Tag tag="45" value="30" />
+      <Tag tag="49" value="1" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="4" />
+      <Tag tag="201" value="3" />
+      <Tag tag="202" value="3" />
+      <Tag tag="203" value="2" />
+      <Tag tag="380" value="472" />
+    </FullEntity>
+    <FullEntity id="5" cardID="CS2_101">
+      <Tag tag="48" value="2" />
+      <Tag tag="49" value="1" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="5" />
+      <Tag tag="201" value="3" />
+      <Tag tag="202" value="10" />
+      <Tag tag="203" value="2" />
+      <Tag tag="313" value="4" />
+    </FullEntity>
+    <FullEntity id="6">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="6" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="7">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="7" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="8">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="8" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="9">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="9" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="10">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="10" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="11">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="11" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="12">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="12" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="13">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="13" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="14">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="14" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="15">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="15" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="16">
+      <Tag tag="49" value="3" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="16" />
+      <Tag tag="263" value="2" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="17">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="17" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="18">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="18" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="19">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="19" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="20">
+      <Tag tag="49" value="3" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="20" />
+      <Tag tag="263" value="3" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="21">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="21" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="22">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="22" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="23">
+      <Tag tag="49" value="3" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="23" />
+      <Tag tag="263" value="4" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="24">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="24" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="25">
+      <Tag tag="49" value="3" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="25" />
+      <Tag tag="263" value="1" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="26">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="26" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="27">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="27" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="28">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="28" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="29">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="29" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="30">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="30" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="31">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="31" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="32">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="32" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="33">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="33" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="34">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="34" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="35">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="35" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="36" cardID="HERO_09">
+      <Tag tag="45" value="30" />
+      <Tag tag="49" value="1" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="36" />
+      <Tag tag="201" value="3" />
+      <Tag tag="202" value="3" />
+      <Tag tag="203" value="2" />
+    </FullEntity>
+    <FullEntity id="37" cardID="CS1h_001">
+      <Tag tag="48" value="2" />
+      <Tag tag="49" value="1" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="37" />
+      <Tag tag="201" value="3" />
+      <Tag tag="202" value="10" />
+      <Tag tag="203" value="2" />
+      <Tag tag="313" value="36" />
+    </FullEntity>
+    <FullEntity id="38">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="38" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="39">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="39" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="40" cardID="GVG_011">
+      <Tag tag="45" value="2" />
+      <Tag tag="47" value="3" />
+      <Tag tag="48" value="2" />
+      <Tag tag="49" value="3" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="40" />
+      <Tag tag="202" value="4" />
+      <Tag tag="203" value="1" />
+      <Tag tag="218" value="1" />
+      <Tag tag="263" value="1" />
+    </FullEntity>
+    <FullEntity id="41">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="41" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="42">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="42" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="43">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="43" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="44">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="44" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="45">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="45" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="46">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="46" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="47" cardID="CS1_112">
+      <Tag tag="48" value="5" />
+      <Tag tag="49" value="3" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="47" />
+      <Tag tag="201" value="3" />
+      <Tag tag="202" value="5" />
+      <Tag tag="203" value="1" />
+      <Tag tag="263" value="2" />
+    </FullEntity>
+    <FullEntity id="48">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="48" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="49">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="49" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="50">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="50" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="51">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="51" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="52">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="52" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="53">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="53" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="54">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="54" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="55">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="55" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="56">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="56" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="57">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="57" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="58">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="58" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="59">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="59" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="60">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="60" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="61">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="61" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="62">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="62" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="63">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="63" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="64" cardID="EX1_284">
+      <Tag tag="45" value="4" />
+      <Tag tag="47" value="4" />
+      <Tag tag="48" value="5" />
+      <Tag tag="49" value="3" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="64" />
+      <Tag tag="192" value="1" />
+      <Tag tag="201" value="3" />
+      <Tag tag="202" value="4" />
+      <Tag tag="203" value="3" />
+      <Tag tag="218" value="1" />
+      <Tag tag="263" value="3" />
+    </FullEntity>
+    <FullEntity id="65">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="65" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="66">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="66" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="67">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="67" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="68">
+      <Tag tag="49" value="3" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="68" />
+      <Tag tag="263" value="5" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <TagChange entity="3" tag="7" value="75" />
+    <TagChange entity="3" tag="17" value="1" />
+    <TagChange entity="3" tag="23" value="1" />
+    <TagChange entity="3" tag="24" value="1" />
+    <TagChange entity="3" tag="27" value="36" />
+    <TagChange entity="3" tag="28" value="10" />
+    <TagChange entity="3" tag="29" value="4" />
+    <TagChange entity="3" tag="30" value="2" />
+    <TagChange entity="3" tag="31" value="2" />
+    <TagChange entity="3" tag="49" value="1" />
+    <TagChange entity="3" tag="50" value="2" />
+    <TagChange entity="3" tag="53" value="3" />
+    <TagChange entity="3" tag="176" value="10" />
+    <TagChange entity="3" tag="202" value="2" />
+    <TagChange entity="3" tag="272" value="1" />
+    <TagChange entity="3" tag="399" value="3" />
+    <TagChange entity="2" tag="7" value="75" />
+    <TagChange entity="2" tag="17" value="1" />
+    <TagChange entity="2" tag="27" value="4" />
+    <TagChange entity="2" tag="28" value="10" />
+    <TagChange entity="2" tag="29" value="4" />
+    <TagChange entity="2" tag="30" value="1" />
+    <TagChange entity="2" tag="31" value="1" />
+    <TagChange entity="2" tag="49" value="1" />
+    <TagChange entity="2" tag="50" value="1" />
+    <TagChange entity="2" tag="53" value="2" />
+    <TagChange entity="2" tag="176" value="10" />
+    <TagChange entity="2" tag="202" value="2" />
+    <TagChange entity="2" tag="272" value="1" />
+    <TagChange entity="2" tag="399" value="4" />
+    <TagChange entity="1" tag="10" value="85" />
+    <TagChange entity="1" tag="20" value="1" />
+    <TagChange entity="1" tag="49" value="1" />
+    <TagChange entity="1" tag="53" value="1" />
+    <TagChange entity="1" tag="198" value="4" />
+    <TagChange entity="1" tag="202" value="1" />
+    <TagChange entity="1" tag="204" value="2" />
+    <TagChange entity="1" tag="19" value="4" />
+    <Action entity="1" index="-1" type="5">
+      <TagChange entity="2" tag="305" value="1" />
+      <Choices entity="1" max="5" min="0" playerID="1" source="1" type="MULLIGAN">
+        <Choice entity="25" index="0" />
+        <Choice entity="16" index="1" />
+        <Choice entity="20" index="2" />
+        <Choice entity="23" index="3" />
+        <Choice entity="68" index="4" />
+      </Choices>
+    </Action>
+    <TagChange entity="3" tag="305" value="1" />
+    <Choices entity="2" max="3" min="0" playerID="2" source="1" type="MULLIGAN">
+      <Choice entity="40" index="0" />
+      <Choice entity="47" index="1" />
+      <Choice entity="64" index="2" />
+    </Choices>
+    <TagChange entity="3" tag="17" value="8" />
+    <TagChange entity="3" tag="17" value="3" />
+    <TagChange entity="3" tag="17" value="5" />
+    <TagChange entity="2" tag="17" value="4" />
+    <TagChange entity="1" tag="198" value="14" />
+    <TagChange entity="1" tag="19" value="14" />
+    <Action entity="1" index="-1" type="5">
+      <TagChange entity="1" tag="198" value="15" />
+    </Action>
+    <TagChange entity="1" tag="19" value="15" />
+    <TagChange entity="1" tag="204" value="3" />
+    <TagChange entity="2" tag="13" value="1" />
+    <TagChange entity="3" tag="13" value="1" />
+  </Game>
+  <Game>
+    <GameEntity id="1">
+      <Tag tag="10" value="85" />
+      <Tag tag="20" value="1" />
+      <Tag tag="49" value="1" />
+      <Tag tag="53" value="1" />
+      <Tag tag="198" value="4" />
+      <Tag tag="202" value="1" />
+      <Tag tag="204" value="2" />
+    </GameEntity>
+    <Player id="2" accountHi="144115198130930503" accountLo="15856412" playerID="1" name="Norzma">
+      <Tag tag="7" value="75" />
+      <Tag tag="17" value="1" />
+      <Tag tag="23" value="1" />
+      <Tag tag="24" value="1" />
+      <Tag tag="27" value="4" />
+      <Tag tag="28" value="10" />
+      <Tag tag="29" value="4" />
+      <Tag tag="30" value="1" />
+      <Tag tag="31" value="1" />
+      <Tag tag="49" value="1" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="2" />
+      <Tag tag="176" value="10" />
+      <Tag tag="202" value="2" />
+      <Tag tag="272" value="1" />
+      <Tag tag="399" value="3" />
+    </Player>
+    <Player id="3" accountHi="144115198130930503" accountLo="18403736" playerID="2" name="Epix">
+      <Tag tag="7" value="75" />
+      <Tag tag="17" value="1" />
+      <Tag tag="27" value="36" />
+      <Tag tag="28" value="10" />
+      <Tag tag="29" value="4" />
+      <Tag tag="30" value="2" />
+      <Tag tag="31" value="2" />
+      <Tag tag="49" value="1" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="3" />
+      <Tag tag="176" value="10" />
+      <Tag tag="202" value="2" />
+      <Tag tag="272" value="1" />
+      <Tag tag="399" value="4" />
+    </Player>
+    <FullEntity id="4" cardID="HERO_09">
+      <Tag tag="45" value="30" />
+      <Tag tag="49" value="1" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="4" />
+      <Tag tag="201" value="3" />
+      <Tag tag="202" value="3" />
+      <Tag tag="203" value="2" />
+    </FullEntity>
+    <FullEntity id="5" cardID="CS1h_001">
+      <Tag tag="48" value="2" />
+      <Tag tag="49" value="1" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="5" />
+      <Tag tag="201" value="3" />
+      <Tag tag="202" value="10" />
+      <Tag tag="203" value="2" />
+      <Tag tag="313" value="4" />
+    </FullEntity>
+    <FullEntity id="6">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="6" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="7">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="7" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="8">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="8" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="9" cardID="CS1_112">
+      <Tag tag="48" value="5" />
+      <Tag tag="49" value="3" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="9" />
+      <Tag tag="201" value="3" />
+      <Tag tag="202" value="5" />
+      <Tag tag="203" value="1" />
+      <Tag tag="263" value="2" />
+    </FullEntity>
+    <FullEntity id="10" cardID="BRM_034">
+      <Tag tag="45" value="4" />
+      <Tag tag="47" value="5" />
+      <Tag tag="48" value="5" />
+      <Tag tag="49" value="3" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="10" />
+      <Tag tag="201" value="3" />
+      <Tag tag="202" value="4" />
+      <Tag tag="203" value="1" />
+      <Tag tag="218" value="1" />
+      <Tag tag="263" value="3" />
+      <Tag tag="386" value="1" />
+    </FullEntity>
+    <FullEntity id="11">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="11" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="12">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="12" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="13">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="13" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="14">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="14" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="15">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="15" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="16">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="16" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="17">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="17" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="18">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="18" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="19">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="19" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="20">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="20" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="21">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="21" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="22">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="22" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="23">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="23" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="24">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="24" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="25">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="25" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="26" cardID="BRM_020">
+      <Tag tag="32" value="1" />
+      <Tag tag="45" value="5" />
+      <Tag tag="47" value="3" />
+      <Tag tag="48" value="4" />
+      <Tag tag="49" value="3" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="26" />
+      <Tag tag="202" value="4" />
+      <Tag tag="203" value="1" />
+      <Tag tag="263" value="1" />
+    </FullEntity>
+    <FullEntity id="27">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="27" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="28">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="28" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="29">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="29" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="30">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="30" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="31">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="31" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="32">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="32" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="33">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="33" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="34">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="34" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="35">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="1" />
+      <Tag tag="53" value="35" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="36" cardID="HERO_05">
+      <Tag tag="45" value="30" />
+      <Tag tag="49" value="1" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="36" />
+      <Tag tag="201" value="3" />
+      <Tag tag="202" value="3" />
+      <Tag tag="203" value="2" />
+    </FullEntity>
+    <FullEntity id="37" cardID="DS1h_292">
+      <Tag tag="48" value="2" />
+      <Tag tag="49" value="1" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="37" />
+      <Tag tag="201" value="3" />
+      <Tag tag="202" value="10" />
+      <Tag tag="203" value="2" />
+      <Tag tag="313" value="36" />
+    </FullEntity>
+    <FullEntity id="38">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="38" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="39">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="39" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="40">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="40" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="41">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="41" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="42">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="42" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="43">
+      <Tag tag="49" value="3" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="43" />
+      <Tag tag="263" value="1" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="44">
+      <Tag tag="49" value="3" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="44" />
+      <Tag tag="263" value="4" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="45">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="45" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="46">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="46" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="47">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="47" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="48">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="48" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="49">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="49" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="50">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="50" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="51">
+      <Tag tag="49" value="3" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="51" />
+      <Tag tag="263" value="2" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="52">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="52" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="53">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="53" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="54">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="54" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="55">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="55" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="56">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="56" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="57">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="57" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="58">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="58" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="59">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="59" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="60">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="60" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="61">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="61" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="62">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="62" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="63">
+      <Tag tag="49" value="3" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="63" />
+      <Tag tag="263" value="3" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="64">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="64" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="65">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="65" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="66">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="66" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="67">
+      <Tag tag="49" value="2" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="67" />
+      <Tag tag="263" value="0" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <FullEntity id="68">
+      <Tag tag="49" value="3" />
+      <Tag tag="50" value="2" />
+      <Tag tag="53" value="68" />
+      <Tag tag="263" value="5" />
+      <Tag tag="231" value="0" />
+      <Tag tag="410" value="0" />
+    </FullEntity>
+    <TagChange entity="2" tag="7" value="75" />
+    <TagChange entity="2" tag="17" value="1" />
+    <TagChange entity="2" tag="27" value="36" />
+    <TagChange entity="2" tag="28" value="10" />
+    <TagChange entity="2" tag="29" value="4" />
+    <TagChange entity="2" tag="30" value="2" />
+    <TagChange entity="2" tag="31" value="2" />
+    <TagChange entity="2" tag="49" value="1" />
+    <TagChange entity="2" tag="50" value="2" />
+    <TagChange entity="2" tag="53" value="3" />
+    <TagChange entity="2" tag="176" value="10" />
+    <TagChange entity="2" tag="202" value="2" />
+    <TagChange entity="2" tag="272" value="1" />
+    <TagChange entity="2" tag="399" value="4" />
+    <TagChange entity="3" tag="7" value="75" />
+    <TagChange entity="3" tag="17" value="1" />
+    <TagChange entity="3" tag="23" value="1" />
+    <TagChange entity="3" tag="24" value="1" />
+    <TagChange entity="3" tag="27" value="4" />
+    <TagChange entity="3" tag="28" value="10" />
+    <TagChange entity="3" tag="29" value="4" />
+    <TagChange entity="3" tag="30" value="1" />
+    <TagChange entity="3" tag="31" value="1" />
+    <TagChange entity="3" tag="49" value="1" />
+    <TagChange entity="3" tag="50" value="1" />
+    <TagChange entity="3" tag="53" value="2" />
+    <TagChange entity="3" tag="176" value="10" />
+    <TagChange entity="3" tag="202" value="2" />
+    <TagChange entity="3" tag="272" value="1" />
+    <TagChange entity="3" tag="399" value="3" />
+    <TagChange entity="1" tag="10" value="85" />
+    <TagChange entity="1" tag="20" value="1" />
+    <TagChange entity="1" tag="49" value="1" />
+    <TagChange entity="1" tag="53" value="1" />
+    <TagChange entity="1" tag="198" value="4" />
+    <TagChange entity="1" tag="202" value="1" />
+    <TagChange entity="1" tag="204" value="2" />
+    <TagChange entity="1" tag="19" value="4" />
+    <Action entity="1" index="-1" type="5">
+      <TagChange entity="3" tag="305" value="1" />
+      <Choices entity="1" max="3" min="0" playerID="1" source="1" type="MULLIGAN">
+        <Choice entity="26" index="0" />
+        <Choice entity="9" index="1" />
+        <Choice entity="10" index="2" />
+      </Choices>
+    </Action>
+    <TagChange entity="2" tag="305" value="1" />
+    <Choices entity="2" max="5" min="0" playerID="2" source="1" type="MULLIGAN">
+      <Choice entity="43" index="0" />
+      <Choice entity="51" index="1" />
+      <Choice entity="63" index="2" />
+      <Choice entity="44" index="3" />
+      <Choice entity="68" index="4" />
+    </Choices>
+    <TagChange entity="2" tag="305" value="2" />
+    <Action entity="2" index="-1" type="5">
+      <TagChange entity="2" tag="305" value="3" />
+    </Action>
+    <Action entity="2" index="-1" type="5">
+      <TagChange entity="2" tag="305" value="4" />
+    </Action>
+    <TagChange entity="3" tag="17" value="8" />
+    <TagChange entity="3" tag="17" value="3" />
+    <TagChange entity="3" tag="17" value="5" />
+    <TagChange entity="2" tag="17" value="4" />
+    <TagChange entity="1" tag="198" value="14" />
+    <TagChange entity="1" tag="19" value="14" />
+    <Action entity="1" index="-1" type="5">
+      <TagChange entity="1" tag="198" value="15" />
+    </Action>
+    <TagChange entity="1" tag="19" value="15" />
+    <TagChange entity="1" tag="204" value="3" />
+    <TagChange entity="3" tag="13" value="1" />
+    <TagChange entity="2" tag="13" value="1" />
+  </Game>
+</HSReplay>
