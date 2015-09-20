@@ -64,14 +64,14 @@ class Node:
 		for node in self.nodes:
 			element.append(node.xml())
 		for attr in self.attributes:
-			if attr == "ts" and not self.timestamp:
-				continue
 			attrib = getattr(self, attr)
 			if isinstance(attrib, int):
 				# Check for enums
 				attrib = str(int(attrib))
 			if attrib:
 				element.attrib[attr] = attrib
+		if self.timestamp:
+			element.attrib["ts"] = self.ts
 		return element
 
 	def __repr__(self):
