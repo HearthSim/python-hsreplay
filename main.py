@@ -564,7 +564,7 @@ class PowerLogParser:
 			self.update_node(node)
 
 	def toxml(self):
-		root = ElementTree.Element("HearthstoneReplay")
+		root = ElementTree.Element("HSReplay")
 		root.attrib["version"] = __version__
 		for game in self.ast:
 			root.append(game.xml())
