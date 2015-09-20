@@ -7,6 +7,9 @@ from xml.etree import ElementTree
 from xml.dom import minidom
 
 
+__version__ = "0.9"
+
+
 POWERLOG_LINE_RE = re.compile(r"^D ([\d:.]+) ([^(]+)\(\) - (.+)$")
 OUTPUTLOG_LINE_RE = re.compile(r"\[Power\] ()([^(]+)\(\) - (.+)$")
 
@@ -558,6 +561,7 @@ class PowerLogParser:
 
 	def toxml(self):
 		root = ElementTree.Element("HearthstoneReplay")
+		root.attrib["version"] = __version__
 		for game in self.ast:
 			root.append(game.xml())
 		return pretty_xml(root)
