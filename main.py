@@ -283,6 +283,9 @@ class PowerLogParser:
 		if data == "GameEntity":
 			return self.game.id
 
+		if data == "UNKNOWN HUMAN PLAYER":
+			return "[UNKNOWN HUMAN PLAYER]"
+
 		if data.isdigit():
 			return data
 
