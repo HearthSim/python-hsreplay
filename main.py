@@ -290,7 +290,7 @@ class PowerLogParser:
 		if data.isdigit():
 			return data
 
-		return self.game.players.get(data, PlayerID(self.game, data))
+		return PlayerID(self.game, data)
 
 	def read(self, f):
 		regex = None
