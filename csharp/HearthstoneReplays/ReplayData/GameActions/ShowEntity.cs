@@ -14,7 +14,7 @@ namespace HearthstoneReplays.GameActions
 		public string CardId { get; set; }
 
 		[XmlAttribute("entity")]
-		public string Entity { get; set; }
+		public int Entity { get; set; }
 
 		[XmlElement("Tag", typeof(Tag))]
 		public List<Tag> Tags { get; set; }

@@ -23,7 +23,7 @@ namespace HearthstoneReplays.ReplayData.Meta
 		public int PlayerId { get; set; }
 
 		[XmlAttribute("source")]
-		public string Source { get; set; }
+		public int Source { get; set; }
 
 		[XmlAttribute("type")]
 		public string Type { get; set; }

@@ -55,7 +55,7 @@ namespace HearthstoneReplays.Parser.Handlers
 				var index = match.Groups[1].Value;
 				var rawEntity = match.Groups[2].Value;
 				var entity = Helper.ParseEntity(rawEntity, state);
-				var choice = new Choice {Entity = entity, Index = index};
+				var choice = new Choice {Entity = entity, Index = int.Parse(index)};
 				state.Choices.ChoiceList.Add(choice);
 			}
 		}

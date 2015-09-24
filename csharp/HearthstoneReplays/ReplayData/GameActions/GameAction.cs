@@ -11,6 +11,6 @@ namespace HearthstoneReplays.GameActions
 	public abstract class GameAction : GameData
 	{
 		[XmlAttribute("entity")]
-		public string Entity { get; set; }
+		public int Entity { get; set; }
 	}
 }

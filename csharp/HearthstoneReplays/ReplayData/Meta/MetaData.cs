@@ -10,7 +10,7 @@ namespace HearthstoneReplays.ReplayData.Meta
 	public class MetaData : GameData
 	{
 		[XmlAttribute("data")]
-		public string Data { get; set; }
+		public int Data { get; set; }
 
 		[XmlAttribute("info")]
 		public string Info { get; set; }

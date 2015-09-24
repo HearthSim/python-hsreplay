@@ -27,53 +27,58 @@ namespace HearthstoneReplays.Parser
 			{GAME_TAG.ZONE, typeof(TAG_ZONE)}
 		};
 
-		public static string ParseEntity(string data, ParserState state)
+		public static int ParseEntity(string data, ParserState state)
 		{
-			if(string.IsNullOrEmpty(data))
-				return null;
-			var match = Regexes.EntityRegex.Match(data);
+		    if (string.IsNullOrEmpty(data))
+		        return 0;
+            var match = Regexes.EntityRegex.Match(data);
 			if(match.Success)
-				return match.Groups[1].Value;
-			if(data == "0")
-				return null;
+				return int.Parse(match.Groups[1].Value);
 			if(data == "GameEntity")
-				return "1";
+				return 1;
 			int numeric;
 			if(int.TryParse(data, out numeric))
-				return data;
+				return numeric;
 			return GetPlayerIdFromName(data, state);
 		}
 
-		public static string GetPlayerIdFromName(string data, ParserState state)
+		public static int GetPlayerIdFromName(string data, ParserState state)
 		{
 			var firstPlayer =
 				(PlayerEntity)state.CurrentGame.Data.FirstOrDefault(x => (x is PlayerEntity) && ((PlayerEntity)x).Id == state.FirstPlayerId);
 			if(firstPlayer == null)
 				throw new Exception("Could not find first player");
-			if(string.IsNullOrEmpty(firstPlayer.Name))
-				firstPlayer.Name = data;
-			if(firstPlayer.Name == data)
-				return firstPlayer.Id.ToString();
 
-			var secondPlayer =
-				(PlayerEntity)state.CurrentGame.Data.FirstOrDefault(x => (x is PlayerEntity) && ((PlayerEntity)x).Id != state.FirstPlayerId);
-			if(secondPlayer == null)
-				throw new Exception("Could not find second player");
+            var secondPlayer =
+                (PlayerEntity)state.CurrentGame.Data.FirstOrDefault(x => (x is PlayerEntity) && ((PlayerEntity)x).Id != state.FirstPlayerId);
+            if(secondPlayer == null)
+                throw new Exception("Could not find second player");
 
-			if(string.IsNullOrEmpty(secondPlayer.Name))
-				secondPlayer.Name = data;
-			if(secondPlayer.Name == data)
-				return secondPlayer.Id.ToString();
+            if(firstPlayer.Name == data)
+                return firstPlayer.Id;
+            if(secondPlayer.Name == data)
+                return secondPlayer.Id;
+
+		    if (string.IsNullOrEmpty(firstPlayer.Name))
+		    {
+		        firstPlayer.Name = data;
+                return firstPlayer.Id;
+            }
+		    if (string.IsNullOrEmpty(secondPlayer.Name))
+		    {
+		        secondPlayer.Name = data;
+                return secondPlayer.Id;
+            }
 
 			if(firstPlayer.Name == "UNKNOWN HUMAN PLAYER")
 			{
 				firstPlayer.Name = data;
-				return firstPlayer.Id.ToString();
+				return firstPlayer.Id;
 			}
 			if(secondPlayer.Name == "UNKNOWN HUMAN PLAYER")
 			{
 				secondPlayer.Name = data;
-				return secondPlayer.Id.ToString();
+				return secondPlayer.Id;
 			}
 
 

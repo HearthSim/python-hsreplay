@@ -16,7 +16,7 @@ namespace HearthstoneReplays.GameActions
 		public int Index { get; set; }
 
 		[XmlAttribute("target")]
-		public string Target { get; set; }
+		public int Target { get; set; }
 
 		[XmlAttribute("type")]
 		public int Type { get; set; }

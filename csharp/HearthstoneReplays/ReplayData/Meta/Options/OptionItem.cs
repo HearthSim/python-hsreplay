@@ -14,6 +14,6 @@ namespace HearthstoneReplays.ReplayData.Meta.Options
 		public int Index { get; set; }
 
 		[XmlAttribute("entity")]
-		public string Entity { get; set; }
+		public int Entity { get; set; }
 	}
 }

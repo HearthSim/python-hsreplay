@@ -155,14 +155,14 @@ namespace HearthstoneReplays.Replay
 			var tagChange = data as TagChange;
 			if(tagChange != null)
 			{
-				var entityId = GetEntityIdFromString(tagChange.Entity);
-			    var prevValue = _entities[entityId].GetTag((GAME_TAG) tagChange.Name);
-				_entities[entityId].SetTag((GAME_TAG)tagChange.Name, tagChange.Value);
+			    var prevValue = _entities[tagChange.Entity].GetTag((GAME_TAG) tagChange.Name);
+				_entities[tagChange.Entity].SetTag((GAME_TAG)tagChange.Name, tagChange.Value);
 
 			    switch (tagChange.Name)
                 {
                     case (int)GAME_TAG.CURRENT_PLAYER:
-                        AddGameState(ActionType.TurnStart);
+                        if(prevValue != tagChange.Value && tagChange.Value == 1)
+                            AddGameState(ActionType.TurnStart);
                         break;
                     case (int)GAME_TAG.PLAYSTATE:
                         if(tagChange.Value == (int)TAG_PLAYSTATE.WON)
@@ -190,18 +190,16 @@ namespace HearthstoneReplays.Replay
 			var showEntity = data as ShowEntity;
 			if(showEntity != null)
 			{
-				var entityId = GetEntityIdFromString(showEntity.Entity);
-				_entities[entityId].SetCardId(showEntity.CardId);
+				_entities[showEntity.Entity].SetCardId(showEntity.CardId);
 				foreach(var tag in showEntity.Tags)
-					_entities[entityId].SetTag((GAME_TAG)tag.Name, tag.Value);
+					_entities[showEntity.Entity].SetTag((GAME_TAG)tag.Name, tag.Value);
 				return;
 			}
 
 			var hideEntity = data as HideEntity;
 			if(hideEntity != null)
 			{
-				var entityId = GetEntityIdFromString(hideEntity.Entity);
-				_entities[entityId].SetTag((GAME_TAG)hideEntity.TagName, hideEntity.TagValue);
+				_entities[hideEntity.Entity].SetTag((GAME_TAG)hideEntity.TagName, hideEntity.TagValue);
 				return;
 			}
 

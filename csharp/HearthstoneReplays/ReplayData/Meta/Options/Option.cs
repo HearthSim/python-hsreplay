@@ -17,7 +17,7 @@ namespace HearthstoneReplays.ReplayData.Meta.Options
 		public string Type { get; set; }
 
 		[XmlAttribute("entity")]
-		public string Entity { get; set; }
+		public int Entity { get; set; }
 
 		[XmlElement("SubOption", typeof(SubOption))]
 		[XmlElement("Target", typeof(Target))]

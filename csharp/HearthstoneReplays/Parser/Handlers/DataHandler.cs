@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using HearthstoneReplays.Entities;
 using HearthstoneReplays.GameActions;
 using HearthstoneReplays.Hearthstone.Enums;
@@ -166,7 +167,7 @@ namespace HearthstoneReplays.Parser.Handlers
 				var rawEntity = match.Groups[1].Value;
 				var cardId = match.Groups[2].Value;
 				var entity = Helper.ParseEntity(rawEntity, state);
-				var showEntity = new FullEntity {CardId = cardId, Id = int.Parse(entity), Tags = new List<Tag>()};
+				var showEntity = new FullEntity {CardId = cardId, Id = entity, Tags = new List<Tag>()};
 				if(state.Node.Type == typeof(Game))
 					((Game)state.Node.Object).Data.Add(showEntity);
 				else if(state.Node.Type == typeof(Action))
@@ -186,13 +187,26 @@ namespace HearthstoneReplays.Parser.Handlers
 				var entity = Helper.ParseEntity(rawEntity, state);
 				var tag = Helper.ParseTag(tagName, value);
 				if(tag.Name == (int)GAME_TAG.ENTITY_ID)
-				{
-					//...
-				}
-				else if(tag.Name == (int)GAME_TAG.CURRENT_PLAYER)
-				{
-					//...
-				}
+                {
+                    int tmp;
+                    if(!int.TryParse(rawEntity, out tmp) && !rawEntity.StartsWith("[") && rawEntity != "GameEntity")
+                    {
+                        if (entity != tag.Value)
+                        {
+                            entity = tag.Value;
+                            var tmpName = ((PlayerEntity) state.CurrentGame.Data[1]).Name;
+                            ((PlayerEntity) state.CurrentGame.Data[1]).Name =
+                                ((PlayerEntity) state.CurrentGame.Data[2]).Name;
+                            ((PlayerEntity) state.CurrentGame.Data[2]).Name = tmpName;
+                            foreach (var dataObj in ((Game) state.Node.Object).Data)
+                            {
+                                var tChange = dataObj as TagChange;
+                                if (tChange != null)
+                                    tChange.Entity = tChange.Entity == 2 ? 3 : 2;
+                            }
+                        }
+                    }
+                }
 				var tagChange = new TagChange {Entity = entity, Name = tag.Name, Value = tag.Value};
 				if(state.Node.Type == typeof(Game))
 					((Game)state.Node.Object).Data.Add(tagChange);
@@ -211,7 +225,6 @@ namespace HearthstoneReplays.Parser.Handlers
 				var tag = Helper.ParseTag(tagName, value);
 				if(tag.Name == (int)GAME_TAG.CURRENT_PLAYER)
 					state.FirstPlayerId = ((PlayerEntity)state.Node.Object).Id;
-				//var tag = new Tag() {Name = tagName, Value = value};
 				if(state.Node.Type == typeof(GameEntity))
 					((GameEntity)state.Node.Object).Tags.Add(tag);
 				else if(state.Node.Type == typeof(PlayerEntity))

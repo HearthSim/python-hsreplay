@@ -9,7 +9,7 @@ namespace HearthstoneReplays.GameActions
 	public class HideEntity : GameData
 	{
 		[XmlAttribute("entity")]
-		public string Entity { get; set; }
+		public int Entity { get; set; }
 
 		[XmlAttribute("tag")]
 		public int TagName { get; set; }

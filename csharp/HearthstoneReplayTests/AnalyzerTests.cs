@@ -3,6 +3,7 @@
 using System.Linq;
 using HearthstoneReplays;
 using HearthstoneReplays.Hearthstone.Enums;
+using HearthstoneReplays.Parser;
 using HearthstoneReplays.Replay;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -17,9 +18,10 @@ namespace HearthstoneReplayTests
 
 		[ClassInitialize]
 		public static void Setup(TestContext context)
-		{
-			var replayData = ReplaySerializer.Deserialize(TestDataReader.GetInputFile("Power_2.log.xml"));
-			_replay = new Replay(replayData);
+        {
+            var replayData = ReplayParser.FromTextReader(TestDataReader.GetInputFile("Power_2.log.txt"));
+            //var replayData = ReplaySerializer.Deserialize(TestDataReader.GetInputFile("Power_2.log.xml"));
+            _replay = new Replay(replayData);
 			_replay.LoadGame(0);
 		}
 
@@ -82,19 +84,42 @@ namespace HearthstoneReplayTests
         }
 
         [TestMethod]
-        public void CorrectLocalPlayer()
+        public void CorrectLocalPlayerAndOpponentTest()
         {
-            var playerName = _replay.GameStates.Last().LocalPlayer.PlayerEntity.Name;
-            Assert.AreEqual(playerName, "Veritas");
+            Assert.AreEqual("Veritas", _replay.GameStates.First().LocalPlayer.PlayerEntity.Name);
+            Assert.AreEqual("Veritas", _replay.GameStates.Last().LocalPlayer.PlayerEntity.Name);
+            Assert.AreEqual("TheKEG", _replay.GameStates.First().Opponent.PlayerEntity.Name);
+            Assert.AreEqual("TheKEG", _replay.GameStates.Last().Opponent.PlayerEntity.Name);
         }
 
         [TestMethod]
-        public void Something()
+        public void CorrectPlayerEntityIdTest()
+        {
+            Assert.AreEqual("TheKEG", _replay.GameStates.First().AllEntities.First(e => e.Value.Id == 2).Value.Name);
+            Assert.AreEqual("TheKEG", _replay.GameStates.Last().AllEntities.First(e => e.Value.Id == 2).Value.Name);
+            Assert.AreEqual("Veritas", _replay.GameStates.First().AllEntities.First(e => e.Value.Id == 3).Value.Name);
+            Assert.AreEqual("Veritas", _replay.GameStates.Last().AllEntities.First(e => e.Value.Id == 3).Value.Name);
+        }
+
+        [TestMethod]
+        public void ActionTypeTurnStartTest()
         {
             var firstTurn = _replay.GetNextAction(ActionType.TurnStart);
             Assert.IsNotNull(firstTurn);
-            //var playerName = _replay.GetNextAction();
-            //Assert.AreEqual(playerName, "Veritas");
+            Assert.AreEqual(1, firstTurn.Player1.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
+            Assert.AreEqual(0, firstTurn.Player2.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
+            var secondTurn = _replay.GetNextAction(ActionType.TurnStart);
+            Assert.IsNotNull(secondTurn);
+            Assert.AreEqual(1, secondTurn.Player1.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
+            Assert.AreEqual(1, secondTurn.Player2.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
+            var thirdTurn = _replay.GetNextAction(ActionType.TurnStart);
+            Assert.IsNotNull(thirdTurn);
+            Assert.AreEqual(2, thirdTurn.Player1.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
+            Assert.AreEqual(1, thirdTurn.Player2.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
+            var fourthTurn = _replay.GetNextAction(ActionType.TurnStart);
+            Assert.IsNotNull(fourthTurn);
+            Assert.AreEqual(2, fourthTurn.Player1.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
+            Assert.AreEqual(2, fourthTurn.Player2.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
         }
     }
 }
