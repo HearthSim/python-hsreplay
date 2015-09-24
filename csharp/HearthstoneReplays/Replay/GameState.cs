@@ -11,13 +11,14 @@ namespace HearthstoneReplays.Replay
 {
 	public class GameState
 	{
-		public Dictionary<int, Entity> AllEntities;
+		public Dictionary<int, Entity> AllEntities { get; }
 		public TimeSpan GameTime;
-		public Player Player1;
-		public Player Player2;
-		public GameStateType Type;
+		public Player Player1 { get; }
+		public Player Player2 { get; }
+		public ActionType Type { get; }
+	    public Entity Source { get; }
 
-		public GameState(Dictionary<int, Entity> entities, GameStateType type)
+		public GameState(Dictionary<int, Entity> entities, ActionType type)
 		{
 			AllEntities = entities;
 			Type = type;

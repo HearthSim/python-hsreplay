@@ -65,13 +65,9 @@
     <EmbeddedResource Include="TestData\Power_1.log.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="TestData\Power_1.log" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="TestData\Power_2.log" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TestData\Power_2.log.xml" />
+    <EmbeddedResource Include="TestData\Power_2.log.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

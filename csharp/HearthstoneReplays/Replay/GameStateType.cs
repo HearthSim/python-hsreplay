@@ -24,4 +24,16 @@ namespace HearthstoneReplays.Replay
 		HEALING,
 		JOUST
 	}
+
+    public enum ActionType
+    {
+        Unknown,
+        Attack,
+        Draw,
+        Play,
+        TurnStart,
+        Death,
+        Victory,
+        Damage
+    }
 }
