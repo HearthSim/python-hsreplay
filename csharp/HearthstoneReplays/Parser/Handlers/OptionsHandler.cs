@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using HearthstoneReplays.Hearthstone.Enums;
 using HearthstoneReplays.ReplayData.Meta.Options;
 
 #endregion
@@ -17,7 +18,7 @@ namespace HearthstoneReplays.Parser.Handlers
 			if(match.Success)
 			{
 				var id = match.Groups[1].Value;
-				state.Options = new Options {Id = id, OptionList = new List<Option>()};
+				state.Options = new Options {Id = int.Parse(id), OptionList = new List<Option>()};
 				if(state.Node.Type == typeof(Game))
 					((Game)state.Node.Object).Data.Add(state.Options);
 				else
@@ -28,9 +29,10 @@ namespace HearthstoneReplays.Parser.Handlers
 			if(match.Success)
 			{
 				var index = match.Groups[1].Value;
-				var type = match.Groups[2].Value;
+				var rawType = match.Groups[2].Value;
 				var rawEntity = match.Groups[3].Value;
 				var entity = Helper.ParseEntity(rawEntity, state);
+			    var type = Helper.ParseEnum<OPTION_TYPE>(rawType);
 				var option = new Option {Entity = entity, Index = int.Parse(index), Type = type, OptionItems = new List<OptionItem>()};
 				state.Options.OptionList.Add(option);
 				state.CurrentOption = option;

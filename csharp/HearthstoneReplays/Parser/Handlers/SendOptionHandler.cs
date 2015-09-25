@@ -24,7 +24,7 @@ namespace HearthstoneReplays.Parser.Handlers
 					OptionIndex = int.Parse(option),
 					Position = int.Parse(position),
 					SubOption = int.Parse(suboption),
-					Target = target
+					Target = int.Parse(target)
 				};
 				if(state.Node.Type == typeof(Game))
 					((Game)state.Node.Object).Data.Add(sendOption);

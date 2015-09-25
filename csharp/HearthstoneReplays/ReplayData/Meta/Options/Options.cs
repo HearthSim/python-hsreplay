@@ -10,7 +10,7 @@ namespace HearthstoneReplays.ReplayData.Meta.Options
 	public class Options : GameData
 	{
 		[XmlAttribute("id")]
-		public string Id { get; set; }
+		public int Id { get; set; }
 
 		public List<Option> OptionList { get; set; }
 	}

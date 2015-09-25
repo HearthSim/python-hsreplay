@@ -13,9 +13,9 @@ namespace HearthstoneReplays.ReplayData.Meta
 		public List<Choice> Choices;
 
 		[XmlAttribute("entity")]
-		public string Entity { get; set; }
+		public int Entity { get; set; }
 
 		[XmlAttribute("type")]
-		public string Type { get; set; }
+		public int Type { get; set; }
 	}
 }

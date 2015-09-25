@@ -18,6 +18,6 @@ namespace HearthstoneReplays.ReplayData.Meta.Options
 		public int SubOption { get; set; }
 
 		[XmlAttribute("target")]
-		public string Target { get; set; }
+		public int Target { get; set; }
 	}
 }

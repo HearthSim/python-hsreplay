@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using HearthstoneReplays.Hearthstone.Enums;
 using HearthstoneReplays.ReplayData.Meta;
 using Action = HearthstoneReplays.GameActions.Action;
 
@@ -17,11 +18,13 @@ namespace HearthstoneReplays.Parser.Handlers
 			var match = Regexes.ChoicesChoiceRegex.Match(data);
 			if(match.Success)
 			{
-				var entity = match.Groups[1].Value;
+				var rawEntity = match.Groups[1].Value;
 				var playerId = match.Groups[2].Value;
-				var type = match.Groups[3].Value;
+				var rawType = match.Groups[3].Value;
 				var min = match.Groups[4].Value;
 				var max = match.Groups[5].Value;
+			    var entity = Helper.ParseEntity(rawEntity, state);
+			    var type = Helper.ParseEnum<CHOICE_TYPE>(rawType);
 				state.Choices = new Choices
 				{
 					ChoiceList = new List<Choice>(),

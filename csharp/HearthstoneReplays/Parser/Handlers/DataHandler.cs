@@ -102,7 +102,7 @@ namespace HearthstoneReplays.Parser.Handlers
 				var info = match.Groups[3].Value;
 				var parsedData = Helper.ParseEntity(rawData, state);
 				var meta = Helper.ParseEnum<METADATA_TYPE>(rawMeta);
-				var metaData = new MetaData {Data = parsedData, Info = info, Meta = meta, MetaInfo = new List<Info>()};
+				var metaData = new MetaData {Data = parsedData, Info = int.Parse(info), Meta = meta, MetaInfo = new List<Info>()};
 				if(state.Node.Type == typeof(Action))
 					((Action)state.Node.Object).Data.Add(metaData);
 				else
@@ -117,7 +117,7 @@ namespace HearthstoneReplays.Parser.Handlers
 				var index = match.Groups[1].Value;
 				var rawEntity = match.Groups[2].Value;
 				var entity = Helper.ParseEntity(rawEntity, state);
-				var metaInfo = new Info {Id = entity, Index = index};
+				var metaInfo = new Info {Id = entity, Index = int.Parse(index)};
 				if(state.Node.Type == typeof(MetaData))
 					((MetaData)state.Node.Object).MetaInfo.Add(metaInfo);
 				else

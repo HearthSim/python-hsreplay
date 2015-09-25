@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using HearthstoneReplays.Hearthstone.Enums;
 using HearthstoneReplays.ReplayData.Meta;
 
 #endregion
@@ -17,8 +18,9 @@ namespace HearthstoneReplays.Parser.Handlers
 			if(match.Success)
 			{
 				var id = match.Groups[1].Value;
-				var type = match.Groups[2].Value;
-				state.SendChoices = new SendChoices {Choices = new List<Choice>(), Entity = id, Type = type};
+				var rawType = match.Groups[2].Value;
+			    var type = Helper.ParseEnum<CHOICE_TYPE>(rawType);
+				state.SendChoices = new SendChoices {Choices = new List<Choice>(), Entity = int.Parse(id), Type = type};
 				if(state.Node.Type == typeof(Game))
 					((Game)state.Node.Object).Data.Add(state.SendChoices);
 				else

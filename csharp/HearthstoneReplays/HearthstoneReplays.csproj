@@ -39,7 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Hearthstone\Enums\CHOICE_TYPE.cs" />
     <Compile Include="Hearthstone\Enums\METADATA_TYPE.cs" />
+    <Compile Include="Hearthstone\Enums\OPTION_TYPE.cs" />
     <Compile Include="Hearthstone\Enums\TAG_CARD_SET.cs" />
     <Compile Include="Hearthstone\Enums\TAG_CLASS.cs" />
     <Compile Include="Hearthstone\Enums\TAG_ENCHANTMENT_VISUAL.cs" />

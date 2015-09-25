@@ -11,7 +11,7 @@ namespace HearthstoneReplays.ReplayData.Meta
 	public class Choices : GameData
 	{
 		[XmlAttribute("entity")]
-		public string Entity { get; set; }
+		public int Entity { get; set; }
 
 		[XmlAttribute("max")]
 		public int Max { get; set; }
@@ -26,7 +26,7 @@ namespace HearthstoneReplays.ReplayData.Meta
 		public int Source { get; set; }
 
 		[XmlAttribute("type")]
-		public string Type { get; set; }
+		public int Type { get; set; }
 
 		[XmlElement("Choice", typeof(Choice))]
 		public List<Choice> ChoiceList { get; set; }
