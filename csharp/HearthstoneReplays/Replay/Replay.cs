@@ -57,9 +57,9 @@ namespace HearthstoneReplays.Replay
 
 		public GameState GetNextAction()
 		{
-			if(_index >= GameStates.Count)
-				_index = 0;
-			return GameStates[_index++];
+			if(_index >= GameStates.Count - 1)
+				return null;
+			return GameStates[++_index];
 		}
 
 		public GameState GetNextAction(ActionType type)
@@ -75,6 +75,27 @@ namespace HearthstoneReplays.Replay
 
 			return GameStates[_index].Type == type ? GameStates[_index] : null;
 		}
+
+	    public GameState GetPreviousAction()
+	    {
+	        if (_index <= 0)
+	            return null;
+	        return GameStates[--_index];
+	    }
+
+        public GameState GetPreviousAction(ActionType type)
+        {
+            if(_index < 0)
+                return null;
+            do
+            {
+                _index--;
+                if(_index < 0)
+                    return null;
+            } while(GameStates[_index].Type != type);
+
+            return GameStates[_index].Type == type ? GameStates[_index] : null;
+        }
 
 		private void AnalyzeReplayData(int index)
 		{
@@ -124,9 +145,9 @@ namespace HearthstoneReplays.Replay
 			}
 		}
 
-	    private void AddGameState(ActionType type)
+	    private void AddGameState(ActionType type, int source)
         {
-            var gState = new GameState((Dictionary<int, Entity>)Utility.DeepClone(_entities), type);
+            var gState = new GameState((Dictionary<int, Entity>)Utility.DeepClone(_entities), type, source);
             GameStates.Add(gState);
         }
 
@@ -138,18 +159,15 @@ namespace HearthstoneReplays.Replay
 				foreach(var subData in action.Data)
 					AnalyzeGameData(subData);
 
-			    switch ((POWER_SUBTYPE) action.Type)
+			    /*switch ((POWER_SUBTYPE) action.Type)
 			    {
 			        case POWER_SUBTYPE.ATTACK:
                         AddGameState(ActionType.Attack);
 			            break;
-                    case POWER_SUBTYPE.PLAY:
-                        AddGameState(ActionType.Play);
-			            break;
                     case POWER_SUBTYPE.DEATHS:
                         AddGameState(ActionType.Death);
 			            break;
-			    }
+			    }*/
 			}
 
 			var tagChange = data as TagChange;
@@ -159,25 +177,52 @@ namespace HearthstoneReplays.Replay
 				_entities[tagChange.Entity].SetTag((GAME_TAG)tagChange.Name, tagChange.Value);
 
 			    switch (tagChange.Name)
-                {
-                    case (int)GAME_TAG.CURRENT_PLAYER:
-                        if(prevValue != tagChange.Value && tagChange.Value == 1)
-                            AddGameState(ActionType.TurnStart);
-                        break;
-                    case (int)GAME_TAG.PLAYSTATE:
-                        if(tagChange.Value == (int)TAG_PLAYSTATE.WON)
-                            AddGameState(ActionType.Victory);
-                        break;
-                    case (int)GAME_TAG.PREDAMAGE:
-                        AddGameState(ActionType.Damage);
-                        break;
-                    case (int)GAME_TAG.ZONE:
-                        if(prevValue == (int)TAG_ZONE.DECK && tagChange.Value == (int)TAG_ZONE.HAND)
-                            AddGameState(ActionType.Draw);
-                    break;
+			    {
+			        case (int) GAME_TAG.CURRENT_PLAYER:
+			            if (prevValue != tagChange.Value && tagChange.Value == 1)
+			                AddGameState(ActionType.TurnStart, tagChange.Entity);
+			            break;
+			        case (int) GAME_TAG.PLAYSTATE:
+			            if (tagChange.Value == (int) TAG_PLAYSTATE.WON)
+			                AddGameState(ActionType.Victory, tagChange.Entity);
+			            else if (tagChange.Value == (int) TAG_PLAYSTATE.LOST)
+			                AddGameState(ActionType.Loss, tagChange.Entity);
+			            else if (tagChange.Value == (int) TAG_PLAYSTATE.TIED)
+			                AddGameState(ActionType.Tie, tagChange.Entity);
+			            break;
+			        case (int) GAME_TAG.DAMAGE:
+			            if (tagChange.Value > 0)
+			                AddGameState(ActionType.Damage, tagChange.Entity);
+			            break;
+			        case (int) GAME_TAG.ZONE:
+			            if (tagChange.Value == (int) TAG_ZONE.DECK && prevValue == (int) TAG_ZONE.HAND &&
+			                _entities[1].GetTag(GAME_TAG.MULLIGAN_STATE) != (int) TAG_MULLIGAN.DONE)
+			            {
+			                AddGameState(ActionType.Mulligan, tagChange.Entity);
+			            }
+			            else if (tagChange.Value == (int) TAG_ZONE.HAND && prevValue == (int) TAG_ZONE.DECK)
+			                AddGameState(ActionType.Draw, tagChange.Entity);
+			            else if (prevValue == (int) TAG_ZONE.HAND && tagChange.Value == (int) TAG_ZONE.PLAY)
+			                AddGameState(ActionType.Play, tagChange.Entity);
+			            else if (prevValue == (int) TAG_ZONE.HAND)
+			                AddGameState(ActionType.HandDiscard, tagChange.Entity);
+			            else if (prevValue == (int) TAG_ZONE.PLAY && tagChange.Value == (int) TAG_ZONE.GRAVEYARD)
+			                AddGameState(ActionType.Death, tagChange.Entity);
+			            else
+			                AddGameState(ActionType.Unknown, tagChange.Entity);
+			            break;
+			        case (int) GAME_TAG.ATTACKING:
+			            Attacking(tagChange.Value == 0 ? null : (int?) tagChange.Entity);
+			            break;
+			        case (int) GAME_TAG.DEFENDING:
+			            Defending(tagChange.Value == 0 ? null : (int?) tagChange.Entity);
+			            break;
+			        case (int) GAME_TAG.NUM_OPTIONS_PLAYED_THIS_TURN:
+			            AddGameState(ActionType.TurnEnd, tagChange.Entity);
+			            break;
 
-                }
-				return;
+			    }
+			    return;
             }
             
             var fullEntity = data as FullEntity;
@@ -191,8 +236,24 @@ namespace HearthstoneReplays.Replay
 			if(showEntity != null)
 			{
 				_entities[showEntity.Entity].SetCardId(showEntity.CardId);
-				foreach(var tag in showEntity.Tags)
-					_entities[showEntity.Entity].SetTag((GAME_TAG)tag.Name, tag.Value);
+			    foreach (var tag in showEntity.Tags)
+                {
+                    var prevValue = _entities[showEntity.Entity].GetTag((GAME_TAG)tag.Name);
+                    _entities[showEntity.Entity].SetTag((GAME_TAG)tag.Name, tag.Value);
+                    if (tag.Name == (int)GAME_TAG.ZONE)
+                    {
+                        if(prevValue == (int)TAG_ZONE.HAND && tag.Value == (int)TAG_ZONE.PLAY)
+                            AddGameState(ActionType.Play, showEntity.Entity);
+                        else if(prevValue == (int)TAG_ZONE.HAND && tag.Value == (int)TAG_ZONE.PLAY)
+                            AddGameState(ActionType.Play, showEntity.Entity);
+                        else if(prevValue == (int)TAG_ZONE.HAND)
+                            AddGameState(ActionType.HandDiscard, showEntity.Entity);
+                        else if(prevValue == (int)TAG_ZONE.PLAY && tag.Value == (int)TAG_ZONE.GRAVEYARD)
+                            AddGameState(ActionType.Death, showEntity.Entity);
+                        else
+                            AddGameState(ActionType.Unknown, showEntity.Entity);
+                    }
+                }
 				return;
 			}
 
@@ -273,9 +334,25 @@ namespace HearthstoneReplays.Replay
 		        /* TODO */
 		        return;
 		    }
-		}
+        }
 
-		private int GetEntityIdFromString(string entity)
+        private int? _attackingEntity;
+        private void Attacking(int? entity)
+        {
+            _attackingEntity = entity;
+            if(_attackingEntity.HasValue && _defendingEntity.HasValue)
+                AddGameState(ActionType.Attack, _attackingEntity.Value);
+        }
+
+        private int? _defendingEntity;
+        private void Defending(int? entity)
+        {
+            _defendingEntity = entity;
+            if(_attackingEntity.HasValue && _defendingEntity.HasValue)
+                AddGameState(ActionType.Attack, _attackingEntity.Value);
+        }
+
+        private int GetEntityIdFromString(string entity)
 		{
 			int entityId;
 			if(!int.TryParse(entity, out entityId))

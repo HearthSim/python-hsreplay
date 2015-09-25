@@ -28,12 +28,17 @@ namespace HearthstoneReplays.Replay
     public enum ActionType
     {
         Unknown,
-        Attack,
+        TurnStart,
+        TurnEnd,
+        Mulligan,
         Draw,
         Play,
-        TurnStart,
+        HandDiscard,
+        Attack,
+        Damage,
         Death,
         Victory,
-        Damage
+        Loss,
+        Tie
     }
 }

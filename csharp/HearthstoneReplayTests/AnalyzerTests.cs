@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Linq;
 using HearthstoneReplays;
 using HearthstoneReplays.Hearthstone.Enums;
@@ -120,6 +121,40 @@ namespace HearthstoneReplayTests
             Assert.IsNotNull(fourthTurn);
             Assert.AreEqual(2, fourthTurn.Player1.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
             Assert.AreEqual(2, fourthTurn.Player2.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
+        }
+
+        [TestMethod]
+        public void ActionTypePlay_LessCardsAfterPlayTest()
+        {
+            GameState play;
+            while((play = _replay.GetNextAction(ActionType.Play)) != null)
+            {
+                var prePlay = _replay.GetPreviousAction();
+                _replay.GetNextAction();
+                Assert.IsTrue(prePlay.ActivePlayer.Hand.Count > play.ActivePlayer.Hand.Count);
+            }
+        }
+
+        [TestMethod]
+        public void ActionTypeDraw_MoreCardsAfterDrawTest()
+        {
+            GameState draw;
+            while ((draw = _replay.GetNextAction(ActionType.Draw)) != null)
+            {
+                var preDraw = _replay.GetPreviousAction();
+                _replay.GetNextAction();
+                Assert.IsTrue(preDraw.ActivePlayer.Hand.Count < draw.ActivePlayer.Hand.Count);
+            }
+        }
+
+        [TestMethod]
+        public void LogAllTheThings()
+        {
+            GameState draw;
+            while((draw = _replay.GetNextAction()) != null)
+            {
+                Console.WriteLine(draw);
+            }
         }
     }
 }

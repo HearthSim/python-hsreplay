@@ -18,25 +18,33 @@ namespace HearthstoneReplays.Replay
 		public ActionType Type { get; }
 	    public Entity Source { get; }
 
-		public GameState(Dictionary<int, Entity> entities, ActionType type)
+		public GameState(Dictionary<int, Entity> entities, ActionType type, int source)
 		{
 			AllEntities = entities;
 			Type = type;
 			Player1 = new Player(entities, 1);
 			Player2 = new Player(entities, 2);
+		    Source = entities[source];
 		}
 
 		public Player LocalPlayer { get; set; }
 		public Player Opponent { get; set; }
+	    public Player ActivePlayer
+	    {
+	        get { return Player1.PlayerEntity.GetTag(GAME_TAG.CURRENT_PLAYER) == 1 ? Player1 : Player2; }
+	    }
 
-		public override string ToString()
+	    public override string ToString()
 		{
 			var p1Board = Player1.Board.Any() ? Player1.Board.Select(x => x.CardId).Aggregate((c, n) => c + ", " + n) : "";
 			var p1Hand = Player1.Hand.Any() ? Player1.Hand.Select(x => x.CardId).Aggregate((c, n) => c + ", " + n) : "";
 			var p2Board = Player2.Board.Any() ? Player2.Board.Select(x => x.CardId).Aggregate((c, n) => c + ", " + n) : "";
 			var p2Hand = Player2.Hand.Any() ? Player2.Hand.Select(x => x.CardId).Aggregate((c, n) => c + ", " + n) : "";
-			return string.Format("[Turn{0}:{1}]P1: Board[{2}] - Hand[{3}] | P2: Board[{4}] - Hand[{5}]", AllEntities[1].GetTag(GAME_TAG.TURN),
-			                     Type, p1Board, p1Hand, p2Board, p2Hand);
+	        var name = string.IsNullOrEmpty(Source.Name) ? Source.CardId : Source.Name;
+	        var player = ActivePlayer == LocalPlayer ? "Player" : "Opponent";
+            return string.Format("({0}) {1} {2} {3}", AllEntities[1].GetTag(GAME_TAG.TURN), player, name, Type);
+            //return string.Format("[{0} Turn {1}:{2}]P1: Board[{3}] - Hand[{4}] | P2: Board[{5}] - Hand[{6}]", name, AllEntities[1].GetTag(GAME_TAG.TURN),
+			  //                   Type, p1Board, p1Hand, p2Board, p2Hand);
 		}
 	}
 
