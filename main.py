@@ -345,6 +345,7 @@ class PowerLogParser:
 		sre = SEND_CHOICES_CHOICETYPE_RE.match(data)
 		if sre:
 			id, type = sre.groups()
+			type = parse_enum(enums.ChoiceType, type)
 			node = SendChoicesNode(ts, id, type)
 			self.update_node(node)
 			self.current_send_choice_node = node
