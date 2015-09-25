@@ -366,6 +366,7 @@ class PowerLogParser:
 		sre = CHOICES_CHOICE_RE.match(data)
 		if sre:
 			entity, playerID, type, min, max = sre.groups()
+			type = parse_enum(enums.ChoiceType, type)
 			node = ChoicesNode(ts, entity, playerID, type, min, max, None)
 			self.game.append(node)
 			self.current_choice_node = node
