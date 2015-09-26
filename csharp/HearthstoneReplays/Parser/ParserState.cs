@@ -25,6 +25,7 @@ namespace HearthstoneReplays.Parser
 		public Option CurrentOption { get; set; }
 		public object LastOption { get; set; }
 		public int FirstPlayerId { get; set; }
+	    public int CurrentPlayerId { get; set; }
 
 		public void Reset()
 		{

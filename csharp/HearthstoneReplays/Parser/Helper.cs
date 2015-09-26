@@ -70,12 +70,12 @@ namespace HearthstoneReplays.Parser
                 return secondPlayer.Id;
             }
 
-			if(firstPlayer.Name == "UNKNOWN HUMAN PLAYER")
+			if(firstPlayer.Name == "UNKNOWN HUMAN PLAYER" || firstPlayer.Name == "The Innkeeper")
 			{
 				firstPlayer.Name = data;
 				return firstPlayer.Id;
 			}
-			if(secondPlayer.Name == "UNKNOWN HUMAN PLAYER")
+			if(secondPlayer.Name == "UNKNOWN HUMAN PLAYER" || secondPlayer.Name == "The Innkeeper")
 			{
 				secondPlayer.Name = data;
 				return secondPlayer.Id;

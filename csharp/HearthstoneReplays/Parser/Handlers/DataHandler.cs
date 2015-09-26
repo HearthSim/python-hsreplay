@@ -185,30 +185,13 @@ namespace HearthstoneReplays.Parser.Handlers
 				var rawEntity = match.Groups[1].Value;
 				var tagName = match.Groups[2].Value;
 				var value = match.Groups[3].Value;
-				var entity = Helper.ParseEntity(rawEntity, state);
 				var tag = Helper.ParseTag(tagName, value);
-				if(tag.Name == (int)GAME_TAG.ENTITY_ID)
-                {
-                    int tmp;
-                    if(!int.TryParse(rawEntity, out tmp) && !rawEntity.StartsWith("[") && rawEntity != "GameEntity")
-                    {
-                        if (entity != tag.Value)
-                        {
-                            entity = tag.Value;
-                            var tmpName = ((PlayerEntity) state.CurrentGame.Data[1]).Name;
-                            ((PlayerEntity) state.CurrentGame.Data[1]).Name =
-                                ((PlayerEntity) state.CurrentGame.Data[2]).Name;
-                            ((PlayerEntity) state.CurrentGame.Data[2]).Name = tmpName;
-                            foreach (var dataObj in ((Game) state.Node.Object).Data)
-                            {
-                                var tChange = dataObj as TagChange;
-                                if (tChange != null)
-                                    tChange.Entity = tChange.Entity == 2 ? 3 : 2;
-                            }
-                        }
-                    }
-                }
-				var tagChange = new TagChange {Entity = entity, Name = tag.Name, Value = tag.Value};
+                if(tag.Name == (int)GAME_TAG.CURRENT_PLAYER)
+                    UpdateCurrentPlayer(state, rawEntity, tag);
+                var entity = Helper.ParseEntity(rawEntity, state);
+                if(tag.Name == (int)GAME_TAG.ENTITY_ID)
+                    entity = UpdatePlayerEntity(state, rawEntity, tag, entity);
+                var tagChange = new TagChange {Entity = entity, Name = tag.Name, Value = tag.Value};
 				if(state.Node.Type == typeof(Game))
 					((Game)state.Node.Object).Data.Add(tagChange);
 				else if(state.Node.Type == typeof(Action))
@@ -238,5 +221,60 @@ namespace HearthstoneReplays.Parser.Handlers
 					throw new Exception("Invalid node " + state.Node.Type + " -- " + data);
 			}
 		}
-	}
+
+        private static int UpdatePlayerEntity(ParserState state, string rawEntity, Tag tag, int entity)
+        {
+            int tmp;
+            if(!int.TryParse(rawEntity, out tmp) && !rawEntity.StartsWith("[") && rawEntity != "GameEntity")
+            {
+                if(entity != tag.Value)
+                {
+                    entity = tag.Value;
+                    var tmpName = ((PlayerEntity)state.CurrentGame.Data[1]).Name;
+                    ((PlayerEntity)state.CurrentGame.Data[1]).Name =
+                        ((PlayerEntity)state.CurrentGame.Data[2]).Name;
+                    ((PlayerEntity)state.CurrentGame.Data[2]).Name = tmpName;
+                    foreach(var dataObj in ((Game)state.Node.Object).Data)
+                    {
+                        var tChange = dataObj as TagChange;
+                        if(tChange != null)
+                            tChange.Entity = tChange.Entity == 2 ? 3 : 2;
+                    }
+                }
+            }
+
+            return entity;
+        }
+
+        private static void UpdateCurrentPlayer(ParserState state, string rawEntity, Tag tag)
+        {
+            if(tag.Value == 0)
+            {
+                try
+                {
+                    Helper.ParseEntity(rawEntity, state);
+                }
+                catch(Exception ex)
+                {
+                    var currentPlayer =
+                        (PlayerEntity)state.CurrentGame.Data.Single(x => (x is PlayerEntity) && ((PlayerEntity)x).Id == state.CurrentPlayerId);
+                    currentPlayer.Name = rawEntity;
+                }
+            }
+            else if(tag.Value == 1)
+            {
+                try
+                {
+                    Helper.ParseEntity(rawEntity, state);
+                }
+                catch(Exception ex)
+                {
+                    var currentPlayer =
+                        (PlayerEntity)state.CurrentGame.Data.Single(x => (x is PlayerEntity) && ((PlayerEntity)x).Id != state.CurrentPlayerId);
+                    currentPlayer.Name = rawEntity;
+                }
+                state.CurrentPlayerId = Helper.ParseEntity(rawEntity, state);
+            }
+        }
+    }
 }
