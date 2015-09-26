@@ -29,7 +29,6 @@ namespace HearthstoneReplays.Replay
     {
         Unknown,
         TurnStart,
-        TurnEnd,
         Mulligan,
         Draw,
         Play,
@@ -39,6 +38,15 @@ namespace HearthstoneReplays.Replay
         Death,
         Victory,
         Loss,
-        Tie
+        Tie,
+        Deaths,
+        Fatigue,
+        ActionPlay,
+        ActionAttack,
+        ActionDeaths,
+        ActionFatigue,
+        ActionJust,
+        ActionPower,
+        ActionTrigger
     }
 }

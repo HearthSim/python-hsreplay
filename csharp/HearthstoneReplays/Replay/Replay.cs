@@ -9,7 +9,6 @@ using HearthstoneReplays.ReplayData.Entities;
 using HearthstoneReplays.ReplayData.GameActions;
 using HearthstoneReplays.ReplayData.Meta;
 using HearthstoneReplays.ReplayData.Meta.Options;
-using Action = HearthstoneReplays.ReplayData.GameActions.Action;
 
 #endregion
 
@@ -19,7 +18,7 @@ namespace HearthstoneReplays.Replay
 	{
 		private readonly Dictionary<int, Entity> _entities = new Dictionary<int, Entity>();
 		private readonly HearthstoneReplay _replay;
-		public readonly List<GameState> GameStates = new List<GameState>();
+		public readonly List<Action> Actions = new List<Action>();
 		private GameEntity _gameEntity;
 		private int _index;
 		private PlayerEntity _p1Entity;
@@ -56,36 +55,70 @@ namespace HearthstoneReplays.Replay
 			_index = 0;
 		}
 
-		public GameState GetNextAction()
+
+	    private Action GetActionAtIndex(int index)
+	    {
+	        return GetActionAtIndex(index, Actions);
+	    }
+        private Action GetActionAtIndex(int index, List<Action> actions)
+	    {
+            foreach (var action in actions)
+            {
+                if (index == 0)
+                    return action;
+                index--;
+                var subAction = GetActionAtIndex(index, action.SubActions);
+                if (subAction != null)
+                    return subAction;
+            }
+            return null;
+	    }
+
+		public Action GetNextAction()
 		{
-			if(_index >= GameStates.Count - 1)
+            return GetActionAtIndex(++_index);
+			if(_index >= Actions.Count - 1)
 				return null;
-			return GameStates[++_index];
+			return Actions[++_index];
 		}
 
-		public GameState GetNextAction(ActionType type)
+		public Action GetNextAction(ActionType type)
 		{
-			if(_index >= GameStates.Count - 1)
+		    Action action;
+		    do
+		    {
+		        action = GetActionAtIndex(++_index);
+		    } while (action != null && action.Type != type);
+		    return action;
+
+			if(_index >= Actions.Count - 1)
 				return null;
 			do
 			{
 				_index++;
-				if(_index >= GameStates.Count - 1)
+				if(_index >= Actions.Count - 1)
 					return null;
-			} while(GameStates[_index].Type != type);
+			} while(Actions[_index].Type != type);
 
-			return GameStates[_index].Type == type ? GameStates[_index] : null;
+			return Actions[_index].Type == type ? Actions[_index] : null;
 		}
 
-	    public GameState GetPreviousAction()
-	    {
-	        if (_index <= 0)
+	    public Action GetPreviousAction()
+        {
+            return GetActionAtIndex(--_index);
+            if (_index <= 0)
 	            return null;
-	        return GameStates[--_index];
+	        return Actions[--_index];
 	    }
 
-        public GameState GetPreviousAction(ActionType type)
+        public Action GetPreviousAction(ActionType type)
         {
+            Action action;
+            do
+            {
+                action = GetActionAtIndex(--_index);
+            } while(action != null && action.Type != type);
+            return action;
             if(_index < 0)
                 return null;
             do
@@ -93,9 +126,9 @@ namespace HearthstoneReplays.Replay
                 _index--;
                 if(_index < 0)
                     return null;
-            } while(GameStates[_index].Type != type);
+            } while(Actions[_index].Type != type);
 
-            return GameStates[_index].Type == type ? GameStates[_index] : null;
+            return Actions[_index].Type == type ? Actions[_index] : null;
         }
 
 		private void AnalyzeReplayData(int index)
@@ -125,50 +158,72 @@ namespace HearthstoneReplays.Replay
 
 
 			foreach(var data in game.Data.Skip(3))
-				AnalyzeGameData(data);
+				AnalyzeGameData(data, Actions, 0);
 
 			var localPlayer =
-				GameStates.FirstOrDefault(
-				                          state =>
-				                          (state.Player1.Hand.All(x => !string.IsNullOrEmpty(x.CardId)) &&
-				                           state.Player2.Hand.All(x => string.IsNullOrEmpty(x.CardId))) ||
-				                          (state.Player1.Hand.All(x => string.IsNullOrEmpty(x.CardId)) &&
-				                           state.Player2.Hand.All(x => !string.IsNullOrEmpty(x.CardId))));
+				Actions.FirstOrDefault(
+				                          action =>
+				                          (action.GameState.Player1.Hand.All(x => !string.IsNullOrEmpty(x.CardId)) &&
+				                           action.GameState.Player2.Hand.All(x => string.IsNullOrEmpty(x.CardId))) ||
+				                          (action.GameState.Player1.Hand.All(x => string.IsNullOrEmpty(x.CardId)) &&
+				                           action.GameState.Player2.Hand.All(x => !string.IsNullOrEmpty(x.CardId))));
 			if(localPlayer == null)
 				throw new Exception("Could not determine local player");
 
-			var p1IsLocal = localPlayer.Player1.Hand.All(x => !string.IsNullOrEmpty(x.CardId)) &&
-			                localPlayer.Player2.Hand.All(x => string.IsNullOrEmpty(x.CardId));
-			foreach(var gs in GameStates)
-			{
-				gs.LocalPlayer = p1IsLocal ? gs.Player1 : gs.Player2;
-				gs.Opponent = p1IsLocal ? gs.Player2 : gs.Player1;
-			}
+			var p1IsLocal = localPlayer.GameState.Player1.Hand.All(x => !string.IsNullOrEmpty(x.CardId)) &&
+			                localPlayer.GameState.Player2.Hand.All(x => string.IsNullOrEmpty(x.CardId));
+		    Action gs;
+		    int count = 0;
+		    while ((gs = GetActionAtIndex(count++)) != null)
+            {
+                gs.GameState.LocalPlayer = p1IsLocal ? gs.GameState.Player1 : gs.GameState.Player2;
+                gs.GameState.Opponent = p1IsLocal ? gs.GameState.Player2 : gs.GameState.Player1;
+            }
 		}
 
-	    private void AddGameState(ActionType type, int source)
+	    private void AddGameState(List<Action> actions, ActionType type, int level, int source, int target = 0)
         {
-            var gState = new GameState((Dictionary<int, Entity>)Utility.DeepClone(_entities), type, source);
-            GameStates.Add(gState);
+            var action = new Action((Dictionary<int, Entity>)Utility.DeepClone(_entities), type, source, target, level);
+            actions.Add(action);
         }
 
-		private void AnalyzeGameData(GameData data)
+		private void AnalyzeGameData(GameData data, List<Action> actions, int level)
 		{
-			var action = data as Action;
+			var action = data as ReplayData.GameActions.Action;
 			if(action != null)
 			{
-				foreach(var subData in action.Data)
-					AnalyzeGameData(subData);
-
-			    /*switch ((POWER_SUBTYPE) action.Type)
+			    ActionType type;
+			    switch ((POWER_SUBTYPE) action.Type)
 			    {
+			        case POWER_SUBTYPE.PLAY:
+			            type = ActionType.ActionPlay;
+			            break;
 			        case POWER_SUBTYPE.ATTACK:
-                        AddGameState(ActionType.Attack);
+			            type = ActionType.ActionAttack;
 			            break;
-                    case POWER_SUBTYPE.DEATHS:
-                        AddGameState(ActionType.Death);
+			        case POWER_SUBTYPE.DEATHS:
+			            type = ActionType.ActionDeaths;
 			            break;
-			    }*/
+			        case POWER_SUBTYPE.FATIGUE:
+			            type = ActionType.ActionFatigue;
+			            break;
+			        case POWER_SUBTYPE.JOUST:
+			            type = ActionType.ActionJust;
+			            break;
+			        case POWER_SUBTYPE.POWER:
+			            type = ActionType.ActionPower;
+			            break;
+			        case POWER_SUBTYPE.TRIGGER:
+			            type = ActionType.ActionTrigger;
+			            break;
+                    default:
+			            type = ActionType.Unknown;
+			            break;
+			    }
+			    var subAction = new Action((Dictionary<int, Entity>)Utility.DeepClone(_entities), type, level: level);
+                actions.Add(subAction);
+                foreach(var subData in action.Data)
+					AnalyzeGameData(subData, subAction.SubActions, level + 1);
 			}
 
 			var tagChange = data as TagChange;
@@ -181,45 +236,42 @@ namespace HearthstoneReplays.Replay
 			    {
 			        case (int) GAME_TAG.CURRENT_PLAYER:
 			            if (prevValue != tagChange.Value && tagChange.Value == 1)
-			                AddGameState(ActionType.TurnStart, tagChange.Entity);
+			                AddGameState(actions, ActionType.TurnStart, level, tagChange.Entity);
 			            break;
 			        case (int) GAME_TAG.PLAYSTATE:
 			            if (tagChange.Value == (int) TAG_PLAYSTATE.WON)
-			                AddGameState(ActionType.Victory, tagChange.Entity);
+			                AddGameState(actions, ActionType.Victory, level, tagChange.Entity);
 			            else if (tagChange.Value == (int) TAG_PLAYSTATE.LOST)
-			                AddGameState(ActionType.Loss, tagChange.Entity);
+			                AddGameState(actions, ActionType.Loss, level, tagChange.Entity);
 			            else if (tagChange.Value == (int) TAG_PLAYSTATE.TIED)
-			                AddGameState(ActionType.Tie, tagChange.Entity);
+			                AddGameState(actions, ActionType.Tie, level, tagChange.Entity);
 			            break;
 			        case (int) GAME_TAG.DAMAGE:
 			            if (tagChange.Value > 0)
-			                AddGameState(ActionType.Damage, tagChange.Entity);
+			                AddGameState(actions, ActionType.Damage, level, tagChange.Entity);
 			            break;
 			        case (int) GAME_TAG.ZONE:
 			            if (tagChange.Value == (int) TAG_ZONE.DECK && prevValue == (int) TAG_ZONE.HAND &&
 			                _entities[1].GetTag(GAME_TAG.MULLIGAN_STATE) != (int) TAG_MULLIGAN.DONE)
 			            {
-			                AddGameState(ActionType.Mulligan, tagChange.Entity);
+			                AddGameState(actions, ActionType.Mulligan, level, tagChange.Entity);
 			            }
 			            else if (tagChange.Value == (int) TAG_ZONE.HAND && prevValue == (int) TAG_ZONE.DECK)
-			                AddGameState(ActionType.Draw, tagChange.Entity);
+			                AddGameState(actions, ActionType.Draw, level, tagChange.Entity);
 			            else if (prevValue == (int) TAG_ZONE.HAND && tagChange.Value == (int) TAG_ZONE.PLAY)
-			                AddGameState(ActionType.Play, tagChange.Entity);
+			                AddGameState(actions, ActionType.Play, level, tagChange.Entity);
 			            else if (prevValue == (int) TAG_ZONE.HAND)
-			                AddGameState(ActionType.HandDiscard, tagChange.Entity);
+			                AddGameState(actions, ActionType.HandDiscard, level, tagChange.Entity);
 			            else if (prevValue == (int) TAG_ZONE.PLAY && tagChange.Value == (int) TAG_ZONE.GRAVEYARD)
-			                AddGameState(ActionType.Death, tagChange.Entity);
+			                AddGameState(actions, ActionType.Death, level, tagChange.Entity);
 			            else
-			                AddGameState(ActionType.Unknown, tagChange.Entity);
+			                AddGameState(actions, ActionType.Unknown, level, tagChange.Entity);
 			            break;
 			        case (int) GAME_TAG.ATTACKING:
-			            Attacking(tagChange.Value == 0 ? null : (int?) tagChange.Entity);
+			            Attacking(tagChange.Value == 0 ? null : (int?) tagChange.Entity, actions, level);
 			            break;
 			        case (int) GAME_TAG.DEFENDING:
-			            Defending(tagChange.Value == 0 ? null : (int?) tagChange.Entity);
-			            break;
-			        case (int) GAME_TAG.NUM_OPTIONS_PLAYED_THIS_TURN:
-			            AddGameState(ActionType.TurnEnd, tagChange.Entity);
+			            Defending(tagChange.Value == 0 ? null : (int?) tagChange.Entity, actions, level);
 			            break;
 
 			    }
@@ -244,15 +296,15 @@ namespace HearthstoneReplays.Replay
                     if (tag.Name == (int)GAME_TAG.ZONE)
                     {
                         if(prevValue == (int)TAG_ZONE.HAND && tag.Value == (int)TAG_ZONE.PLAY)
-                            AddGameState(ActionType.Play, showEntity.Entity);
+                            AddGameState(actions, ActionType.Play, level, showEntity.Entity);
                         else if(prevValue == (int)TAG_ZONE.HAND && tag.Value == (int)TAG_ZONE.PLAY)
-                            AddGameState(ActionType.Play, showEntity.Entity);
+                            AddGameState(actions, ActionType.Play, level, showEntity.Entity);
                         else if(prevValue == (int)TAG_ZONE.HAND)
-                            AddGameState(ActionType.HandDiscard, showEntity.Entity);
+                            AddGameState(actions, ActionType.HandDiscard, level, showEntity.Entity);
                         else if(prevValue == (int)TAG_ZONE.PLAY && tag.Value == (int)TAG_ZONE.GRAVEYARD)
-                            AddGameState(ActionType.Death, showEntity.Entity);
+                            AddGameState(actions, ActionType.Death, level, showEntity.Entity);
                         else
-                            AddGameState(ActionType.Unknown, showEntity.Entity);
+                            AddGameState(actions, ActionType.Unknown, level, showEntity.Entity);
                     }
                 }
 				return;
@@ -338,19 +390,19 @@ namespace HearthstoneReplays.Replay
         }
 
         private int? _attackingEntity;
-        private void Attacking(int? entity)
+        private void Attacking(int? entity, List<Action> actions, int level)
         {
             _attackingEntity = entity;
             if(_attackingEntity.HasValue && _defendingEntity.HasValue)
-                AddGameState(ActionType.Attack, _attackingEntity.Value);
+                AddGameState(actions, ActionType.Attack, level, _attackingEntity.Value, _defendingEntity.Value);
         }
 
         private int? _defendingEntity;
-        private void Defending(int? entity)
+        private void Defending(int? entity, List<Action> actions, int level)
         {
             _defendingEntity = entity;
             if(_attackingEntity.HasValue && _defendingEntity.HasValue)
-                AddGameState(ActionType.Attack, _attackingEntity.Value);
+                AddGameState(actions, ActionType.Attack, level, _attackingEntity.Value, _defendingEntity.Value);
         }
 
         private int GetEntityIdFromString(string entity)

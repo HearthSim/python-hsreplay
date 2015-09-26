@@ -64,10 +64,12 @@
     <Compile Include="Parser\Regexes.cs" />
     <Compile Include="Parser\ReplayParser.cs" />
     <Compile Include="ReplayData\Meta\Info.cs" />
+    <Compile Include="Replay\Action.cs" />
     <Compile Include="Replay\Entity.cs" />
     <Compile Include="Replay\GameState.cs" />
     <Compile Include="Hearthstone\Enums\GAME_TAG.cs" />
     <Compile Include="Replay\GameStateType.cs" />
+    <Compile Include="Replay\Player.cs" />
     <Compile Include="Replay\Replay.cs" />
     <Compile Include="ReplayData\GameActions\Action.cs" />
     <Compile Include="ReplayData\Entities\BaseEntity.cs" />
