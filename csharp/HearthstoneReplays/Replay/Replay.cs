@@ -52,7 +52,7 @@ namespace HearthstoneReplays.Replay
 
 		public void Reset()
 		{
-			_index = 0;
+			_index = -1;
 		}
 
 
@@ -64,12 +64,13 @@ namespace HearthstoneReplays.Replay
 	    {
             foreach (var action in actions)
             {
-                if (index == 0)
+                if (index <= 0)
                     return action;
                 index--;
                 var subAction = GetActionAtIndex(index, action.SubActions);
                 if (subAction != null)
                     return subAction;
+                index -= action.SubActions.Count;
             }
             return null;
 	    }
@@ -192,93 +193,150 @@ namespace HearthstoneReplays.Replay
 			var action = data as ReplayData.GameActions.Action;
 			if(action != null)
 			{
-			    ActionType type;
+			    ActionType startType, endType;
 			    switch ((POWER_SUBTYPE) action.Type)
 			    {
 			        case POWER_SUBTYPE.PLAY:
-			            type = ActionType.ActionPlay;
+			            startType = ActionType.ActionStartPlay;
+			            endType = ActionType.ActionEndPlay;
 			            break;
 			        case POWER_SUBTYPE.ATTACK:
-			            type = ActionType.ActionAttack;
+			            startType = ActionType.ActionStartAttack;
+			            endType = ActionType.ActionEndAttack;
 			            break;
 			        case POWER_SUBTYPE.DEATHS:
-			            type = ActionType.ActionDeaths;
+			            startType = ActionType.ActionStartDeaths;
+			            endType = ActionType.ActionEndDeaths;
 			            break;
 			        case POWER_SUBTYPE.FATIGUE:
-			            type = ActionType.ActionFatigue;
+			            startType = ActionType.ActionStartFatigue;
+			            endType = ActionType.ActionEndFatigue;
 			            break;
 			        case POWER_SUBTYPE.JOUST:
-			            type = ActionType.ActionJust;
+			            startType = ActionType.ActionStartJoust;
+			            endType = ActionType.ActionEndJoust;
 			            break;
 			        case POWER_SUBTYPE.POWER:
-			            type = ActionType.ActionPower;
+			            startType = ActionType.ActionStartPower;
+			            endType = ActionType.ActionEndPower;
 			            break;
 			        case POWER_SUBTYPE.TRIGGER:
-			            type = ActionType.ActionTrigger;
+			            startType = ActionType.ActionStartTrigger;
+			            endType = ActionType.ActionEndTrigger;
 			            break;
-                    default:
-			            type = ActionType.Unknown;
+			        default:
+			            startType = ActionType.ActionStartUnknown;
+			            endType = ActionType.ActionEndUnknown;
 			            break;
 			    }
-			    var subAction = new Action((Dictionary<int, Entity>)Utility.DeepClone(_entities), type, level: level);
-                actions.Add(subAction);
+
+			    var startSubAction = new Action((Dictionary<int, Entity>)Utility.DeepClone(_entities), startType, action.Entity, action.Target, level);
+                actions.Add(startSubAction);
                 foreach(var subData in action.Data)
-					AnalyzeGameData(subData, subAction.SubActions, level + 1);
-			}
+					AnalyzeGameData(subData, startSubAction.SubActions, level + 1);
+			    if (startSubAction.SubActions.Count == 0)
+			        actions.Remove(startSubAction);
+			    else
+                {
+                    var endSubAction = new Action((Dictionary<int, Entity>)Utility.DeepClone(_entities), endType, action.Entity, action.Target, level);
+                    actions.Add(endSubAction);
+                }
+            }
 
 			var tagChange = data as TagChange;
-			if(tagChange != null)
-			{
-			    var prevValue = _entities[tagChange.Entity].GetTag((GAME_TAG) tagChange.Name);
-				_entities[tagChange.Entity].SetTag((GAME_TAG)tagChange.Name, tagChange.Value);
+		    if (tagChange != null)
+		    {
+		        var prevValue = _entities[tagChange.Entity].GetTag((GAME_TAG) tagChange.Name);
+		        if (prevValue == tagChange.Value)
+		            return;
+		        _entities[tagChange.Entity].SetTag((GAME_TAG) tagChange.Name, tagChange.Value);
 
-			    switch (tagChange.Name)
-			    {
-			        case (int) GAME_TAG.CURRENT_PLAYER:
-			            if (prevValue != tagChange.Value && tagChange.Value == 1)
-			                AddGameState(actions, ActionType.TurnStart, level, tagChange.Entity);
-			            break;
-			        case (int) GAME_TAG.PLAYSTATE:
-			            if (tagChange.Value == (int) TAG_PLAYSTATE.WON)
-			                AddGameState(actions, ActionType.Victory, level, tagChange.Entity);
-			            else if (tagChange.Value == (int) TAG_PLAYSTATE.LOST)
-			                AddGameState(actions, ActionType.Loss, level, tagChange.Entity);
-			            else if (tagChange.Value == (int) TAG_PLAYSTATE.TIED)
-			                AddGameState(actions, ActionType.Tie, level, tagChange.Entity);
-			            break;
-			        case (int) GAME_TAG.DAMAGE:
-			            if (tagChange.Value > 0)
-			                AddGameState(actions, ActionType.Damage, level, tagChange.Entity);
-			            break;
-			        case (int) GAME_TAG.ZONE:
-			            if (tagChange.Value == (int) TAG_ZONE.DECK && prevValue == (int) TAG_ZONE.HAND &&
-			                _entities[1].GetTag(GAME_TAG.MULLIGAN_STATE) != (int) TAG_MULLIGAN.DONE)
-			            {
-			                AddGameState(actions, ActionType.Mulligan, level, tagChange.Entity);
-			            }
-			            else if (tagChange.Value == (int) TAG_ZONE.HAND && prevValue == (int) TAG_ZONE.DECK)
-			                AddGameState(actions, ActionType.Draw, level, tagChange.Entity);
-			            else if (prevValue == (int) TAG_ZONE.HAND && tagChange.Value == (int) TAG_ZONE.PLAY)
-			                AddGameState(actions, ActionType.Play, level, tagChange.Entity);
-			            else if (prevValue == (int) TAG_ZONE.HAND)
-			                AddGameState(actions, ActionType.HandDiscard, level, tagChange.Entity);
-			            else if (prevValue == (int) TAG_ZONE.PLAY && tagChange.Value == (int) TAG_ZONE.GRAVEYARD)
-			                AddGameState(actions, ActionType.Death, level, tagChange.Entity);
-			            else
-			                AddGameState(actions, ActionType.Unknown, level, tagChange.Entity);
-			            break;
-			        case (int) GAME_TAG.ATTACKING:
-			            Attacking(tagChange.Value == 0 ? null : (int?) tagChange.Entity, actions, level);
-			            break;
-			        case (int) GAME_TAG.DEFENDING:
-			            Defending(tagChange.Value == 0 ? null : (int?) tagChange.Entity, actions, level);
-			            break;
+		        switch (tagChange.Name)
+		        {
+		            case (int) GAME_TAG.CURRENT_PLAYER:
+		                if (prevValue != tagChange.Value && tagChange.Value == 1)
+		                    AddGameState(actions, ActionType.TurnStart, level, tagChange.Entity);
+		                break;
+		            case (int) GAME_TAG.PLAYSTATE:
+		                if (tagChange.Value == (int) TAG_PLAYSTATE.WON)
+		                    AddGameState(actions, ActionType.Victory, level, tagChange.Entity);
+		                else if (tagChange.Value == (int) TAG_PLAYSTATE.LOST)
+		                    AddGameState(actions, ActionType.Loss, level, tagChange.Entity);
+		                else if (tagChange.Value == (int) TAG_PLAYSTATE.TIED)
+		                    AddGameState(actions, ActionType.Tie, level, tagChange.Entity);
+		                break;
+		            case (int) GAME_TAG.DAMAGE:
+		                if (tagChange.Value > 0)
+		                    AddGameState(actions, ActionType.Damage, level, tagChange.Entity);
+		                break;
+		            case (int) GAME_TAG.ZONE:
+		                switch (prevValue)
+		                {
+		                    case (int) TAG_ZONE.HAND:
+		                        if (tagChange.Value == (int) TAG_ZONE.DECK &&
+		                            _entities[2].GetTag(GAME_TAG.MULLIGAN_STATE) != (int) TAG_MULLIGAN.DONE
+		                            && _entities[3].GetTag(GAME_TAG.MULLIGAN_STATE) != (int) TAG_MULLIGAN.DONE)
+		                            AddGameState(actions, ActionType.Mulligan, level, tagChange.Entity);
+		                        else if (tagChange.Value == (int) TAG_ZONE.PLAY)
+		                            AddGameState(actions, ActionType.Play, level, tagChange.Entity);
+		                        else
+		                            AddGameState(actions, ActionType.HandDiscard, level, tagChange.Entity);
+		                        break;
+		                    case (int) TAG_ZONE.DECK:
+		                        if (tagChange.Value == (int) TAG_ZONE.HAND)
+		                            AddGameState(actions, ActionType.Draw, level, tagChange.Entity);
+		                        else if (tagChange.Value == (int) TAG_ZONE.PLAY || tagChange.Value == (int) TAG_ZONE.SECRET)
+		                            AddGameState(actions, ActionType.PlayFromDeck, level, tagChange.Entity);
+		                        else
+		                            AddGameState(actions, ActionType.DeckDiscard, level, tagChange.Entity);
+		                        break;
+		                    case (int) TAG_ZONE.PLAY:
 
-			    }
-			    return;
-            }
-            
-            var fullEntity = data as FullEntity;
+		                        if (tagChange.Value == (int) TAG_ZONE.GRAVEYARD)
+		                            AddGameState(actions, ActionType.Death, level, tagChange.Entity);
+		                        else if (tagChange.Value == (int) TAG_ZONE.HAND)
+		                            AddGameState(actions, ActionType.PlayToHand, level, tagChange.Entity);
+		                        else if (tagChange.Value == (int) TAG_ZONE.DECK)
+		                            AddGameState(actions, ActionType.PlayToDeck, level, tagChange.Entity);
+		                        else
+		                            AddGameState(actions, ActionType.UnknownZoneChangeTC, level, tagChange.Entity);
+		                        break;
+		                    case (int) TAG_ZONE.SECRET:
+		                        if (tagChange.Value == (int) TAG_ZONE.GRAVEYARD)
+		                            AddGameState(actions, ActionType.SecretTrigger, level, tagChange.Entity);
+		                        else
+		                            AddGameState(actions, ActionType.UnknownZoneChangeTC, level, tagChange.Entity);
+		                        break;
+		                    case (int) TAG_ZONE.INVALID:
+		                        if (tagChange.Value == (int) TAG_ZONE.HAND)
+		                            AddGameState(actions, ActionType.CreateInHand, level, tagChange.Entity);
+		                        else if (tagChange.Value == (int) TAG_ZONE.PLAY)
+		                            AddGameState(actions, ActionType.CreateInPlay, level, tagChange.Entity);
+		                        else if (tagChange.Value == (int) TAG_ZONE.DECK)
+		                            AddGameState(actions, ActionType.CreateInDeck, level, tagChange.Entity);
+		                        else
+		                            AddGameState(actions, ActionType.UnknownZoneChangeTC, level, tagChange.Entity);
+		                        break;
+		                    default:
+		                        AddGameState(actions, ActionType.UnknownZoneChangeTC, level, tagChange.Entity);
+		                        break;
+		                }
+		                break;
+		            case (int) GAME_TAG.ATTACKING:
+		                Attacking(tagChange.Value == 0 ? null : (int?) tagChange.Entity, actions, level);
+		                break;
+		            case (int) GAME_TAG.DEFENDING:
+		                Defending(tagChange.Value == 0 ? null : (int?) tagChange.Entity, actions, level);
+		                break;
+		            case (int) GAME_TAG.CONTROLLER:
+		                AddGameState(actions, ActionType.Steal, level, tagChange.Entity);
+		                break;
+
+		        }
+		        return;
+		    }
+
+		    var fullEntity = data as FullEntity;
 			if(fullEntity != null)
 			{
 				_entities.Add(fullEntity.Id, new Entity(fullEntity.Id, fullEntity.CardId, fullEntity.Tags));
@@ -295,16 +353,17 @@ namespace HearthstoneReplays.Replay
                     _entities[showEntity.Entity].SetTag((GAME_TAG)tag.Name, tag.Value);
                     if (tag.Name == (int)GAME_TAG.ZONE)
                     {
-                        if(prevValue == (int)TAG_ZONE.HAND && tag.Value == (int)TAG_ZONE.PLAY)
-                            AddGameState(actions, ActionType.Play, level, showEntity.Entity);
-                        else if(prevValue == (int)TAG_ZONE.HAND && tag.Value == (int)TAG_ZONE.PLAY)
-                            AddGameState(actions, ActionType.Play, level, showEntity.Entity);
-                        else if(prevValue == (int)TAG_ZONE.HAND)
-                            AddGameState(actions, ActionType.HandDiscard, level, showEntity.Entity);
+                        if (prevValue == (int) TAG_ZONE.HAND)
+                        {
+                            if(tag.Value == (int)TAG_ZONE.PLAY)
+                                AddGameState(actions, ActionType.Play, level, showEntity.Entity);
+                            else
+                                AddGameState(actions, ActionType.HandDiscard, level, showEntity.Entity);
+                        }
                         else if(prevValue == (int)TAG_ZONE.PLAY && tag.Value == (int)TAG_ZONE.GRAVEYARD)
                             AddGameState(actions, ActionType.Death, level, showEntity.Entity);
                         else
-                            AddGameState(actions, ActionType.Unknown, level, showEntity.Entity);
+                            AddGameState(actions, ActionType.UnknownZoneChangeT, level, showEntity.Entity);
                     }
                 }
 				return;
@@ -389,7 +448,7 @@ namespace HearthstoneReplays.Replay
 		    }
         }
 
-        private int? _attackingEntity;
+	    private int? _attackingEntity;
         private void Attacking(int? entity, List<Action> actions, int level)
         {
             _attackingEntity = entity;
