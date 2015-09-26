@@ -1,14 +1,14 @@
 ﻿#region
 
 using System.Xml.Serialization;
-using HearthstoneReplays.Entities;
-using HearthstoneReplays.GameActions;
+using HearthstoneReplays.ReplayData.Entities;
+using HearthstoneReplays.ReplayData.GameActions;
 using HearthstoneReplays.ReplayData.Meta;
 using HearthstoneReplays.ReplayData.Meta.Options;
 
 #endregion
 
-namespace HearthstoneReplays
+namespace HearthstoneReplays.ReplayData
 {
 	[XmlInclude(typeof(BaseEntity))]
 	[XmlInclude(typeof(GameAction))]

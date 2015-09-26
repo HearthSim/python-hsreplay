@@ -3,9 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using HearthstoneReplays.Entities;
-using HearthstoneReplays.GameActions;
 using HearthstoneReplays.Hearthstone.Enums;
+using HearthstoneReplays.ReplayData.Entities;
+using HearthstoneReplays.ReplayData.GameActions;
 
 #endregion
 

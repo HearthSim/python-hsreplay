@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using HearthstoneReplays.Parser.Handlers;
+using HearthstoneReplays.ReplayData;
 
 #endregion
 

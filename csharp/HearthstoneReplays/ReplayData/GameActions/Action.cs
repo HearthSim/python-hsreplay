@@ -2,13 +2,13 @@
 
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using HearthstoneReplays.Entities;
+using HearthstoneReplays.ReplayData.Entities;
 using HearthstoneReplays.ReplayData.Meta;
 using HearthstoneReplays.ReplayData.Meta.Options;
 
 #endregion
 
-namespace HearthstoneReplays.GameActions
+namespace HearthstoneReplays.ReplayData.GameActions
 {
 	public class Action : GameAction
 	{

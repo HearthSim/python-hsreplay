@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using HearthstoneReplays.Hearthstone.Enums;
+using HearthstoneReplays.ReplayData;
 using HearthstoneReplays.ReplayData.Meta;
 
 #endregion

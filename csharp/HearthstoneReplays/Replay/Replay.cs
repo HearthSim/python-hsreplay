@@ -3,12 +3,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using HearthstoneReplays.Entities;
-using HearthstoneReplays.GameActions;
 using HearthstoneReplays.Hearthstone.Enums;
+using HearthstoneReplays.ReplayData;
+using HearthstoneReplays.ReplayData.Entities;
+using HearthstoneReplays.ReplayData.GameActions;
 using HearthstoneReplays.ReplayData.Meta;
 using HearthstoneReplays.ReplayData.Meta.Options;
-using Action = HearthstoneReplays.GameActions.Action;
+using Action = HearthstoneReplays.ReplayData.GameActions.Action;
 
 #endregion
 

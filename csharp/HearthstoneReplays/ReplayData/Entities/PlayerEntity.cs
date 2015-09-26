@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 #endregion
 
-namespace HearthstoneReplays.Entities
+namespace HearthstoneReplays.ReplayData.Entities
 {
 	public class PlayerEntity : BaseEntity
 	{

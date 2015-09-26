@@ -2,8 +2,8 @@
 
 using System;
 using System.Collections.Generic;
-using HearthstoneReplays.GameActions;
 using HearthstoneReplays.Hearthstone.Enums;
+using HearthstoneReplays.ReplayData.GameActions;
 
 #endregion
 

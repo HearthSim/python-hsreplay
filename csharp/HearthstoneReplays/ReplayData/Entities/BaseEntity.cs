@@ -3,11 +3,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
-using HearthstoneReplays.GameActions;
+using HearthstoneReplays.ReplayData.GameActions;
 
 #endregion
 
-namespace HearthstoneReplays.Entities
+namespace HearthstoneReplays.ReplayData.Entities
 {
 	[XmlInclude(typeof(GameEntity))]
 	[XmlInclude(typeof(PlayerEntity))]

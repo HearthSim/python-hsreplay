@@ -1,5 +1,6 @@
 #region
 
+using HearthstoneReplays.ReplayData;
 using HearthstoneReplays.ReplayData.Meta;
 using HearthstoneReplays.ReplayData.Meta.Options;
 

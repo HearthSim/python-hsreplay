@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 #endregion
 
-namespace HearthstoneReplays
+namespace HearthstoneReplays.ReplayData
 {
 	[XmlRoot("HSReplay")]
 	public class HearthstoneReplay

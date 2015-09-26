@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 #endregion
 
-namespace HearthstoneReplays.GameActions
+namespace HearthstoneReplays.ReplayData.GameActions
 {
 	public class ShowEntity : GameData
 
