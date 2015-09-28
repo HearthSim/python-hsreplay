@@ -16,6 +16,9 @@ namespace HearthstoneReplays.ReplayData
 		[XmlAttribute("timestamp")]
 		public string TimeStamp { get; set; }
 
+        [XmlAttribute("type")]
+        public int Type { get; set; }
+
 		[XmlElement("Action", typeof(Action))]
 		[XmlElement("Choices", typeof(Choices))]
 		[XmlElement("FullEntity", typeof(FullEntity))]

@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Hearthstone\Enums\CHOICE_TYPE.cs" />
+    <Compile Include="Hearthstone\Enums\GAME_TYPE.cs" />
     <Compile Include="Hearthstone\Enums\METADATA_TYPE.cs" />
     <Compile Include="Hearthstone\Enums\OPTION_TYPE.cs" />
     <Compile Include="Hearthstone\Enums\TAG_CARD_SET.cs" />
