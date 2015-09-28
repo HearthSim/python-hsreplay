@@ -7,7 +7,9 @@
 	version NMTOKEN #REQUIRED>
 
 <!ELEMENT Game (Action | Choices | FullEntity | GameEntity | HideEntity | Options | Player | SendChoices | SendOption | ShowEntity | TagChange)*>
-<!ATTLIST Game ts NMTOKEN #IMPLIED>
+<!ATTLIST Game
+	type NMTOKEN #IMPLIED
+	ts NMTOKEN #IMPLIED>
 
 <!ELEMENT GameEntity ( Tag* )>
 <!ATTLIST GameEntity id %entity; #REQUIRED>
