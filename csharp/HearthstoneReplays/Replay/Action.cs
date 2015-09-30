@@ -9,12 +9,12 @@ namespace HearthstoneReplays.Replay
 {
     public class Action
     {
-        public GameState GameState { get; }
-        public List<Action> SubActions { get; }
-        public ActionType Type { get; }
-        public Entity Source { get; }
-        public Entity Target { get; }
-        public int Level { get; }
+        public GameState GameState { get; private set; }
+        public List<Action> SubActions { get; private set; }
+        public ActionType Type { get; private set; }
+        public Entity Source { get; private set; }
+        public Entity Target { get; private set; }
+        public int Level { get; private set; }
 
         public Action(Dictionary<int, Entity> entities, ActionType type, int source = 0, int target = 0, int level = 0)
         {
