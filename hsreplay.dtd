@@ -12,7 +12,9 @@
 	ts NMTOKEN #IMPLIED>
 
 <!ELEMENT GameEntity ( Tag* )>
-<!ATTLIST GameEntity id %entity; #REQUIRED>
+<!ATTLIST GameEntity
+	id %entity; #REQUIRED
+	ts NMTOKEN #IMPLIED>
 
 <!ELEMENT Player (Tag*)>
 <!ATTLIST Player
