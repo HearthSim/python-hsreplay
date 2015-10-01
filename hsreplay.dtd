@@ -1,5 +1,6 @@
 <!ENTITY % entity 'NMTOKEN'>
 <!ENTITY % gameTag 'NMTOKEN'>
+<!ENTITY % timestamp 'NMTOKEN'>
 
 <!ELEMENT HSReplay (Game*)>
 <!ATTLIST HSReplay
@@ -9,12 +10,12 @@
 <!ELEMENT Game (Action | Choices | FullEntity | GameEntity | HideEntity | Options | Player | SendChoices | SendOption | ShowEntity | TagChange)*>
 <!ATTLIST Game
 	type NMTOKEN #IMPLIED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT GameEntity ( Tag* )>
 <!ATTLIST GameEntity
 	id %entity; #REQUIRED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT Player (Tag*)>
 <!ATTLIST Player
@@ -23,20 +24,20 @@
 	name CDATA #IMPLIED
 	accountHi NMTOKEN #IMPLIED
 	accountLo NMTOKEN #IMPLIED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT Tag EMPTY>
 <!ATTLIST Tag
 	tag %gameTag; #REQUIRED
 	value NMTOKEN #REQUIRED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT TagChange EMPTY>
 <!ATTLIST TagChange
 	entity %entity; #REQUIRED
 	tag %gameTag; #REQUIRED
 	value NMTOKEN #REQUIRED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT Action (Action | FullEntity | HideEntity | TagChange | MetaData | ShowEntity)*>
 <!ATTLIST Action
@@ -44,52 +45,52 @@
 	index NMTOKEN #IMPLIED
 	target NMTOKEN #IMPLIED
 	type NMTOKEN #REQUIRED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT FullEntity (Tag*)>
 <!ATTLIST FullEntity
 	cardID NMTOKEN #IMPLIED
 	id %gameTag; #REQUIRED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT ShowEntity (Tag*)>
 <!ATTLIST ShowEntity
 	cardID NMTOKEN #IMPLIED
 	entity %entity; #REQUIRED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT HideEntity EMPTY>
 <!ATTLIST HideEntity
 	entity %entity; #REQUIRED
 	tag %gameTag; #REQUIRED
 	value NMTOKEN #REQUIRED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT MetaData (Info*)>
 <!ATTLIST MetaData
 	meta NMTOKEN #REQUIRED
 	data %entity; #IMPLIED
 	info NMTOKEN #REQUIRED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT Info EMPTY>
 <!ATTLIST Info
 	index NMTOKEN #REQUIRED
 	id %entity; #REQUIRED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT Choice EMPTY>
 <!ATTLIST Choice
 	entity %entity; #REQUIRED
 	index NMTOKEN #REQUIRED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!-- Not sending a choice is valid, eg. in Mulligan -->
 <!ELEMENT SendChoices (Choice*)>
 <!ATTLIST SendChoices
 	entity %entity; #REQUIRED
 	type NMTOKEN #REQUIRED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT Choices (Choice+)>
 <!ATTLIST Choices
@@ -99,31 +100,31 @@
 	type NMTOKEN #REQUIRED
 	min NMTOKEN #IMPLIED
 	max NMTOKEN #IMPLIED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT Option (SubOption*|Target*)>
 <!ATTLIST Option
 	entity %entity; #IMPLIED
 	index NMTOKEN #REQUIRED
 	type NMTOKEN #REQUIRED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT SubOption (Target*)>
 <!ATTLIST SubOption
 	entity %entity; #REQUIRED
 	index NMTOKEN #REQUIRED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT Target EMPTY>
 <!ATTLIST Target
 	entity %entity; #REQUIRED
 	index NMTOKEN #REQUIRED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT Options (Option+)>
 <!ATTLIST Options
 	id NMTOKEN #REQUIRED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
 
 <!ELEMENT SendOption EMPTY>
 <!ATTLIST SendOption
@@ -131,4 +132,4 @@
 	subOption NMTOKEN #IMPLIED
 	position NMTOKEN #IMPLIED
 	target NMTOKEN #IMPLIED
-	ts NMTOKEN #IMPLIED>
+	ts %timestamp; #IMPLIED>
