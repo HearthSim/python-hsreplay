@@ -36,8 +36,7 @@
 	value NMTOKEN #REQUIRED
 	ts NMTOKEN #IMPLIED>
 
-<!-- Child elements must be one of Action, FullEntity, TagChange, MetaData, ShowEntity -->
-<!ELEMENT Action ANY>
+<!ELEMENT Action (Action | FullEntity | HideEntity | TagChange | MetaData | ShowEntity)*>
 <!ATTLIST Action
 	entity %entity; #REQUIRED
 	index NMTOKEN #IMPLIED
