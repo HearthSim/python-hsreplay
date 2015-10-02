@@ -51,7 +51,7 @@
 <!ELEMENT FullEntity (Tag*)>
 <!ATTLIST FullEntity
 	cardID NMTOKEN #IMPLIED
-	id %gameTag; #REQUIRED
+	id %entity; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
 <!ELEMENT ShowEntity (Tag*)>
