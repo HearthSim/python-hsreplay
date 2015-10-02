@@ -1,6 +1,7 @@
 <!ENTITY % entity 'NMTOKEN'>
 <!ENTITY % gameTag 'NMTOKEN'>
 <!ENTITY % timestamp 'NMTOKEN'>
+<!ENTITY % enumValue 'NMTOKEN'>
 
 <!ELEMENT HSReplay (Game*)>
 <!ATTLIST HSReplay
@@ -9,7 +10,7 @@
 
 <!ELEMENT Game (Action | Choices | FullEntity | GameEntity | HideEntity | Options | Player | SendChoices | SendOption | ShowEntity | TagChange)*>
 <!ATTLIST Game
-	type NMTOKEN #IMPLIED
+	type %enumValue; #IMPLIED
 	ts %timestamp; #IMPLIED>
 
 <!ELEMENT GameEntity ( Tag* )>
@@ -44,7 +45,7 @@
 	entity %entity; #REQUIRED
 	index NMTOKEN #IMPLIED
 	target NMTOKEN #IMPLIED
-	type NMTOKEN #REQUIRED
+	type %enumValue; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
 <!ELEMENT FullEntity (Tag*)>
@@ -68,7 +69,7 @@
 
 <!ELEMENT MetaData (Info*)>
 <!ATTLIST MetaData
-	meta NMTOKEN #REQUIRED
+	meta %enumValue; #REQUIRED
 	data %entity; #IMPLIED
 	info NMTOKEN #REQUIRED
 	ts %timestamp; #IMPLIED>
@@ -97,7 +98,7 @@
 	entity %entity; #REQUIRED
 	playerID NMTOKEN #REQUIRED
 	source NMTOKEN #REQUIRED
-	type NMTOKEN #REQUIRED
+	type %enumValue; #REQUIRED
 	min NMTOKEN #IMPLIED
 	max NMTOKEN #IMPLIED
 	ts %timestamp; #IMPLIED>
@@ -106,7 +107,7 @@
 <!ATTLIST Option
 	entity %entity; #IMPLIED
 	index NMTOKEN #REQUIRED
-	type NMTOKEN #REQUIRED
+	type %enumValue; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
 <!ELEMENT SubOption (Target*)>
