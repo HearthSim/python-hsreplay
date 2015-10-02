@@ -168,7 +168,7 @@ class TagChangeNode(Node):
 
 class HideEntityNode(Node):
 	tagname = "HideEntity"
-	attributes = ("entity", "tag", "value")
+	attributes = ("entity", "zone")
 	timestamp = True
 
 
@@ -450,8 +450,9 @@ class PowerLogParser:
 		if sre:
 			entity, tag, value = sre.groups()
 			entity = self._parse_entity(entity)
-			tag, value = parse_tag(tag, value)
-			node = HideEntityNode(ts, entity, tag, value)
+			tag, zone = parse_tag(tag, value)
+			assert tag == GameTag.ZONE
+			node = HideEntityNode(ts, entity, zone)
 			self.update_node(node)
 			return
 

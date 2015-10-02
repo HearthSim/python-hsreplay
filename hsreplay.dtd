@@ -63,8 +63,7 @@
 <!ELEMENT HideEntity EMPTY>
 <!ATTLIST HideEntity
 	entity %entity; #REQUIRED
-	tag %gameTag; #REQUIRED
-	value NMTOKEN #REQUIRED
+	zone %enumValue; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
 <!ELEMENT MetaData (Info*)>
