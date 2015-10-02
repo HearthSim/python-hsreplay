@@ -132,5 +132,5 @@
 	option NMTOKEN #REQUIRED
 	subOption NMTOKEN #IMPLIED
 	position NMTOKEN #IMPLIED
-	target NMTOKEN #IMPLIED
+	target %entity; #IMPLIED
 	ts %timestamp; #IMPLIED>
