@@ -20,7 +20,7 @@
 
 <!ELEMENT Player (Tag*)>
 <!ATTLIST Player
-	id NMTOKEN #REQUIRED
+	id %entity; #REQUIRED
 	playerID NMTOKEN #REQUIRED
 	name CDATA #IMPLIED
 	accountHi NMTOKEN #IMPLIED
