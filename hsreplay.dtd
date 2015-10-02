@@ -1,23 +1,72 @@
+<!--
+ ! An entity element SHOULD always be an integer representing the entity ID.
+ ! However, due to limitations in the Power.log format, player names are
+ ! sometimes impossible to reverse back into an entity ID and MAY be used
+ ! instead of the entity ID. Also note that they can be "UNKNOWN HUMAN PLAYER"
+ ! in case of a logging/connection issue.
+-->
 <!ENTITY % entity 'NMTOKEN'>
-<!ENTITY % gameTag 'NMTOKEN'>
-<!ENTITY % timestamp 'NMTOKEN'>
+
+<!--
+ ! An enumValue element MUST always be an integer.
+ ! It represents the value of one of the game's enums. For specifics, see
+ ! the tag's documentation.
+-->
 <!ENTITY % enumValue 'NMTOKEN'>
 
+<!--
+ ! This is a GameTag enumValue.
+-->
+<!ENTITY % gameTag 'NMTOKEN'>
+
+<!--
+ ! ALL non-root tags accept an optional `ts` attribute which denotes the
+ ! timestamp most relevant to the element.
+ ! The attribute SHOULD be omitted for elements which will never have a
+ ! different timestamp than their parent element.
+-->
+<!ENTITY % timestamp 'NMTOKEN'>
+
+
+<!-- HSReplay root tag
+ ! Contains a list of Hearthstone games
+ ! build: The Hearthstone build used to generate the replays
+ ! version: The version of the HSReplay spec used for the document
+-->
 <!ELEMENT HSReplay (Game*)>
 <!ATTLIST HSReplay
 	build NMTOKEN #IMPLIED
 	version NMTOKEN #REQUIRED>
+
+
+<!-- A Hearthstone game
+ ! Contains a full or partial Hearthstone game. Begins on CREATE_GAME.
+ ! type: A GameType enum value. Optional because it cannot be read directly
+ !       from Power.log.
+-->
 
 <!ELEMENT Game (Action | Choices | FullEntity | GameEntity | HideEntity | Options | Player | SendChoices | SendOption | ShowEntity | TagChange)*>
 <!ATTLIST Game
 	type %enumValue; #IMPLIED
 	ts %timestamp; #IMPLIED>
 
+
+<!--
+ ! Corresponds to GameEntity in Power.log.
+ ! Its ID SHOULD always be 1 - if it's not, something is terribly wrong!
+-->
 <!ELEMENT GameEntity ( Tag* )>
 <!ATTLIST GameEntity
 	id %entity; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
+
+<!--
+ ! Corresponds to Player in Power.log.
+ ! id is the entity id and should not be confused with playerID!
+ ! name SHOULD be included - it has to be reversed from followup packets
+ ! which carry the player's name instead of ID.
+-->
 <!ELEMENT Player (Tag*)>
 <!ATTLIST Player
 	id %entity; #REQUIRED
@@ -27,19 +76,14 @@
 	accountLo NMTOKEN #IMPLIED
 	ts %timestamp; #IMPLIED>
 
-<!ELEMENT Tag EMPTY>
-<!ATTLIST Tag
-	tag %gameTag; #REQUIRED
-	value NMTOKEN #REQUIRED
-	ts %timestamp; #IMPLIED>
 
-<!ELEMENT TagChange EMPTY>
-<!ATTLIST TagChange
-	entity %entity; #REQUIRED
-	tag %gameTag; #REQUIRED
-	value NMTOKEN #REQUIRED
-	ts %timestamp; #IMPLIED>
-
+<!--
+ ! Contains a full action (from ACTION_START to corresponding ACTION_END)
+ ! This is recursive: Actions may contain further Actions.
+ ! index: The index the action is performed at (-1 if not provided)
+ ! target: The id of the entity being targeted (0 if not provided)
+ ! type: A PowSubType enum value representing the type of action performed
+-->
 <!ELEMENT Action (Action | FullEntity | HideEntity | TagChange | MetaData | ShowEntity)*>
 <!ATTLIST Action
 	entity %entity; #REQUIRED
@@ -48,24 +92,78 @@
 	type %enumValue; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
+
+<!--
+ ! Represents a GameTag key/value pair (tag=... value=...)
+ ! It is included as part of all types of entity definitions and
+ ! carries the initial tags attached to the entity.
+ ! tag: A GameTag key
+ ! value: A value for the GameTag. SHOULD always be an integer.
+-->
+<!ELEMENT Tag EMPTY>
+<!ATTLIST Tag
+	tag %gameTag; #REQUIRED
+	value NMTOKEN #REQUIRED
+	ts %timestamp; #IMPLIED>
+
+
+<!--
+ ! Corresponds to TAG_CHANGE in Power.log
+ ! tag: A GameTag key
+ ! value: A value for the GameTag. SHOULD always be an integer.
+-->
+<!ELEMENT TagChange EMPTY>
+<!ATTLIST TagChange
+	entity %entity; #REQUIRED
+	tag %gameTag; #REQUIRED
+	value NMTOKEN #REQUIRED
+	ts %timestamp; #IMPLIED>
+
+
+<!-- Card Entity definitions -->
+
+<!--
+ ! Corresponds to FULL_ENTITY in Power.log.
+ ! Represents a complete entity definition, with a list of tags.
+-->
 <!ELEMENT FullEntity (Tag*)>
 <!ATTLIST FullEntity
 	cardID NMTOKEN #IMPLIED
 	id %entity; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
+<!--
+ ! Corresponds to a SHOW_ENTITY in Power.log.
+ ! Represents an entity being revealed from an unrevealed state.
+ ! Carries a list of tags like FullEntity.
+ ! entity: The id of the entity being revealed
+-->
 <!ELEMENT ShowEntity (Tag*)>
 <!ATTLIST ShowEntity
 	cardID NMTOKEN #IMPLIED
 	entity %entity; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
+<!--
+ ! Corresponds to a HIDE_ENTITY in Power.log.
+ ! entity: The id of the entity being hidden
+ ! zone: The zone the entity is being moved to
+-->
 <!ELEMENT HideEntity EMPTY>
 <!ATTLIST HideEntity
 	entity %entity; #REQUIRED
 	zone %enumValue; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
+
+<!-- Metadata -->
+
+<!--
+ ! Corresponds to META_DATA in Power.log
+ ! meta: A MetaDataType enum value
+ ! data: An entity definition
+ ! info: The info count. SHOULD NOT be included if Info tags are available.
+-->
 <!ELEMENT MetaData (Info*)>
 <!ATTLIST MetaData
 	meta %enumValue; #REQUIRED
@@ -73,24 +171,29 @@
 	info NMTOKEN #IMPLIED
 	ts %timestamp; #IMPLIED>
 
+<!--
+ ! In verbose mode, Power.log outputs detailed Info for META_DATA packets.
+ ! index: The index of the info element
+ ! id: The id of the entity in question
+ -->
 <!ELEMENT Info EMPTY>
 <!ATTLIST Info
 	index NMTOKEN #REQUIRED
 	id %entity; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
-<!ELEMENT Choice EMPTY>
-<!ATTLIST Choice
-	entity %entity; #REQUIRED
-	index NMTOKEN #REQUIRED
-	ts %timestamp; #IMPLIED>
 
-<!-- Not sending a choice is valid, eg. in Mulligan -->
-<!ELEMENT SendChoices (Choice*)>
-<!ATTLIST SendChoices
-	entity %entity; #REQUIRED
-	type NMTOKEN #REQUIRED
-	ts %timestamp; #IMPLIED>
+<!-- Choices -->
+
+<!--
+ ! Represents data output by DebugPrintEntityChoices() in Power.log
+ ! entity: The ID of the entity the choices are presented to
+ ! playerID: The player ID of the player the choices are presented to
+ ! source: The source of the choices
+ ! type: A ChoiceType enum value representing the type of choice (MULLIGAN vs. GENERAL)
+ ! min: The min count of the choices
+ ! max: The max count of the choices
+-->
 
 <!ELEMENT Choices (Choice+)>
 <!ATTLIST Choices
@@ -102,6 +205,47 @@
 	max NMTOKEN #IMPLIED
 	ts %timestamp; #IMPLIED>
 
+<!--
+ ! Represents data output by SendChoices() in Power.log
+ ! entity: The id of the entity making the choice
+ ! type: A ChoiceType enum value representing MULLIGAN or GENERAL, eg. Tracking
+ ! May contain no choice as not sending a choice is valid, eg. in Mulligan
+-->
+<!ELEMENT SendChoices (Choice*)>
+<!ATTLIST SendChoices
+	entity %entity; #REQUIRED
+	type %enumValue; #REQUIRED
+	ts %timestamp; #IMPLIED>
+
+<!--
+ ! Represents a choice, either being proposed or sent
+ ! entity: The id of the choice entity
+ ! index: The index of the choice in the choice list
+-->
+<!ELEMENT Choice EMPTY>
+<!ATTLIST Choice
+	entity %entity; #REQUIRED
+	index NMTOKEN #REQUIRED
+	ts %timestamp; #IMPLIED>
+
+
+<!-- Options -->
+
+<!--
+ ! Represents data output by DebugPrintOptions() in Power.log
+ ! id: The option packet ID
+-->
+<!ELEMENT Options (Option+)>
+<!ATTLIST Options
+	id NMTOKEN #REQUIRED
+	ts %timestamp; #IMPLIED>
+
+<!--
+ ! A single option presented to the user.
+ ! May have suboptions ("choose one"), or multiple targets.
+ ! entity: The id of the entity chosen as the option. SHOULD be 0 for END_TURN
+ ! type: An OptionType enum value: PASS (unused), END_TURN or POWER
+-->
 <!ELEMENT Option (SubOption*|Target*)>
 <!ATTLIST Option
 	entity %entity; #IMPLIED
@@ -109,23 +253,34 @@
 	type %enumValue; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
+<!--
+ ! Behaves exactly like Option, but may not have further sub-options and
+ ! does not have a type.
+-->
 <!ELEMENT SubOption (Target*)>
 <!ATTLIST SubOption
 	entity %entity; #REQUIRED
 	index NMTOKEN #REQUIRED
 	ts %timestamp; #IMPLIED>
 
+<!--
+ ! A target for an Option or SubOption
+ ! entity: The id of the target
+ ! index: The index of the target in the targets list
+-->
 <!ELEMENT Target EMPTY>
 <!ATTLIST Target
 	entity %entity; #REQUIRED
 	index NMTOKEN #REQUIRED
 	ts %timestamp; #IMPLIED>
 
-<!ELEMENT Options (Option+)>
-<!ATTLIST Options
-	id NMTOKEN #REQUIRED
-	ts %timestamp; #IMPLIED>
-
+<!--
+ ! Sends a chosen option.
+ ! option: The index of the chosen Option
+ ! subOption: The index of the chosen SubOption (default -1)
+ ! position: The position chosen for the option (default 0)
+ ! target: The entity id of the chosen target
+-->
 <!ELEMENT SendOption EMPTY>
 <!ATTLIST SendOption
 	option NMTOKEN #REQUIRED
