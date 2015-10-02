@@ -88,7 +88,7 @@
 <!ATTLIST Action
 	entity %entity; #REQUIRED
 	index NMTOKEN #IMPLIED
-	target NMTOKEN #IMPLIED
+	target %entity; #IMPLIED
 	type %enumValue; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
