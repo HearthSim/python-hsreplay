@@ -116,7 +116,7 @@ class HideEntity(Packet):
 		return "HIDE_ENTITY - Entity=%s tag=%s value=%s" % self.args()
 
 	def args(self):
-		return self.format_entity(self.entity), self.tag, self.value
+		return self.format_entity(self.entity), "ZONE", self.zone
 
 
 class TagChange(Packet):
