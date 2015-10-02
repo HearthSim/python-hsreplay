@@ -71,7 +71,7 @@
 <!ATTLIST MetaData
 	meta %enumValue; #REQUIRED
 	data %entity; #IMPLIED
-	info NMTOKEN #REQUIRED
+	info NMTOKEN #IMPLIED
 	ts %timestamp; #IMPLIED>
 
 <!ELEMENT Info EMPTY>
