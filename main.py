@@ -21,6 +21,9 @@ CHOICES_CHOICE_RE = re.compile(r"id=(\d+) Player=%s TaskList=(\d+) ChoiceType=(\
 CHOICES_SOURCE_RE = re.compile(r"Source=%s$" % _E)
 CHOICES_ENTITIES_RE = re.compile(r"Entities\[(\d+)\]=(\[.+\])$")
 
+ENTITIES_CHOSEN_RE = re.compile(r"id=(\d+) Player=%s EntitiesCount=(\d+)$" % _E)
+ENTITIES_CHOSEN_ENTITIES_RE = re.compile(r"Entities\[(\d+)\]=%s$" % _E)
+
 SEND_CHOICES_CHOICETYPE_RE = re.compile(r"id=(\d+) ChoiceType=(.+)$")
 SEND_CHOICES_ENTITIES_RE = re.compile(r"m_chosenEntities\[(\d+)\]=(\[.+\])$")
 
@@ -188,6 +191,12 @@ class ChoiceNode(Node):
 	timestamp = False
 
 
+class ChosenEntitiesNode(Node):
+	tagname = "ChosenEntities"
+	attributes = ("entity", "playerID", "count")
+	timestamp = True
+
+
 class SendChoicesNode(Node):
 	tagname = "SendChoices"
 	attributes = ("entity", "type")
@@ -337,6 +346,8 @@ class PowerLogParser:
 			self.handle_choices(ts, data)
 		elif method == "GameState.DebugPrintEntityChoices":
 			self.handle_choices(ts, data)
+		elif method == "GameState.DebugPrintEntitiesChosen":
+			self.handle_entities_chosen(ts, data)
 		elif method == "GameState.DebugPrintOptions":
 			self.handle_options(ts, data)
 		elif method == "GameState.SendOption":
@@ -369,6 +380,35 @@ class PowerLogParser:
 			return
 
 		sys.stderr.write("Warning: Unhandled sent choices: %r\n" % (data))
+
+	def handle_entities_chosen(self, ts, data):
+		# New in 10357
+		data = data.lstrip()
+
+		sre = ENTITIES_CHOSEN_RE.match(data)
+		if sre:
+			entity, player, count = sre.groups()
+			entity = self._parse_entity(entity)
+			# NOTE: in 10357, "Player" is bugged, it's treating a player ID
+			# as an entity ID, resulting in "Player=GameEntity"
+			# For our own sanity we keep the old playerID logic from the
+			# previous builds, we'll change to "player" when it's fixed.
+			playerID = self._parse_entity(player)
+			assert str(playerID).isdigit()
+			node = ChosenEntitiesNode(ts, entity, playerID, count)
+			self.game.append(node)
+			self.current_chosen_entities_node = node
+			return
+
+		sre = ENTITIES_CHOSEN_ENTITIES_RE.match(data)
+		if sre:
+			index, entity = sre.groups()
+			entity = self._parse_entity(entity)
+			node = ChoiceNode(ts, index, entity)
+			self.current_chosen_entities_node.append(node)
+			return
+
+		sys.stderr.write("Warning: Unhandled chosen entities: %r\n" % (data))
 
 	def handle_choices(self, ts, data):
 		data = data.lstrip()
