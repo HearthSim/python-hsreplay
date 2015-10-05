@@ -386,6 +386,9 @@ class PowerLogParser:
 			entity = self._parse_entity(entity)
 			node = ChoiceNode(ts, index, entity)
 			self.current_choice_node.append(node)
+			return
+
+		sys.stderr.write("Warning: Unhandled choices: %r\n" % (data))
 
 	def handle_data(self, ts, data):
 		# print(data)
