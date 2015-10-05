@@ -189,20 +189,22 @@
  ! Represents data output by DebugPrintEntityChoices() in Power.log
  ! entity: The ID of the entity the choices are presented to
  ! playerID: The player ID of the player the choices are presented to
- ! source: The source of the choices
+ ! taskList: The TaskList element from Power.log (>= 10357) - not needed for replays
  ! type: A ChoiceType enum value representing the type of choice (MULLIGAN vs. GENERAL)
  ! min: The min count of the choices
  ! max: The max count of the choices
+ ! source: The source of the choices
 -->
 
 <!ELEMENT Choices (Choice+)>
 <!ATTLIST Choices
 	entity %entity; #REQUIRED
 	playerID NMTOKEN #REQUIRED
-	source NMTOKEN #REQUIRED
+	taskList NMTOKEN #IMPLIED
 	type %enumValue; #REQUIRED
 	min NMTOKEN #IMPLIED
 	max NMTOKEN #IMPLIED
+	source NMTOKEN #REQUIRED
 	ts %timestamp; #IMPLIED>
 
 <!--
