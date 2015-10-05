@@ -16,7 +16,8 @@ OUTPUTLOG_LINE_RE = re.compile(r"\[Power\] ()([^(]+)\(\) - (.+)$")
 
 ENTITY_RE = re.compile("\[.*\s*id=(\d+)\s*.*\]")
 
-CHOICES_CHOICE_RE = re.compile(r"id=(\d+) PlayerId=(\d+) ChoiceType=(\w+) CountMin=(\d+) CountMax=(\d+)$")
+CHOICES_CHOICE_RE_OLD = re.compile(r"id=(\d+) PlayerId=(\d+) ChoiceType=(\w+) CountMin=(\d+) CountMax=(\d+)$")
+CHOICES_CHOICE_RE = re.compile(r"id=(\d+) Player=%s TaskList=(\d+) ChoiceType=(\w+) CountMin=(\d+) CountMax=(\d+)$" % _E)
 CHOICES_SOURCE_RE = re.compile(r"Source=%s$" % _E)
 CHOICES_ENTITIES_RE = re.compile(r"Entities\[(\d+)\]=(\[.+\])$")
 
@@ -177,7 +178,7 @@ class HideEntityNode(Node):
 
 class ChoicesNode(Node):
 	tagname = "Choices"
-	attributes = ("entity", "playerID", "type", "min", "max", "source")
+	attributes = ("entity", "playerID", "taskList", "type", "min", "max", "source")
 	timestamp = True
 
 
@@ -334,6 +335,8 @@ class PowerLogParser:
 			self.handle_send_choices(ts, data)
 		elif method == "GameState.DebugPrintChoices":
 			self.handle_choices(ts, data)
+		elif method == "GameState.DebugPrintEntityChoices":
+			self.handle_choices(ts, data)
 		elif method == "GameState.DebugPrintOptions":
 			self.handle_options(ts, data)
 		elif method == "GameState.SendOption":
@@ -364,11 +367,28 @@ class PowerLogParser:
 	def handle_choices(self, ts, data):
 		data = data.lstrip()
 
-		sre = CHOICES_CHOICE_RE.match(data)
+		# pre-10357 choices
+		sre = CHOICES_CHOICE_RE_OLD.match(data)
 		if sre:
 			entity, playerID, type, min, max = sre.groups()
 			type = parse_enum(enums.ChoiceType, type)
-			node = ChoicesNode(ts, entity, playerID, type, min, max, None)
+			taskList = None
+			node = ChoicesNode(ts, entity, playerID, taskList, type, min, max, None)
+			self.game.append(node)
+			self.current_choice_node = node
+			return
+
+		sre = CHOICES_CHOICE_RE.match(data)
+		if sre:
+			entity, player, taskList, type, min, max = sre.groups()
+			# NOTE: in 10357, "Player" is bugged, it's treating a player ID
+			# as an entity ID, resulting in "Player=GameEntity"
+			# For our own sanity we keep the old playerID logic from the
+			# previous builds, we'll change to "player" when it's fixed.
+			player = self._parse_entity(player)
+			assert str(player).isdigit()
+			type = parse_enum(enums.ChoiceType, type)
+			node = ChoicesNode(ts, entity, player, taskList, type, min, max, None)
 			self.game.append(node)
 			self.current_choice_node = node
 			return
