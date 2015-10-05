@@ -341,6 +341,12 @@ class PowerLogParser:
 			self.handle_options(ts, data)
 		elif method == "GameState.SendOption":
 			self.handle_send_option(ts, data)
+		elif method == "GameState.DebugPrintPowerList":
+			# We don't need this
+			pass
+		else:
+			if not method.startswith(("PowerTaskList.", "PowerProcessor.")):
+				sys.stderr.write("Warning: Unhandled method %r\n" % (method))
 
 	def handle_send_choices(self, ts, data):
 		data = data.lstrip()
