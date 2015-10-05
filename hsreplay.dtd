@@ -45,7 +45,7 @@
  !       from Power.log.
 -->
 
-<!ELEMENT Game (Action | Choices | FullEntity | GameEntity | HideEntity | Options | Player | SendChoices | SendOption | ShowEntity | TagChange)*>
+<!ELEMENT Game (Action | Choices | ChosenEntities | FullEntity | GameEntity | HideEntity | Options | Player | SendChoices | SendOption | ShowEntity | TagChange)*>
 <!ATTLIST Game
 	type %enumValue; #IMPLIED
 	ts %timestamp; #IMPLIED>
@@ -205,6 +205,26 @@
 	min NMTOKEN #IMPLIED
 	max NMTOKEN #IMPLIED
 	source NMTOKEN #REQUIRED
+	ts %timestamp; #IMPLIED>
+
+
+<!--
+ ! Represents data output by DebugPrintChosenEntities() in Power.log.
+ ! Not to be confused with SendChoices! This is inbound, SendChoices is
+ ! outbound. Ideally, SendChoices will be collapsed into ChosenEntities
+ ! but Power.log does not output ChosenEntities for the player who sent
+ ! the choices. New in 10357.
+ ! entity: The id of the entity that made the choice
+ ! playerID: The player ID of the player that made the choice. Obtained
+   from 'Player' in Power.log, but note this is currently bugged and
+   interprets player IDs as entity IDs...
+   count: The chosen entity count (not required)
+-->
+<!ELEMENT ChosenEntities (Choice*)>
+<!ATTLIST ChosenEntities
+	entity %entity; #REQUIRED
+	playerID NMTOKEN #REQUIRED
+	count NMTOKEN #IMPLIED
 	ts %timestamp; #IMPLIED>
 
 <!--
