@@ -355,6 +355,9 @@ class PowerLogParser:
 		elif method == "GameState.DebugPrintPowerList":
 			# We don't need this
 			pass
+		elif method == "GameState.OnEntityChoices":
+			# Spectator mode noise
+			pass
 		else:
 			if not method.startswith(("PowerTaskList.", "PowerProcessor.")):
 				sys.stderr.write("Warning: Unhandled method %r\n" % (method))
