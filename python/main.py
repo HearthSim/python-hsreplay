@@ -17,7 +17,7 @@ OUTPUTLOG_LINE_RE = re.compile(r"\[Power\] ()([^(]+)\(\) - (.+)$")
 ENTITY_RE = re.compile("\[.*\s*id=(\d+)\s*.*\]")
 
 CHOICES_CHOICE_RE_OLD = re.compile(r"id=(\d+) PlayerId=(\d+) ChoiceType=(\w+) CountMin=(\d+) CountMax=(\d+)$")
-CHOICES_CHOICE_RE = re.compile(r"id=(\d+) Player=%s TaskList=(\d+) ChoiceType=(\w+) CountMin=(\d+) CountMax=(\d+)$" % _E)
+CHOICES_CHOICE_RE = re.compile(r"id=(\d+) Player=%s TaskList=(\d+)? ChoiceType=(\w+) CountMin=(\d+) CountMax=(\d+)$" % _E)
 CHOICES_SOURCE_RE = re.compile(r"Source=%s$" % _E)
 CHOICES_ENTITIES_RE = re.compile(r"Entities\[(\d+)\]=(\[.+\])$")
 
@@ -397,7 +397,7 @@ class PowerLogParser:
 			# For our own sanity we keep the old playerID logic from the
 			# previous builds, we'll change to "player" when it's fixed.
 			playerID = self._parse_entity(player)
-			assert str(playerID).isdigit()
+			# assert str(playerID).isdigit()
 			node = ChosenEntitiesNode(ts, entity, playerID, count)
 			self.game.append(node)
 			self.current_chosen_entities_node = node
@@ -430,12 +430,13 @@ class PowerLogParser:
 		sre = CHOICES_CHOICE_RE.match(data)
 		if sre:
 			entity, player, taskList, type, min, max = sre.groups()
+			# tasklist can be empty eg. in spectator mode
 			# NOTE: in 10357, "Player" is bugged, it's treating a player ID
 			# as an entity ID, resulting in "Player=GameEntity"
 			# For our own sanity we keep the old playerID logic from the
 			# previous builds, we'll change to "player" when it's fixed.
 			player = self._parse_entity(player)
-			assert str(player).isdigit()
+			# assert str(player).isdigit()
 			type = parse_enum(enums.ChoiceType, type)
 			node = ChoicesNode(ts, entity, player, taskList, type, min, max, None)
 			self.game.append(node)
