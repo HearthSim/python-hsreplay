@@ -336,7 +336,7 @@ class PowerLogParser:
 		if self.current_node is None:
 			# Incomplete game
 			sys.stderr.write("Warning: Creating an incomplete game\n")
-			self.create_game(ts=None)
+			self.create_game(ts="")
 		self.current_node.append(node)
 
 	def add_data(self, ts, method, data):
