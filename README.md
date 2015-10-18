@@ -23,3 +23,16 @@ languages, please get in touch through our `#hearthsim` channel (see below).
 
 HSReplay is a [HearthSim](http://hearthsim.info) project. All development
 happens on our IRC channel `#hearthsim` on [Freenode](https://freenode.net).
+
+
+# License
+
+The HSReplay specification (and the specification alone) is licensed
+[CC0](https://creativecommons.org/publicdomain/zero/1.0/). That means it is
+in the Public Domain, or as close to being in the Public Domain as possible
+depending on the applicable laws. The full license text is available in
+the `LICENSE` file.
+
+The Python and C# implementations are licensed
+[MIT](http://choosealicense.com/licenses/mit/). The full license text is
+available in the `LICENSE` file in the respective implementations' folder.
