@@ -99,7 +99,9 @@ class GameNode(Node):
 			return
 		if entity in self.players:
 			# Just making sure we're not corrupting data...
-			assert self.players[entity] == id
+			if self.players[entity] != id:
+				sys.stderr.write("Warning: cannot match player %r to entity ID\n" % (entity))
+				return
 		self.players[entity] = id
 		self.playernodes[id].name = entity
 
