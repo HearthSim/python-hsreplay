@@ -13,7 +13,7 @@ They each contain capabilities for reading the `Power.log` files generated
 by Hearthstone when logging is enabled.
 
 For more information, see
-[How to enabled logging](https://github.com/jleclanche/fireplace/wiki/How-to-enable-logging).
+[How to enable logging](https://github.com/jleclanche/fireplace/wiki/How-to-enable-logging).
 
 If you are interested in developing reference implementations in other
 languages, please get in touch through our `#hearthsim` channel (see below).
