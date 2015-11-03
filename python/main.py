@@ -1,6 +1,9 @@
 #!/usr/bin/env python
+import msvcrt #windows only, TODO
 import re
 import sys
+import threading
+import time
 from hearthstone import enums
 from hearthstone.enums import GameTag
 from xml.etree import ElementTree
@@ -8,6 +11,11 @@ from xml.dom import minidom
 
 
 __version__ = "0.9"
+
+#configure these constants to your likings
+KEEP_ALIVE = True #True = keeps listening on new log entries, False = finishes parsing once EOF reached
+DEFAULT_POWERLOG_DIR = r"C:\\Program Files (x86)\\Hearthstone\\Logs\\Power.log" #path to use when no parameter is passed
+PROCESS_INTERVAL = 0.5 #time in seconds for the interval in which read data is further processed
 
 _E = r"(GameEntity|UNKNOWN HUMAN PLAYER|\[.+\]|\d+|.+)"
 
@@ -44,7 +52,6 @@ ACTION_METADATA_RE = re.compile(r"META_DATA - Meta=(\w+) Data=%s Info=(\d+)" % _
 ACTION_METADATA_INFO_RE = re.compile(r"Info\[(\d+)\] = %s" % _E)
 ACTION_CREATEGAME_RE = re.compile(r"GameEntity EntityID=(\d+)")
 ACTION_CREATEGAME_PLAYER_RE = re.compile(r"Player EntityID=(\d+) PlayerID=(\d+) GameAccountId=\[hi=(\d+) lo=(\d+)\]$")
-
 
 def pretty_xml(xml):
 	ret = ElementTree.tostring(xml)
@@ -290,6 +297,7 @@ class PowerLogParser:
 		self.ast = []
 		self.current_node = None
 		self.metadata_node = None
+		self.queried_nodes = [] #needed for streaming (KEEP_ALIVE = True)	
 
 	def _parse_entity(self, data):
 		if not data:
@@ -313,24 +321,50 @@ class PowerLogParser:
 
 		return PlayerID(self.game, data)
 
-	def read(self, f):
-		regex = None
-		for line in f.readlines():
-			if regex is None:
-				sre = POWERLOG_LINE_RE.match(line)
-				if sre:
-					regex = POWERLOG_LINE_RE
-				else:
-					sre = OUTPUTLOG_LINE_RE.match(line)
-					if sre:
-						regex = OUTPUTLOG_LINE_RE
-			else:
-				sre = regex.match(line)
+	def read(self, fname):
+		with open(fname, "r", encoding="utf-8") as f:
 
-			if not sre:
-				continue
+			regex = None
 
-			self.add_data(*sre.groups())
+			if (KEEP_ALIVE): #read all lines and then keep trying to read new lines until interrupted
+				while True:
+					try:
+						line = f.readline()
+						if regex is None:
+							sre = POWERLOG_LINE_RE.match(line)
+							if sre:
+								regex = POWERLOG_LINE_RE
+							else:
+								sre = OUTPUTLOG_LINE_RE.match(line)
+								if sre:
+									regex = OUTPUTLOG_LINE_RE
+						else:
+							sre = regex.match(line)
+
+						if not sre:
+							continue
+
+						self.add_data(*sre.groups())
+					except:
+						continue
+
+			else: #read all lines and terminate
+				for line in f.readlines():
+					if regex is None:
+						sre = POWERLOG_LINE_RE.match(line)
+						if sre:
+							regex = POWERLOG_LINE_RE
+						else:
+							sre = OUTPUTLOG_LINE_RE.match(line)
+							if sre:
+								regex = OUTPUTLOG_LINE_RE
+					else:
+						sre = regex.match(line)
+
+					if not sre:
+						continue
+
+					self.add_data(*sre.groups())
 
 	def update_node(self, node):
 		if self.current_node is None:
@@ -375,6 +409,8 @@ class PowerLogParser:
 			node = SendChoicesNode(ts, id, type)
 			self.update_node(node)
 			self.current_send_choice_node = node
+			if (KEEP_ALIVE and isinstance(self.current_node, GameNode)):
+				self.queried_nodes.append(node)
 			return
 
 		sre = SEND_CHOICES_ENTITIES_RE.match(data)
@@ -404,6 +440,8 @@ class PowerLogParser:
 			node = ChosenEntitiesNode(ts, entity, playerID, count)
 			self.game.append(node)
 			self.current_chosen_entities_node = node
+			if (KEEP_ALIVE and isinstance(self.current_node, GameNode)):
+				self.queried_nodes.append(node)
 			return
 
 		sre = ENTITIES_CHOSEN_ENTITIES_RE.match(data)
@@ -428,6 +466,8 @@ class PowerLogParser:
 			node = ChoicesNode(ts, entity, playerID, taskList, type, min, max, None)
 			self.game.append(node)
 			self.current_choice_node = node
+			if (KEEP_ALIVE and isinstance(self.current_node, GameNode)):
+				self.queried_nodes.append(node)
 			return
 
 		sre = CHOICES_CHOICE_RE.match(data)
@@ -500,6 +540,8 @@ class PowerLogParser:
 				self.current_node = self.current_node.parent
 			self.update_node(node)
 			self.current_node.indent_level = indent_level
+			if (KEEP_ALIVE and isinstance(self.current_node, GameNode)):
+				self.queried_nodes.append(node)
 			return
 
 		sre = ACTION_FULLENTITY_RE_1.match(data)
@@ -511,6 +553,8 @@ class PowerLogParser:
 			node = FullEntityNode(ts, entity, cardid)
 			self.entity_def = node
 			self.update_node(node)
+			if (KEEP_ALIVE and isinstance(self.current_node, GameNode)):
+				self.queried_nodes.append(node)
 			return
 
 		sre = ACTION_SHOWENTITY_RE.match(data)
@@ -520,6 +564,8 @@ class PowerLogParser:
 			node = ShowEntityNode(ts, entity, cardid)
 			self.entity_def = node
 			self.update_node(node)
+			if (KEEP_ALIVE and isinstance(self.current_node, GameNode)):
+				self.queried_nodes.append(node)
 			return
 
 		sre = ACTION_HIDEENTITY_RE.match(data)
@@ -530,6 +576,8 @@ class PowerLogParser:
 			assert tag == GameTag.ZONE
 			node = HideEntityNode(ts, entity, zone)
 			self.update_node(node)
+			if (KEEP_ALIVE and isinstance(self.current_node, GameNode)):
+				self.queried_nodes.append(node)
 			return
 
 		sre = ACTION_START_RE.match(data)
@@ -541,6 +589,8 @@ class PowerLogParser:
 			node = ActionNode(ts, entity, type, index, target)
 			self.update_node(node)
 			node.parent = self.current_node
+			if (KEEP_ALIVE and isinstance(self.current_node, GameNode)):
+				self.queried_nodes.append(node)
 			self.current_node = node
 			self.current_node.indent_level = indent_level
 			return
@@ -571,6 +621,8 @@ class PowerLogParser:
 			node = GameEntityNode(ts, id)
 			self.update_node(node)
 			self.entity_def = node
+			if (KEEP_ALIVE and isinstance(self.current_node, GameNode)):
+				self.queried_nodes.append(node)
 			return
 
 		sre = ACTION_CREATEGAME_PLAYER_RE.match(data)
@@ -580,6 +632,8 @@ class PowerLogParser:
 			self.entity_def = node
 			self.update_node(node)
 			self.game.playernodes[id] = node
+			if (KEEP_ALIVE and isinstance(self.current_node, GameNode)):
+				self.queried_nodes.append(node)
 			return
 
 		if data == "CREATE_GAME":
@@ -613,6 +667,8 @@ class PowerLogParser:
 			node = OptionsNode(ts, id)
 			self.current_options_node = node
 			self.update_node(node)
+			if (KEEP_ALIVE and isinstance(self.current_node, GameNode)):
+				self.queried_nodes.append(node)
 			return
 
 		sre = OPTIONS_OPTION_RE.match(data)
@@ -651,6 +707,8 @@ class PowerLogParser:
 			option, suboption, target, position = sre.groups()
 			node = SendOptionNode(ts, option, suboption, target, position)
 			self.update_node(node)
+			if (KEEP_ALIVE and isinstance(self.current_node, GameNode)):
+				self.queried_nodes.append(node)
 
 	def toxml(self):
 		root = ElementTree.Element("HSReplay")
@@ -659,15 +717,49 @@ class PowerLogParser:
 			root.append(game.xml())
 		return pretty_xml(root)
 
+	def process(self, process_interval):
+		while True:
+			#process read and queried data the way you want to
+			l = len(self.queried_nodes)
+			for x in range(0, l):
+				node = self.queried_nodes.pop(0)
+				print(pretty_xml(node.xml()))
+			time.sleep(process_interval)
+
+#windows only, TODO
+def checkExit():
+	try:
+		x = msvcrt.kbhit()
+		return False
+	except KeyboardInterrupt:
+		return True
 
 def main():
-	fname = sys.argv[1]
+	fname = DEFAULT_POWERLOG_DIR
+	if (len(sys.argv) > 1):
+		fname = sys.argv[1]
 	parser = PowerLogParser()
+	
+	if (KEEP_ALIVE):
+		reader = threading.Thread(target=parser.read, args = (fname,))
+		reader.daemon = True
+		reader.start()
 
-	with open(fname, "r") as f:
-		parser.read(f)
+		worker = threading.Thread(target=parser.process, args = (PROCESS_INTERVAL,))
+		worker.daemon = True
+		worker.start()
 
-	print(parser.toxml())
+		while True:
+		 	try:
+		 		if (checkExit()):
+		 			break
+		 	except KeyboardInterrupt:
+		 		break
+
+	else:
+		parser.read(fname)
+
+	#print(parser.toxml())
 
 
 if __name__ == "__main__":
