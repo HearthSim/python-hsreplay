@@ -355,6 +355,9 @@ class PowerLogParser:
 			self.handle_options(ts, data)
 		elif method == "GameState.SendOption":
 			self.handle_send_option(ts, data)
+		elif method == "ChoiceCardMgr.WaitThenShowChoices":
+			# Not needed for replays
+			pass
 		elif method == "GameState.DebugPrintPowerList":
 			# We don't need this
 			pass
