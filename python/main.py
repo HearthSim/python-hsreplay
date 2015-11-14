@@ -34,8 +34,8 @@ OPTIONS_SUBOPTION_RE = re.compile(r"(subOption|target) (\d+) entity=%s$" % _E)
 SEND_OPTION_RE = re.compile(r"selectedOption=(\d+) selectedSubOption=(-1|\d+) selectedTarget=(\d+) selectedPosition=(\d+)")
 
 ACTION_TAG_RE = re.compile(r"tag=(\w+) value=(\w+)")
-ACTION_FULLENTITY_RE_1 = re.compile(r"FULL_ENTITY - Updating %s CardID=(\w+)?$" % _E)
-ACTION_FULLENTITY_RE_2 = re.compile(r"FULL_ENTITY - Creating ID=(\d+) CardID=(\w+)?$")
+ACTION_FULLENTITY_CREATE_RE = re.compile(r"FULL_ENTITY - Creating ID=(\d+) CardID=(\w+)?$")
+ACTION_FULLENTITY_UPDATE_RE = re.compile(r"FULL_ENTITY - Updating %s CardID=(\w+)?$" % _E)
 ACTION_SHOWENTITY_RE = re.compile(r"SHOW_ENTITY - Updating Entity=%s CardID=(\w+)$" % _E)
 ACTION_HIDEENTITY_RE = re.compile(r"HIDE_ENTITY - Entity=%s tag=(\w+) value=(\w+)$" % _E)
 ACTION_TAGCHANGE_RE = re.compile(r"TAG_CHANGE Entity=%s tag=(\w+) value=(\w+)" % _E)
@@ -505,9 +505,11 @@ class PowerLogParser:
 			self.current_node.indent_level = indent_level
 			return
 
-		sre = ACTION_FULLENTITY_RE_1.match(data)
+		sre = ACTION_FULLENTITY_CREATE_RE.match(data)
 		if not sre:
-			sre = ACTION_FULLENTITY_RE_2.match(data)
+			# Updating an existing entity through a FullEntity tag is rare but
+			# it is possible and not illegal.
+			sre = ACTION_FULLENTITY_UPDATE_RE.match(data)
 		if sre:
 			entity, cardid = sre.groups()
 			entity = self._parse_entity(entity)
