@@ -558,6 +558,12 @@ class PowerLogParser:
 			meta = parse_enum(enums.MetaDataType, meta)
 			data = self._parse_entity(data)
 			node = MetaDataNode(ts, meta, data, info)
+			if not isinstance(self.current_node, ActionNode):
+				sys.stderr.write(
+					"Warning: META_DATA node present outside an Action block\n"
+					"This is not officially supported. "
+					"See https://github.com/HearthSim/hs-bugs/issues/260\n"
+				)
 			self.update_node(node)
 			self.metadata_node = node
 			return
