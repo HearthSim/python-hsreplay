@@ -81,7 +81,7 @@
  ! target: The id of the entity being targeted (0 if not provided)
  ! type: A PowSubType enum value representing the type of action performed
 -->
-<!ELEMENT Action (Action | FullEntity | HideEntity | TagChange | MetaData | ShowEntity)*>
+<!ELEMENT Action (Action | FullEntity | HideEntity | TagChange | MetaData | ShowEntity | Choices | SendChoices)*>
 <!ATTLIST Action
 	entity %entity; #REQUIRED
 	index NMTOKEN #IMPLIED
