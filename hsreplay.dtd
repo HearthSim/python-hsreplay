@@ -299,7 +299,7 @@
 <!ELEMENT SendOption EMPTY>
 <!ATTLIST SendOption
 	option NMTOKEN #REQUIRED
-	subOption NMTOKEN #IMPLIED
-	position NMTOKEN #IMPLIED
+	subOption NMTOKEN "-1"
+	position NMTOKEN "0"
 	target %entity; #IMPLIED
 	ts %timestamp; #IMPLIED>
