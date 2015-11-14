@@ -247,6 +247,8 @@ class PlayerID:
 		return str(self).__contains__(other)
 
 	def __str__(self):
+		if self.data not in self.game.players:
+			sys.stderr.write("Warning: Could not match %r to an entity id.\n" % (self.data))
 		return self.game.players.get(self.data, self.data)
 
 
