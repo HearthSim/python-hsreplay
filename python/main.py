@@ -29,7 +29,7 @@ SEND_CHOICES_ENTITIES_RE = re.compile(r"m_chosenEntities\[(\d+)\]=(\[.+\])$")
 
 OPTIONS_ENTITY_RE = re.compile(r"id=(\d+)$")
 OPTIONS_OPTION_RE = re.compile(r"option (\d+) type=(\w+) mainEntity=%s?$" % _E)
-OPTIONS_SUBOPTION_RE = re.compile(r"(subOption|target) (\d+) entity=%s$" % _E)
+OPTIONS_SUBOPTION_RE = re.compile(r"(subOption|target) (\d+) entity=%s?$" % _E)
 
 SEND_OPTION_RE = re.compile(r"selectedOption=(\d+) selectedSubOption=(-1|\d+) selectedTarget=(\d+) selectedPosition=(\d+)")
 
