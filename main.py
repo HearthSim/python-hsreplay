@@ -355,6 +355,8 @@ class PowerLogParser:
 			self.handle_options(ts, data)
 		elif method == "GameState.SendOption":
 			self.handle_send_option(ts, data)
+		elif method == "GameState.DebugPrintChoice":
+			sys.stderr.write("Warning: DebugPrintChoice was removed in 10357. Ignoring.\n")
 		elif method == "ChoiceCardMgr.WaitThenShowChoices":
 			# Not needed for replays
 			pass
