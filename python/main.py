@@ -431,7 +431,7 @@ class PowerLogParser:
 			type = parse_enum(enums.ChoiceType, type)
 			taskList = None
 			node = ChoicesNode(ts, entity, playerID, taskList, type, min, max, None)
-			self.game.append(node)
+			self.current_node.append(node)
 			self.current_choice_node = node
 			return
 
@@ -447,7 +447,7 @@ class PowerLogParser:
 			# assert str(player).isdigit()
 			type = parse_enum(enums.ChoiceType, type)
 			node = ChoicesNode(ts, entity, player, taskList, type, min, max, None)
-			self.game.append(node)
+			self.current_node.append(node)
 			self.current_choice_node = node
 			return
 
