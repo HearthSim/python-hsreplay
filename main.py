@@ -499,10 +499,6 @@ class PowerLogParser:
 			entity = self._parse_entity(entity)
 			node = TagChangeNode(ts, entity, tag, value)
 
-			if self.current_node.indent_level > indent_level:
-				# mismatched indent levels - closing the node
-				# this can happen eg. during mulligans
-				self.current_node = self.current_node.parent
 			self.update_node(node)
 			self.current_node.indent_level = indent_level
 			return
