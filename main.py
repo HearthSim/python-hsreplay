@@ -367,7 +367,7 @@ class PowerLogParser:
 			# Spectator mode noise
 			pass
 		else:
-			if not method.startswith(("PowerTaskList.", "PowerProcessor.")):
+			if not method.startswith(("PowerTaskList.", "PowerProcessor.", "PowerSpellController")):
 				sys.stderr.write("Warning: Unhandled method %r\n" % (method))
 
 	def handle_send_choices(self, ts, data):
