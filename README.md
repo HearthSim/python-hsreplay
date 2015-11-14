@@ -5,6 +5,9 @@ HSReplay is a replay format for [Hearthstone](http://playhearthstone.com/).
 It is an XML-based format, with a structure closely mirroring that of the
 game's protocol.
 
+The extension for HSReplay files is `.hsreplay`.
+The MIME Type is `application/vnd.hearthsim-hsreplay+xml`.
+
 
 ## Implementations
 
