@@ -74,7 +74,7 @@ class Node:
 				attrib = str(int(attrib))
 			if attrib:
 				element.attrib[attr] = attrib
-		if self.timestamp:
+		if self.timestamp and self.ts:
 			element.attrib["ts"] = self.ts
 		return element
 
