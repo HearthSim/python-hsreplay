@@ -1,4 +1,11 @@
 <!--
+ ! This is HSReplay 1.0 DTD.
+ ! Project page: http://hearthsim.info/hsreplay/
+ ! The DTD is available at the following URL:
+ ! http://hearthsim.info/hsreplay/dtd/hsreplay-1.0.dtd
+-->
+
+<!--
  ! An entity element SHOULD always be an integer representing the entity ID.
  ! However, due to limitations in the Power.log format, player names are
  ! sometimes impossible to reverse back into an entity ID and MAY be used
