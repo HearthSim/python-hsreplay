@@ -5,19 +5,19 @@
  ! instead of the entity ID. Also note that they can be "UNKNOWN HUMAN PLAYER"
  ! in case of a logging/connection issue.
 -->
-<!ENTITY % entity 'NMTOKEN'>
+<!ENTITY % entity "NMTOKEN">
 
 <!--
  ! An enumValue element MUST always be an integer.
  ! It represents the value of one of the game's enums. For specifics, see
  ! the tag's documentation.
 -->
-<!ENTITY % enumValue 'NMTOKEN'>
+<!ENTITY % enumValue "NMTOKEN">
 
 <!--
  ! This is a GameTag enumValue.
 -->
-<!ENTITY % gameTag 'NMTOKEN'>
+<!ENTITY % gameTag "NMTOKEN">
 
 <!--
  ! ALL non-root tags accept an optional `ts` attribute which denotes the
@@ -25,8 +25,10 @@
  ! The attribute SHOULD be omitted for elements which will never have a
  ! different timestamp than their parent element.
 -->
-<!ENTITY % timestamp 'NMTOKEN'>
+<!ENTITY % timestamp "NMTOKEN">
 
+
+<!-- Core tags -->
 
 <!-- HSReplay root tag
  ! Contains a list of Hearthstone games
@@ -38,28 +40,24 @@
 	build NMTOKEN #IMPLIED
 	version NMTOKEN #REQUIRED>
 
-
 <!-- A Hearthstone game
  ! Contains a full or partial Hearthstone game. Begins on CREATE_GAME.
  ! type: A GameType enum value. Optional because it cannot be read directly
  !       from Power.log.
 -->
-
 <!ELEMENT Game (Action | Choices | ChosenEntities | FullEntity | GameEntity | HideEntity | Options | Player | SendChoices | SendOption | ShowEntity | TagChange)*>
 <!ATTLIST Game
 	type %enumValue; #IMPLIED
 	ts %timestamp; #IMPLIED>
 
-
 <!--
  ! Corresponds to GameEntity in Power.log.
  ! Its ID SHOULD always be 1 - if it's not, something is terribly wrong!
 -->
-<!ELEMENT GameEntity ( Tag* )>
+<!ELEMENT GameEntity (Tag*)>
 <!ATTLIST GameEntity
 	id %entity; #REQUIRED
 	ts %timestamp; #IMPLIED>
-
 
 <!--
  ! Corresponds to Player in Power.log.
@@ -76,7 +74,6 @@
 	accountLo NMTOKEN #IMPLIED
 	ts %timestamp; #IMPLIED>
 
-
 <!--
  ! Contains a full action (from ACTION_START to corresponding ACTION_END)
  ! This is recursive: Actions may contain further Actions.
@@ -92,7 +89,6 @@
 	type %enumValue; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
-
 <!--
  ! Represents a GameTag key/value pair (tag=... value=...)
  ! It is included as part of all types of entity definitions and
@@ -105,7 +101,6 @@
 	tag %gameTag; #REQUIRED
 	value NMTOKEN #REQUIRED
 	ts %timestamp; #IMPLIED>
-
 
 <!--
  ! Corresponds to TAG_CHANGE in Power.log
@@ -195,7 +190,6 @@
  ! max: The max count of the choices
  ! source: The source of the choices
 -->
-
 <!ELEMENT Choices (Choice+)>
 <!ATTLIST Choices
 	entity %entity; #REQUIRED
@@ -206,7 +200,6 @@
 	max NMTOKEN #IMPLIED
 	source NMTOKEN #REQUIRED
 	ts %timestamp; #IMPLIED>
-
 
 <!--
  ! Represents data output by DebugPrintChosenEntities() in Power.log.
