@@ -664,10 +664,13 @@ class PowerLogParser:
 			self.update_node(node)
 
 	def toxml(self):
-		root = ElementTree.Element("HSReplay")
-		root.attrib["version"] = __version__
+		builder = ElementTree.TreeBuilder()
+		builder.start("HSReplay", {"version": __version__})
+		builder.end("HSReplay")
+		root = builder.close()
 		for game in self.ast:
 			root.append(game.xml())
+
 		return pretty_xml(root)
 
 
