@@ -7,7 +7,9 @@ from xml.etree import ElementTree
 from xml.dom import minidom
 
 
-__version__ = "0.9"
+__version__ = "1.0"
+
+SYSTEM_DTD = "http://hearthsim.info/hsreplay/dtd/hsreplay-%s.dtd" % (__version__)
 
 _E = r"(GameEntity|UNKNOWN HUMAN PLAYER|\[.+\]|\d+|.+)"
 
@@ -48,7 +50,19 @@ ACTION_CREATEGAME_PLAYER_RE = re.compile(r"Player EntityID=(\d+) PlayerID=(\d+) 
 
 def pretty_xml(xml):
 	ret = ElementTree.tostring(xml)
-	ret = minidom.parseString(ret).toprettyxml(indent="\t")
+	ret = minidom.parseString(ret)
+
+	imp = minidom.DOMImplementation()
+	doctype = imp.createDocumentType(
+		qualifiedName="hsreplay",
+		publicId="",
+		systemId="http://hearthsim.info/hsreplay/dtd/hsreplay-1.0.dtd",
+	)
+	doc = imp.createDocument(None, "HSReplay", doctype)
+	for element in ret.documentElement.childNodes:
+		doc.documentElement.appendChild(element)
+
+	ret = doc.toprettyxml(indent="\t")
 	return "\n".join(line for line in ret.split("\n") if line.strip())
 
 
