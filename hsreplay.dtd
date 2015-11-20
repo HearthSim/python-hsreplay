@@ -91,8 +91,8 @@
 <!ELEMENT Action (Action | FullEntity | HideEntity | TagChange | MetaData | ShowEntity | Choices | SendChoices)*>
 <!ATTLIST Action
 	entity %entity; #REQUIRED
-	index NMTOKEN #IMPLIED
-	target %entity; #IMPLIED
+	index NMTOKEN "-1"
+	target %entity; "0"
 	type %enumValue; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
