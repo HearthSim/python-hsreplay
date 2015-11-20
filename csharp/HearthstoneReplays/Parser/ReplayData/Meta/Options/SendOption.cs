@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.ComponentModel;
 using System.Xml.Serialization;
 
 #endregion
@@ -11,10 +12,10 @@ namespace HearthstoneReplays.Parser.ReplayData.Meta.Options
 		[XmlAttribute("option")]
 		public int OptionIndex { get; set; }
 
-		[XmlAttribute("position")]
+		[XmlAttribute("position"), DefaultValue(0)]
 		public int Position { get; set; }
 
-		[XmlAttribute("suboption")]
+		[XmlAttribute("suboption"), DefaultValue(-1)]
 		public int SubOption { get; set; }
 
 		[XmlAttribute("target")]
