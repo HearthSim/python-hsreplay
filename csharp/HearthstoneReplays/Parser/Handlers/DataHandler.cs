@@ -33,7 +33,7 @@ namespace HearthstoneReplays.Parser.Handlers
 
 			if(data == "CREATE_GAME")
 			{
-				state.CurrentGame = new Game {Data = new List<GameData>()};
+				state.CurrentGame = new Game {Data = new List<GameData>(), TimeStamp = timestamp};
 				state.Replay.Games.Add(state.CurrentGame);
 				state.Node = new Node(typeof(Game), state.CurrentGame, 0, null);
 				return;
@@ -86,7 +86,7 @@ namespace HearthstoneReplays.Parser.Handlers
 					Entity = entity,
 					Index = int.Parse(index),
 					Target = target,
-					//TimeStamp = timestamp,
+					TimeStamp = timestamp,
 					Type = type
 				};
 				if(state.Node.Type == typeof(Game))
