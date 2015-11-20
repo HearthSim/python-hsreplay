@@ -34,8 +34,8 @@ namespace HearthstoneReplays.Parser.Handlers
 			match = Regexes.SendChoicesEntitiesRegex.Match(data);
 			if(match.Success)
 			{
-				var id = Helper.ParseEntity(match.Groups[1].Value, state);
-				var index = Helper.ParseEntity(match.Groups[2].Value, state);
+				var index = Helper.ParseEntity(match.Groups[1].Value, state);
+				var id = Helper.ParseEntity(match.Groups[2].Value, state);
 				var choice = new Choice {Entity = id, Index = index};
 				state.SendChoices.Choices.Add(choice);
 			}
