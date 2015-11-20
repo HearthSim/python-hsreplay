@@ -9,7 +9,7 @@ namespace HearthstoneReplays.Parser.ReplayData.Meta
 {
 	public class SendChoices : GameData
 	{
-		[XmlElement("Chioce", typeof(Choice))]
+		[XmlElement("Choice", typeof(Choice))]
 		public List<Choice> Choices;
 
 		[XmlAttribute("entity")]
