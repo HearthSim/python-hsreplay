@@ -56,7 +56,7 @@ def pretty_xml(xml):
 	doctype = imp.createDocumentType(
 		qualifiedName="hsreplay",
 		publicId="",
-		systemId="http://hearthsim.info/hsreplay/dtd/hsreplay-1.0.dtd",
+		systemId=SYSTEM_DTD,
 	)
 	doc = imp.createDocument(None, "HSReplay", doctype)
 	for element in list(ret.documentElement.childNodes):
