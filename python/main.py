@@ -59,7 +59,7 @@ def pretty_xml(xml):
 		systemId="http://hearthsim.info/hsreplay/dtd/hsreplay-1.0.dtd",
 	)
 	doc = imp.createDocument(None, "HSReplay", doctype)
-	for element in ret.documentElement.childNodes:
+	for element in list(ret.documentElement.childNodes):
 		doc.documentElement.appendChild(element)
 
 	ret = doc.toprettyxml(indent="\t")
