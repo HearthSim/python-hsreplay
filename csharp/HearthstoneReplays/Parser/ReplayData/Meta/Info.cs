@@ -8,7 +8,7 @@ namespace HearthstoneReplays.Parser.ReplayData.Meta
 {
 	public class Info : GameData
 	{
-		[XmlAttribute("info")]
+		[XmlAttribute("index")]
 		public int Index { get; set; }
 
 		[XmlAttribute("id")]
