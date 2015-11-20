@@ -22,7 +22,7 @@ namespace HearthstoneReplays.Parser.ReplayData
 	[XmlInclude(typeof(ChosenEntities))]
 	public abstract class GameData
 	{
-		[XmlAttribute("timestamp")]
+		[XmlAttribute("ts")]
 		public string TimeStamp { get; set; }
 	}
 }
