@@ -33,7 +33,8 @@ namespace HearthstoneReplays.Parser.Handlers
 					Max = int.Parse(max),
 					Min = int.Parse(min),
 					PlayerId = int.Parse(playerId),
-					Type = type
+					Type = type,
+					TimeStamp = timestamp
 				};
 				if(state.Node.Type == typeof(Game))
 					((Game)state.Node.Object).Data.Add(state.Choices);
@@ -68,7 +69,8 @@ namespace HearthstoneReplays.Parser.Handlers
 					Min = int.Parse(min),
 					PlayerId = player,
 					TaskList = int.Parse(taskList),
-					Type = type
+					Type = type,
+					TimeStamp = timestamp
 				};
 				if(state.Node.Type == typeof(Game))
 					((Game)state.Node.Object).Data.Add(state.Choices);

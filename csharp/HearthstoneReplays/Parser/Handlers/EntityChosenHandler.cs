@@ -22,7 +22,7 @@ namespace HearthstoneReplays.Parser.Handlers
 				var count = int.Parse(match.Groups[3].Value);
 				var entity = Helper.ParseEntity(rawEntity, state);
 				var player = Helper.ParseEntity(rawPlayer, state);
-				var cEntities = new ChosenEntities {Entity = entity, PlayerId = player, Count = count, Choices = new List<Choice>()};
+				var cEntities = new ChosenEntities {Entity = entity, PlayerId = player, Count = count, Choices = new List<Choice>(), TimeStamp = timestamp};
 				state.CurrentGame.Data.Add(cEntities);
 				state.CurrentChosenEntites = cEntities;
 				return;

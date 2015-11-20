@@ -22,7 +22,7 @@ namespace HearthstoneReplays.Parser.Handlers
 				var id = match.Groups[1].Value;
 				var rawType = match.Groups[2].Value;
 			    var type = Helper.ParseEnum<ChoiceType>(rawType);
-				state.SendChoices = new SendChoices {Choices = new List<Choice>(), Entity = int.Parse(id), Type = type};
+				state.SendChoices = new SendChoices {Choices = new List<Choice>(), Entity = int.Parse(id), Type = type, TimeStamp = timestamp};
 				if(state.Node.Type == typeof(Game))
 					((Game)state.Node.Object).Data.Add(state.SendChoices);
 				else if(state.Node.Type == typeof(Action))

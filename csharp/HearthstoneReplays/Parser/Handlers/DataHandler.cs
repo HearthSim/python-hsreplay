@@ -154,7 +154,7 @@ namespace HearthstoneReplays.Parser.Handlers
 				var value = match.Groups[3].Value;
 				var entity = Helper.ParseEntity(rawEntity, state);
 				var zone = Helper.ParseTag(tagName, value);
-				var hideEntity = new HideEntity {Entity = entity, Zone = zone.Value};
+				var hideEntity = new HideEntity {Entity = entity, Zone = zone.Value, TimeStamp = timestamp};
 				if(state.Node.Type == typeof(Game))
 					((Game)state.Node.Object).Data.Add(hideEntity);
 				else if(state.Node.Type == typeof(Action))
