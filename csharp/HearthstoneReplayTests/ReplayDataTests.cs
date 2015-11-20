@@ -29,5 +29,12 @@ namespace HearthstoneReplayTests
 			using(var r2 = TestDataReader.GetInputFile("Power_1.log.xml"))
 				Assert.IsTrue(r1.ReadLine() == r2.ReadLine());*/
 		}
+
+		[TestMethod]
+		public void Test()
+		{
+			var replay = ReplayParser.FromTextReader(TestDataReader.GetInputFile("Power_3.log.txt"));
+			ReplaySerializer.Serialize(replay, "r3.xml");
+		}
 	}
 }

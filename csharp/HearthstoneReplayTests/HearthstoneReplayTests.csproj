@@ -75,6 +75,9 @@
   <ItemGroup>
     <EmbeddedResource Include="TestData\BRM_Ragnaros_Power.log.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestData\Power_3.log.txt" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

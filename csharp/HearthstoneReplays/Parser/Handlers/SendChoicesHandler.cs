@@ -2,9 +2,10 @@
 
 using System;
 using System.Collections.Generic;
-using HearthstoneReplays.Hearthstone.Enums;
-using HearthstoneReplays.ReplayData;
-using HearthstoneReplays.ReplayData.Meta;
+using HearthDb.Enums;
+using HearthstoneReplays.Parser.ReplayData;
+using HearthstoneReplays.Parser.ReplayData.Meta;
+using Action = HearthstoneReplays.Parser.ReplayData.GameActions.Action;
 
 #endregion
 
@@ -20,10 +21,12 @@ namespace HearthstoneReplays.Parser.Handlers
 			{
 				var id = match.Groups[1].Value;
 				var rawType = match.Groups[2].Value;
-			    var type = Helper.ParseEnum<CHOICE_TYPE>(rawType);
+			    var type = Helper.ParseEnum<ChoiceType>(rawType);
 				state.SendChoices = new SendChoices {Choices = new List<Choice>(), Entity = int.Parse(id), Type = type};
 				if(state.Node.Type == typeof(Game))
 					((Game)state.Node.Object).Data.Add(state.SendChoices);
+				else if(state.Node.Type == typeof(Action))
+					((Action)state.Node.Object).Data.Add(state.SendChoices);
 				else
 					throw new Exception("Invalid node " + state.Node.Type + " -- " + data);
 				return;

@@ -2,9 +2,9 @@
 
 using System;
 using System.Collections.Generic;
-using HearthstoneReplays.Hearthstone.Enums;
-using HearthstoneReplays.ReplayData;
-using HearthstoneReplays.ReplayData.Meta.Options;
+using HearthDb.Enums;
+using HearthstoneReplays.Parser.ReplayData;
+using HearthstoneReplays.Parser.ReplayData.Meta.Options;
 
 #endregion
 
@@ -33,7 +33,7 @@ namespace HearthstoneReplays.Parser.Handlers
 				var rawType = match.Groups[2].Value;
 				var rawEntity = match.Groups[3].Value;
 				var entity = Helper.ParseEntity(rawEntity, state);
-			    var type = Helper.ParseEnum<OPTION_TYPE>(rawType);
+			    var type = Helper.ParseEnum<OptionType>(rawType);
 				var option = new Option {Entity = entity, Index = int.Parse(index), Type = type, OptionItems = new List<OptionItem>()};
 				state.Options.OptionList.Add(option);
 				state.CurrentOption = option;

@@ -2,8 +2,8 @@
 
 using System;
 using System.Collections.Generic;
-using HearthstoneReplays.Hearthstone.Enums;
-using HearthstoneReplays.ReplayData.GameActions;
+using HearthDb.Enums;
+using HearthstoneReplays.Parser.ReplayData.GameActions;
 
 #endregion
 
@@ -16,11 +16,11 @@ namespace HearthstoneReplays.Replay
 		{
 			Id = id;
 			CardId = cardId;
-			Tags = new Dictionary<GAME_TAG, int>();
+			Tags = new Dictionary<GameTag, int>();
 			if(tags != null)
 			{
 				foreach(var tag in tags)
-					Tags.Add((GAME_TAG)tag.Name, tag.Value);
+					Tags.Add((GameTag)tag.Name, tag.Value);
 			}
 		}
 
@@ -33,21 +33,21 @@ namespace HearthstoneReplays.Replay
 		public string CardId { get; private set; }
 		public int? PlayerId { get; private set; }
 		public string Name { get; set; }
-		public Dictionary<GAME_TAG, int> Tags { get; private set; }
+		public Dictionary<GameTag, int> Tags { get; private set; }
 
-		public bool HasTag(GAME_TAG tag)
+		public bool HasTag(GameTag tag)
 		{
 			return GetTag(tag) > 0;
 		}
 
-		public int GetTag(GAME_TAG tag)
+		public int GetTag(GameTag tag)
 		{
 			int value;
 			Tags.TryGetValue(tag, out value);
 			return value;
 		}
 
-		public void SetTag(GAME_TAG tag, int value)
+		public void SetTag(GameTag tag, int value)
 		{
 			if(!Tags.ContainsKey(tag))
 				Tags.Add(tag, value);
@@ -55,7 +55,7 @@ namespace HearthstoneReplays.Replay
 				Tags[tag] = value;
 		}
 
-		public void SetTag(GAME_TAG tag, string value)
+		public void SetTag(GameTag tag, string value)
 		{
 			if(!Tags.ContainsKey(tag))
 				Tags.Add(tag, ParseTagValue(tag, value));
@@ -65,42 +65,42 @@ namespace HearthstoneReplays.Replay
 
 		public void SetTag(string tag, int value)
 		{
-			GAME_TAG gameTag;
+			GameTag gameTag;
 			if(Enum.TryParse(tag, out gameTag))
 				SetTag(gameTag, value);
 		}
 
 		public void SetTag(string tag, string value)
 		{
-			GAME_TAG gameTag;
+			GameTag gameTag;
 			if(Enum.TryParse(tag, out gameTag))
 				SetTag(gameTag, value);
 		}
 
-		private int ParseTagValue(GAME_TAG tag, string rawValue)
+		private int ParseTagValue(GameTag tag, string rawValue)
 		{
 			int value;
-			if(tag == GAME_TAG.ZONE)
+			if(tag == GameTag.ZONE)
 			{
-				TAG_ZONE zone;
+				Zone zone;
 				Enum.TryParse(rawValue, out zone);
 				value = (int)zone;
 			}
-			else if(tag == GAME_TAG.MULLIGAN_STATE)
+			else if(tag == GameTag.MULLIGAN_STATE)
 			{
-				TAG_MULLIGAN state;
+				Mulligan state;
 				Enum.TryParse(rawValue, out state);
 				value = (int)state;
 			}
-			else if(tag == GAME_TAG.PLAYSTATE)
+			else if(tag == GameTag.PLAYSTATE)
 			{
-				TAG_PLAYSTATE state;
+				PlayState state;
 				Enum.TryParse(rawValue, out state);
 				value = (int)state;
 			}
-			else if(tag == GAME_TAG.CARDTYPE)
+			else if(tag == GameTag.CARDTYPE)
 			{
-				TAG_CARDTYPE type;
+				CardType type;
 				Enum.TryParse(rawValue, out type);
 				value = (int)type;
 			}
@@ -115,14 +115,14 @@ namespace HearthstoneReplays.Replay
 				CardId = cardId;
 		}
 
-		public bool IsInZone(TAG_ZONE zone)
+		public bool IsInZone(Zone zone)
 		{
-			return (TAG_ZONE)GetTag(GAME_TAG.ZONE) == zone;
+			return (Zone)GetTag(GameTag.ZONE) == zone;
 		}
 
-		public bool IsOfType(TAG_CARDTYPE type)
+		public bool IsOfType(CardType type)
 		{
-			return (TAG_CARDTYPE)GetTag(GAME_TAG.CARDTYPE) == type;
+			return (CardType)GetTag(GameTag.CARDTYPE) == type;
 		}
 	}
 }

@@ -2,7 +2,7 @@
 
 using System.IO;
 using System.Xml.Serialization;
-using HearthstoneReplays.ReplayData;
+using HearthstoneReplays.Parser.ReplayData;
 
 #endregion
 

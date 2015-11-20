@@ -2,8 +2,7 @@
 
 using System;
 using System.Linq;
-using HearthstoneReplays;
-using HearthstoneReplays.Hearthstone.Enums;
+using HearthDb.Enums;
 using HearthstoneReplays.Parser;
 using HearthstoneReplays.Replay;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -61,7 +60,7 @@ namespace HearthstoneReplayTests
 			Action action;
 			while((action = _replay.GetNextAction(ActionType.Play)) != null)
 			{
-				foreach(var x in action.GameState.LocalPlayer.Board.Where(e => e.IsOfType(TAG_CARDTYPE.MINION)))
+				foreach(var x in action.GameState.LocalPlayer.Board.Where(e => e.IsOfType(CardType.MINION)))
 					Assert.IsFalse(string.IsNullOrEmpty(x.CardId), action.ToString());
 			}
 		}
@@ -72,7 +71,7 @@ namespace HearthstoneReplayTests
 			Action action;
 			while((action = _replay.GetNextAction(ActionType.Play)) != null)
 			{
-				foreach(var x in action.GameState.Opponent.Board.Where(e => e.IsOfType(TAG_CARDTYPE.MINION)))
+				foreach(var x in action.GameState.Opponent.Board.Where(e => e.IsOfType(CardType.MINION)))
 					Assert.IsFalse(string.IsNullOrEmpty(x.CardId), action.ToString());
 			}
 		}
@@ -80,8 +79,8 @@ namespace HearthstoneReplayTests
 	    [TestMethod]
 	    public void GameHasWinnerTest()
         {
-            var playerWon = _replay.Actions.Last().GameState.LocalPlayer.PlayerEntity.GetTag(GAME_TAG.PLAYSTATE) == (int)TAG_PLAYSTATE.WON;
-            var opponentWon = _replay.Actions.Last().GameState.Opponent.PlayerEntity.GetTag(GAME_TAG.PLAYSTATE) == (int)TAG_PLAYSTATE.WON;
+            var playerWon = _replay.Actions.Last().GameState.LocalPlayer.PlayerEntity.GetTag(GameTag.PLAYSTATE) == (int)PlayState.WON;
+            var opponentWon = _replay.Actions.Last().GameState.Opponent.PlayerEntity.GetTag(GameTag.PLAYSTATE) == (int)PlayState.WON;
             Assert.IsTrue(playerWon || opponentWon);
         }
 
@@ -108,20 +107,20 @@ namespace HearthstoneReplayTests
         {
             var firstTurn = _replay.GetNextAction(ActionType.TurnStart);
             Assert.IsNotNull(firstTurn);
-            Assert.AreEqual(1, firstTurn.GameState.Player1.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
-            Assert.AreEqual(0, firstTurn.GameState.Player2.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
+            Assert.AreEqual(1, firstTurn.GameState.Player1.PlayerEntity.GetTag(GameTag.RESOURCES));
+            Assert.AreEqual(0, firstTurn.GameState.Player2.PlayerEntity.GetTag(GameTag.RESOURCES));
             var secondTurn = _replay.GetNextAction(ActionType.TurnStart);
             Assert.IsNotNull(secondTurn);
-            Assert.AreEqual(1, secondTurn.GameState.Player1.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
-            Assert.AreEqual(1, secondTurn.GameState.Player2.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
+            Assert.AreEqual(1, secondTurn.GameState.Player1.PlayerEntity.GetTag(GameTag.RESOURCES));
+            Assert.AreEqual(1, secondTurn.GameState.Player2.PlayerEntity.GetTag(GameTag.RESOURCES));
             var thirdTurn = _replay.GetNextAction(ActionType.TurnStart);
             Assert.IsNotNull(thirdTurn);
-            Assert.AreEqual(2, thirdTurn.GameState.Player1.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
-            Assert.AreEqual(1, thirdTurn.GameState.Player2.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
+            Assert.AreEqual(2, thirdTurn.GameState.Player1.PlayerEntity.GetTag(GameTag.RESOURCES));
+            Assert.AreEqual(1, thirdTurn.GameState.Player2.PlayerEntity.GetTag(GameTag.RESOURCES));
             var fourthTurn = _replay.GetNextAction(ActionType.TurnStart);
             Assert.IsNotNull(fourthTurn);
-            Assert.AreEqual(2, fourthTurn.GameState.Player1.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
-            Assert.AreEqual(2, fourthTurn.GameState.Player2.PlayerEntity.GetTag(GAME_TAG.RESOURCES));
+            Assert.AreEqual(2, fourthTurn.GameState.Player1.PlayerEntity.GetTag(GameTag.RESOURCES));
+            Assert.AreEqual(2, fourthTurn.GameState.Player2.PlayerEntity.GetTag(GameTag.RESOURCES));
         }
 
         [TestMethod]

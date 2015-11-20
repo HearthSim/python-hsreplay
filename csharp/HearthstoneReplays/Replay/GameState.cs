@@ -2,8 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using HearthstoneReplays.Hearthstone.Enums;
+using HearthDb.Enums;
 
 #endregion
 
@@ -27,7 +26,7 @@ namespace HearthstoneReplays.Replay
 		public Player Opponent { get; set; }
 	    public Player ActivePlayer
 	    {
-	        get { return Player1.PlayerEntity.GetTag(GAME_TAG.CURRENT_PLAYER) == 1 ? Player1 : Player2; }
+	        get { return Player1.PlayerEntity.GetTag(GameTag.CURRENT_PLAYER) == 1 ? Player1 : Player2; }
 	    }
 
 	}

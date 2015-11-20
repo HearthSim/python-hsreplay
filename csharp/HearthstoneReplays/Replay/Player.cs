@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using HearthstoneReplays.Hearthstone.Enums;
+using HearthDb.Enums;
 
 namespace HearthstoneReplays.Replay
 {
@@ -11,17 +11,17 @@ namespace HearthstoneReplays.Replay
         public Player(Dictionary<int, Entity> allEntities, int id)
         {
             Id = id;
-            var playerEntites = allEntities.Values.Where(e => e.GetTag(GAME_TAG.CONTROLLER) == id).ToList();
+            var playerEntites = allEntities.Values.Where(e => e.GetTag(GameTag.CONTROLLER) == id).ToList();
             Hero = playerEntites.FirstOrDefault(e => !string.IsNullOrEmpty(e.CardId) && e.CardId.StartsWith("HERO_"));
-            PlayerEntity = playerEntites.FirstOrDefault(e => e.HasTag(GAME_TAG.PLAYER_ID));
-            Board = playerEntites.Where(e => e.IsInZone(TAG_ZONE.PLAY)).ToList();
-            Hand = playerEntites.Where(e => e.IsInZone(TAG_ZONE.HAND)).ToList();
-            Deck = playerEntites.Where(e => e.IsInZone(TAG_ZONE.DECK)).ToList();
-            SetAside = playerEntites.Where(e => e.IsInZone(TAG_ZONE.SETASIDE)).ToList();
-            Invalid = playerEntites.Where(e => e.IsInZone(TAG_ZONE.INVALID)).ToList();
-            Graveyard = playerEntites.Where(e => e.IsInZone(TAG_ZONE.GRAVEYARD)).ToList();
-            RemovedFromGame = playerEntites.Where(e => e.IsInZone(TAG_ZONE.REMOVEDFROMGAME)).ToList();
-            Secret = playerEntites.Where(e => e.IsInZone(TAG_ZONE.SECRET)).ToList();
+            PlayerEntity = playerEntites.FirstOrDefault(e => e.HasTag(GameTag.PLAYER_ID));
+            Board = playerEntites.Where(e => e.IsInZone(Zone.PLAY)).ToList();
+            Hand = playerEntites.Where(e => e.IsInZone(Zone.HAND)).ToList();
+            Deck = playerEntites.Where(e => e.IsInZone(Zone.DECK)).ToList();
+            SetAside = playerEntites.Where(e => e.IsInZone(Zone.SETASIDE)).ToList();
+            Invalid = playerEntites.Where(e => e.IsInZone(Zone.INVALID)).ToList();
+            Graveyard = playerEntites.Where(e => e.IsInZone(Zone.GRAVEYARD)).ToList();
+            RemovedFromGame = playerEntites.Where(e => e.IsInZone(Zone.REMOVEDFROMGAME)).ToList();
+            Secret = playerEntites.Where(e => e.IsInZone(Zone.SECRET)).ToList();
         }
 
         public List<Entity> Board { get; private set; }

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HearthstoneReplays.Hearthstone.Enums;
+﻿using System.Collections.Generic;
+using HearthDb.Enums;
 
 namespace HearthstoneReplays.Replay
 {
@@ -34,7 +30,7 @@ namespace HearthstoneReplays.Replay
             var source = Source != null ? " " + (string.IsNullOrEmpty(Source.Name) ? Source.CardId : Source.Name) : "";
             var target = Target != null ? " -> " + (string.IsNullOrEmpty(Target.Name) ? Target.CardId : Target.Name) : "";
             var player = GameState.ActivePlayer == GameState.LocalPlayer ? "Player" : "Opponent";
-            return new string('\t', Level) + string.Format("({0}) {1} {2}{3}{4}", GameState.AllEntities[1].GetTag(GAME_TAG.TURN), Type, player, source, target);
+            return new string('\t', Level) + string.Format("({0}) {1} {2}{3}{4}", GameState.AllEntities[1].GetTag(GameTag.TURN), Type, player, source, target);
             //var p1Board = Player1.Board.Any() ? Player1.Board.Select(x => x.CardId).Aggregate((c, n) => c + ", " + n) : "";
             //var p1Hand = Player1.Hand.Any() ? Player1.Hand.Select(x => x.CardId).Aggregate((c, n) => c + ", " + n) : "";
             //var p2Board = Player2.Board.Any() ? Player2.Board.Select(x => x.CardId).Aggregate((c, n) => c + ", " + n) : "";

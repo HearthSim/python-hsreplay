@@ -3,9 +3,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using HearthstoneReplays.Hearthstone.Enums;
-using HearthstoneReplays.ReplayData.Entities;
-using HearthstoneReplays.ReplayData.GameActions;
+using HearthDb.Enums;
+using HearthstoneReplays.Parser.ReplayData.Entities;
+using HearthstoneReplays.Parser.ReplayData.GameActions;
+using Type = System.Type;
 
 #endregion
 
@@ -13,18 +14,18 @@ namespace HearthstoneReplays.Parser
 {
 	public class Helper
 	{
-		private static readonly Dictionary<GAME_TAG, Type> TagTypes = new Dictionary<GAME_TAG, Type>
+		private static readonly Dictionary<GameTag, Type> TagTypes = new Dictionary<GameTag, Type>
 		{
-			{GAME_TAG.CARDTYPE, typeof(TAG_CARDTYPE)},
-			{GAME_TAG.CLASS, typeof(TAG_CLASS)},
-			{GAME_TAG.FACTION, typeof(TAG_FACTION)},
-			{GAME_TAG.PLAYSTATE, typeof(TAG_PLAYSTATE)},
-			{GAME_TAG.RARITY, typeof(TAG_RARITY)},
-			{GAME_TAG.MULLIGAN_STATE, typeof(TAG_MULLIGAN)},
-			{GAME_TAG.NEXT_STEP, typeof(TAG_STEP)},
-			{GAME_TAG.STATE, typeof(TAG_STATE)},
-			{GAME_TAG.STEP, typeof(TAG_STEP)},
-			{GAME_TAG.ZONE, typeof(TAG_ZONE)}
+			{GameTag.CARDTYPE, typeof(CardType)},
+			{GameTag.CLASS, typeof(CardClass)},
+			{GameTag.FACTION, typeof(Faction)},
+			{GameTag.PLAYSTATE, typeof(PlayState)},
+			{GameTag.RARITY, typeof(Rarity)},
+			{GameTag.MULLIGAN_STATE, typeof(Mulligan)},
+			{GameTag.NEXT_STEP, typeof(Step)},
+			{GameTag.STATE, typeof(State)},
+			{GameTag.STEP, typeof(Step)},
+			{GameTag.ZONE, typeof(Zone)}
 		};
 
 		public static int ParseEntity(string data, ParserState state)
@@ -91,9 +92,9 @@ namespace HearthstoneReplays.Parser
 			int tagValue;
 
 			var tag = new Tag();
-			tag.Name = ParseEnum<GAME_TAG>(tagName);
+			tag.Name = ParseEnum<GameTag>(tagName);
 
-			if(TagTypes.TryGetValue((GAME_TAG)tag.Name, out tagType))
+			if(TagTypes.TryGetValue((GameTag)tag.Name, out tagType))
 				tag.Value = ParseEnum(tagType, value);
 			else if(int.TryParse(value, out tagValue))
 				tag.Value = tagValue;

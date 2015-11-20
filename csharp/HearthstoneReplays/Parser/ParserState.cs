@@ -1,8 +1,9 @@
 #region
 
-using HearthstoneReplays.ReplayData;
-using HearthstoneReplays.ReplayData.Meta;
-using HearthstoneReplays.ReplayData.Meta.Options;
+using HearthstoneReplays.Parser.ReplayData;
+using HearthstoneReplays.Parser.ReplayData.GameActions;
+using HearthstoneReplays.Parser.ReplayData.Meta;
+using HearthstoneReplays.Parser.ReplayData.Meta.Options;
 
 #endregion
 
@@ -26,6 +27,7 @@ namespace HearthstoneReplays.Parser
 		public object LastOption { get; set; }
 		public int FirstPlayerId { get; set; }
 	    public int CurrentPlayerId { get; set; }
+		public ChosenEntities CurrentChosenEntites { get; set; }
 
 		public void Reset()
 		{

@@ -1,8 +1,8 @@
 ﻿#region
 
 using System;
-using HearthstoneReplays.ReplayData;
-using HearthstoneReplays.ReplayData.Meta.Options;
+using HearthstoneReplays.Parser.ReplayData;
+using HearthstoneReplays.Parser.ReplayData.Meta.Options;
 
 #endregion
 
