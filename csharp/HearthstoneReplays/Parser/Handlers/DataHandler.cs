@@ -24,7 +24,11 @@ namespace HearthstoneReplays.Parser.Handlers
 			data = trimmed;
 
 			if(state.Node != null && indentLevel <= state.Node.IndentLevel)
-				state.Node = state.Node.Parent ?? state.Node;
+			{
+				var action = state.Node.Object as Action;
+				if(action == null || action.Entity != 1 || !data.ToLower().Contains("mulligan"))
+					state.Node = state.Node.Parent ?? state.Node;
+			}
 
 
 			if(data == "CREATE_GAME")
