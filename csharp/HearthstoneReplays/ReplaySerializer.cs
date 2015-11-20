@@ -17,7 +17,7 @@ namespace HearthstoneReplays
 		{
 			var ns = new XmlSerializerNamespaces();
 			ns.Add("", "");
-			var settings = new XmlWriterSettings {CloseOutput = true, Indent = true};
+			var settings = new XmlWriterSettings {CloseOutput = true, Indent = true, IndentChars = "\t"};
 			using(TextWriter writer = new StreamWriter(filePath))
 			using(var xmlWriter = XmlWriter.Create(writer, settings))
 			{
