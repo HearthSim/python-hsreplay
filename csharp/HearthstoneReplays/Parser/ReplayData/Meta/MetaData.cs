@@ -1,6 +1,7 @@
 ﻿#region
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Xml.Serialization;
 
 #endregion
@@ -9,7 +10,7 @@ namespace HearthstoneReplays.Parser.ReplayData.Meta
 {
 	public class MetaData : GameData
 	{
-		[XmlAttribute("data")]
+		[XmlAttribute("data"), DefaultValue(0)]
 		public int Data { get; set; }
 
 		[XmlAttribute("info")]
