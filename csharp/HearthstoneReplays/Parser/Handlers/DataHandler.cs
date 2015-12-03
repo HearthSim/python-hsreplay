@@ -24,7 +24,10 @@ namespace HearthstoneReplays.Parser.Handlers
 			data = trimmed;
 
 			if(data == "ACTION_END")
+			{
 				state.Node = state.Node.Parent ?? state.Node;
+				return;
+			}
 
 			if(data == "CREATE_GAME")
 			{
@@ -125,6 +128,7 @@ namespace HearthstoneReplays.Parser.Handlers
 					((MetaData)state.Node.Object).MetaInfo.Add(metaInfo);
 				else
 					throw new Exception("Invalid node " + state.Node.Type);
+			    return;
 			}
 
 			match = Regexes.ActionShowEntityRegex.Match(data);
