@@ -13,7 +13,7 @@ namespace HearthstoneReplays.Parser.ReplayData
 {
 	public class Game
 	{
-		[XmlAttribute("timestamp")]
+		[XmlAttribute("ts")]
 		public string TimeStamp { get; set; }
 
         [XmlAttribute("type")]
