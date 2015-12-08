@@ -1,8 +1,10 @@
 package com.hearthsim.hsreplay.parser.replaydata.entities;
 
-import java.util.HashSet;
+import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessOrder;
 import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -20,12 +22,13 @@ import com.hearthsim.hsreplay.parser.replaydata.gameactions.Tag;
 @NoArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
+@XmlAccessorOrder(XmlAccessOrder.ALPHABETICAL)
 public class FullEntity extends BaseEntity {
 
 	@XmlAttribute(name = "cardID")
 	private String cardId;
 
-	public FullEntity(String cardId, int entity, HashSet<Tag> tags) {
+	public FullEntity(String cardId, int entity, List<Tag> tags) {
 		super(entity, tags);
 		this.cardId = cardId;
 	}

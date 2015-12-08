@@ -1,7 +1,6 @@
 package com.hearthsim.hsreplay.parser.handlers;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.regex.Matcher;
 
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +53,7 @@ public class DataHandler {
 		if (match.matches()) {
 			String id = match.group(1);
 			if (Integer.parseInt(id) != 1) throw new Exception("Game ID incorrect! " + id);
-			GameEntity gEntity = new GameEntity(Integer.parseInt(id), new HashSet<>());
+			GameEntity gEntity = new GameEntity(Integer.parseInt(id), new ArrayList<>());
 			state.getCurrentGame().getData().add(gEntity);
 			Node node = new Node(GameEntity.class, gEntity, indentLevel, state.getNode());
 			state.setNode(node);
@@ -69,7 +68,7 @@ public class DataHandler {
 			String accountLo = match.group(4);
 			PlayerEntity pEntity = PlayerEntity.builder().accountHi(accountHi).accountLo(accountLo)
 					.playerId(Integer.parseInt(playerId)).build();
-			pEntity.setTags(new HashSet<>());
+			pEntity.setTags(new ArrayList<>());
 			pEntity.setId(Integer.parseInt(id));
 			state.updateCurrentNode(Game.class);
 			state.getCurrentGame().getData().add(pEntity);
@@ -148,7 +147,7 @@ public class DataHandler {
 			String cardId = match.group(2);
 			int entity = Helper.parseEntity(rawEntity, state);
 
-			ShowEntity showEntity = ShowEntity.builder().cardId(cardId).entity(entity).tags(new HashSet<>()).build();
+			ShowEntity showEntity = ShowEntity.builder().cardId(cardId).entity(entity).tags(new ArrayList<>()).build();
 			state.updateCurrentNode(Game.class, Action.class);
 
 			if (state.getNode().getType().isAssignableFrom(Game.class))
@@ -191,7 +190,7 @@ public class DataHandler {
 			String cardId = match.group(2);
 			int entity = Helper.parseEntity(rawEntity, state);
 
-			FullEntity fullEntity = new FullEntity(cardId, entity, new HashSet<>());
+			FullEntity fullEntity = new FullEntity(cardId, entity, new ArrayList<>());
 			state.updateCurrentNode(Game.class, Action.class);
 
 			if (state.getNode().getType().isAssignableFrom(Game.class))

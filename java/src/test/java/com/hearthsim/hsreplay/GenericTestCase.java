@@ -10,6 +10,10 @@ public class GenericTestCase {
 
 	private final ReplaySerializer parser = new ReplaySerializer();
 
+	/**
+	 * Very generic test case to check for regressions. Should develop more
+	 * specific test cases as the implementation evolves
+	 */
 	@SuppressWarnings("resource")
 	@Test
 	public void test() throws Exception {
@@ -24,8 +28,8 @@ public class GenericTestCase {
 
 		String expectedXmlOneLiner = expectedXmlAString.replaceAll("\t", "").replaceAll("\n", "").replaceAll("\r", "");
 		String xmlOneLiner = xml.replaceAll("\t", "").replaceAll("\n", "").replaceAll("\r", "");
-		System.out.println(expectedXmlOneLiner);
-		System.out.println(xmlOneLiner);
+		// System.out.println(expectedXmlOneLiner);
+		// System.out.println(xmlOneLiner);
 
 		assertEquals(expectedXmlOneLiner, xmlOneLiner);
 	}
