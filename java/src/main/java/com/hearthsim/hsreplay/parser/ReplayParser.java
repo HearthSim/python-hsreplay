@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.hearthsim.hsreplay.enums.GameType;
 import com.hearthsim.hsreplay.parser.handlers.ChoicesHandler;
 import com.hearthsim.hsreplay.parser.handlers.DataHandler;
@@ -13,6 +15,7 @@ import com.hearthsim.hsreplay.parser.handlers.SendChoicesHandler;
 import com.hearthsim.hsreplay.parser.handlers.SendOptionHandler;
 import com.hearthsim.hsreplay.parser.replaydata.HearthstoneReplay;
 
+@Slf4j
 public class ReplayParser {
 
 	public static final String VERSION = "1.0";
@@ -99,7 +102,7 @@ public class ReplayParser {
 			default:
 				if (!method.startsWith("PowerTaskList.") && !method.startsWith("PowerProcessor.")
 						&& !method.startsWith("PowerSpellController"))
-					System.out.println("Warning: Unhandled method: " + method);
+					log.warn("Warning: Unhandled method: " + method);
 				break;
 		}
 	}
