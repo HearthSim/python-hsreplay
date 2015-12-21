@@ -6,6 +6,7 @@ import info.hearthsim.hsreplay.parser.ParserState;
 import info.hearthsim.hsreplay.parser.Regexes;
 import info.hearthsim.hsreplay.parser.replaydata.Game;
 import info.hearthsim.hsreplay.parser.replaydata.meta.options.Option;
+import info.hearthsim.hsreplay.parser.replaydata.meta.options.OptionItem;
 import info.hearthsim.hsreplay.parser.replaydata.meta.options.Options;
 import info.hearthsim.hsreplay.parser.replaydata.meta.options.SubOption;
 import info.hearthsim.hsreplay.parser.replaydata.meta.options.Target;
@@ -20,7 +21,7 @@ public class OptionsHandler {
 		Matcher match = Regexes.OptionsEntityRegex.matcher(data);
 		if (match.matches()) {
 			String id = match.group(1);
-			Options options = new Options(timestamp, Integer.parseInt(id), new ArrayList<>());
+			Options options = new Options(timestamp, Integer.parseInt(id), new ArrayList<Option>());
 			state.setOptions(options);
 			state.updateCurrentNode(Game.class);
 
@@ -41,7 +42,7 @@ public class OptionsHandler {
 			int entity = Helper.parseEntity(rawEntity, state);
 			int type = OptionType.parseEnum(rawType);
 
-			Option option = new Option(Integer.parseInt(index), type, entity, new ArrayList<>());
+			Option option = new Option(Integer.parseInt(index), type, entity, new ArrayList<OptionItem>());
 			state.getOptions().getOptionList().add(option);
 			state.setCurrentOption(option);
 			state.setLastOption(option);
@@ -56,7 +57,7 @@ public class OptionsHandler {
 			int entity = Helper.parseEntity(rawEntity, state);
 
 			if ("subOption".equals(subOptionType)) {
-				SubOption subOption = new SubOption(entity, Integer.parseInt(index), new ArrayList<>());
+				SubOption subOption = new SubOption(entity, Integer.parseInt(index), new ArrayList<Target>());
 				state.getCurrentOption().getOptionsItems().add(subOption);
 				state.setLastOption(subOption);
 			}

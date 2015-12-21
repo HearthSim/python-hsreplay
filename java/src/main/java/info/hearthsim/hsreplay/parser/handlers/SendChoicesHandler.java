@@ -22,7 +22,7 @@ public class SendChoicesHandler {
 			String rawType = match.group(2);
 			int type = ChoiceType.parseEnum(rawType);
 
-			SendChoices sendChoices = new SendChoices(timestamp, new ArrayList<>(), Integer.parseInt(id), type);
+			SendChoices sendChoices = new SendChoices(timestamp, new ArrayList<Choice>(), Integer.parseInt(id), type);
 			state.setSendChoices(sendChoices);
 
 			if (state.getNode().getType().isAssignableFrom(Game.class))

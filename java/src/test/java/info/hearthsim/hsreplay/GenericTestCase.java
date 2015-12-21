@@ -1,7 +1,6 @@
 package info.hearthsim.hsreplay;
 
 import static org.junit.Assert.*;
-import info.hearthsim.hsreplay.ReplaySerializer;
 
 import java.util.Scanner;
 
@@ -19,18 +18,18 @@ public class GenericTestCase {
 	@Test
 	public void test() throws Exception {
 
-		String expectedXmlAString = new Scanner(getClass().getResourceAsStream("Power_2.log.xml"), "UTF-8")
-				.useDelimiter("\\A").next();
+		String inputLogFile = "output_log.0.13.5.txt";
 
-		String logFile = new Scanner(getClass().getResourceAsStream("Power_2.log.txt"), "UTF-8").useDelimiter("\\A")
-				.next();
+		String expectedXmlAString = new Scanner(getClass().getResourceAsStream("expected_xml.xml"), "UTF-8")
+				.useDelimiter("\\A").next();
+		String logFile = new Scanner(getClass().getResourceAsStream(inputLogFile), "UTF-8").useDelimiter("\\A").next();
 
 		String xml = parser.xmlFromLogs(logFile);
 
 		String expectedXmlOneLiner = expectedXmlAString.replaceAll("\t", "").replaceAll("\n", "").replaceAll("\r", "");
 		String xmlOneLiner = xml.replaceAll("\t", "").replaceAll("\n", "").replaceAll("\r", "");
 		// System.out.println(expectedXmlOneLiner);
-		// System.out.println(xmlOneLiner);
+		System.out.println(xmlOneLiner);
 
 		assertEquals(expectedXmlOneLiner, xmlOneLiner);
 	}

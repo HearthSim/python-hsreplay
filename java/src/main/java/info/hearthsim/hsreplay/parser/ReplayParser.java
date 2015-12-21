@@ -1,12 +1,8 @@
 package info.hearthsim.hsreplay.parser;
 
 import info.hearthsim.hsreplay.enums.GameType;
-import info.hearthsim.hsreplay.parser.handlers.ChoicesHandler;
 import info.hearthsim.hsreplay.parser.handlers.DataHandler;
-import info.hearthsim.hsreplay.parser.handlers.EntityChosenHandler;
-import info.hearthsim.hsreplay.parser.handlers.OptionsHandler;
-import info.hearthsim.hsreplay.parser.handlers.SendChoicesHandler;
-import info.hearthsim.hsreplay.parser.handlers.SendOptionHandler;
+import info.hearthsim.hsreplay.parser.replaydata.Game;
 import info.hearthsim.hsreplay.parser.replaydata.HearthstoneReplay;
 
 import java.util.ArrayList;
@@ -42,11 +38,12 @@ public class ReplayParser {
 
 	private void read(Iterable<String> lines) throws Exception {
 		state.reset();
-		state.getReplay().setGames(new ArrayList<>());
+		state.getReplay().setGames(new ArrayList<Game>());
 		Pattern logTypeRegex = null;
 
 		for (String line : lines) {
 
+			log.debug("Considering input log line: " + line);
 			Matcher match = null;
 			if (logTypeRegex == null) {
 				match = Regexes.PowerlogLineRegex.matcher(line);
@@ -71,34 +68,37 @@ public class ReplayParser {
 	private void addData(String timestamp, String method, String data) throws Exception {
 
 		switch (method) {
-			case "GameState.DebugPrintPower":
+		// case "GameState.DebugPrintPower":
+		// DataHandler.handle(timestamp, data, state);
+		// break;
+			case "PowerTaskList.DebugPrintPower":
 				DataHandler.handle(timestamp, data, state);
 				break;
-			case "GameState.SendChoices":
-				SendChoicesHandler.handle(timestamp, data, state);
-				break;
-			case "GameState.DebugPrintChoices":
-			case "GameState.DebugPrintEntityChoices":
-				ChoicesHandler.handle(timestamp, data, state);
-				break;
-			case "GameState.DebugPrintEntitiesChosen":
-				EntityChosenHandler.handle(timestamp, data, state);
-				break;
-			case "GameState.DebugPrintOptions":
-				OptionsHandler.handle(timestamp, data, state);
-				break;
-			case "GameState.SendOption":
-				SendOptionHandler.handle(timestamp, data, state);
-				break;
-			case "GameState.OnEntityChoices":
-				// Spectator mode noise
-				break;
-			case "ChoiceCardMgr.WaitThenShowChoices":
-				// Not needed for replays
-				break;
-			case "GameState.DebugPrintChoice":
-				System.out.println("Warning: DebugPrintChoice was removed in 10357. Ignoring.");
-				break;
+			// case "GameState.SendChoices":
+			// SendChoicesHandler.handle(timestamp, data, state);
+			// break;
+			// case "GameState.DebugPrintChoices":
+			// case "GameState.DebugPrintEntityChoices":
+			// ChoicesHandler.handle(timestamp, data, state);
+			// break;
+			// case "GameState.DebugPrintEntitiesChosen":
+			// EntityChosenHandler.handle(timestamp, data, state);
+			// break;
+			// case "GameState.DebugPrintOptions":
+			// OptionsHandler.handle(timestamp, data, state);
+			// break;
+			// case "GameState.SendOption":
+			// SendOptionHandler.handle(timestamp, data, state);
+			// break;
+			// case "GameState.OnEntityChoices":
+			// // Spectator mode noise
+			// break;
+			// case "ChoiceCardMgr.WaitThenShowChoices":
+			// // Not needed for replays
+			// break;
+			// case "GameState.DebugPrintChoice":
+			// System.out.println("Warning: DebugPrintChoice was removed in 10357. Ignoring.");
+			// break;
 			default:
 				if (!method.startsWith("PowerTaskList.") && !method.startsWith("PowerProcessor.")
 						&& !method.startsWith("PowerSpellController"))

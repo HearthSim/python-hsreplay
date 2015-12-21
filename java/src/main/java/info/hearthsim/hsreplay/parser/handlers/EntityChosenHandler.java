@@ -28,7 +28,7 @@ public class EntityChosenHandler {
 			int entity = Helper.parseEntity(rawEntity, state);
 			int player = Helper.parseEntity(rawPlayer, state);
 
-			ChosenEntities cEntities = new ChosenEntities(timestamp, entity, player, count, new ArrayList<>());
+			ChosenEntities cEntities = new ChosenEntities(timestamp, entity, player, count, new ArrayList<Choice>());
 			state.getCurrentGame().getData().add(cEntities);
 			state.setCurrentChosenEntities(cEntities);
 			return;

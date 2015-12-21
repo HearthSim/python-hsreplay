@@ -26,8 +26,9 @@ public class ChoicesHandler {
 			int entity = Helper.parseEntity(rawEntity, state);
 			int type = ChoiceType.parseEnum(rawType);
 
-			Choices choices = Choices.builder().choiceList(new ArrayList<>()).entity(entity).max(Integer.parseInt(max))
-					.min(Integer.parseInt(min)).playerId(Integer.parseInt(playerId)).type(type).build();
+			Choices choices = Choices.builder().choiceList(new ArrayList<Choice>()).entity(entity)
+					.max(Integer.parseInt(max)).min(Integer.parseInt(min)).playerId(Integer.parseInt(playerId))
+					.type(type).build();
 			choices.setTimestamp(timestamp);
 			state.setChoices(choices);
 
@@ -60,9 +61,9 @@ public class ChoicesHandler {
 			int player = Helper.parseEntity(rawPlayer, state);
 			int type = ChoiceType.parseEnum(rawType);
 
-			Choices choices = Choices.builder().choiceList(new ArrayList<>()).entity(entity).max(Integer.parseInt(max))
-					.min(Integer.parseInt(min)).playerId(player).type(type).taskList(Integer.parseInt(taskList))
-					.build();
+			Choices choices = Choices.builder().choiceList(new ArrayList<Choice>()).entity(entity)
+					.max(Integer.parseInt(max)).min(Integer.parseInt(min)).playerId(player).type(type)
+					.taskList(Integer.parseInt(taskList)).build();
 			choices.setTimestamp(timestamp);
 			state.setChoices(choices);
 

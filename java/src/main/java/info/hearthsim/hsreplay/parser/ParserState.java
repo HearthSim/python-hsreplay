@@ -46,9 +46,19 @@ public class ParserState {
 
 	public void updateCurrentNode(Class... types) {
 		log.info("\t\tUpdating node " + node + " with types " + Arrays.toString(types));
-		while (node.getParent() != null && Arrays.asList(types).stream().allMatch(x -> !node.getType().equals(x))) {
+		while (node.getParent() != null && doesMatch(types)) {
 			node = node.getParent();
 		}
 	}
 
+	// Arrays.asList(types).stream().allMatch(x -> !node.getType().equals(x))
+	private boolean doesMatch(Class[] types) {
+		if (types == null || types.length == 0) return true;
+
+		for (Class x : types) {
+			if (node.getType().equals(x)) return false;
+		}
+
+		return true;
+	}
 }

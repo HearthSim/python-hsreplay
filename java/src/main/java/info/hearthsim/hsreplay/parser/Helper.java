@@ -15,8 +15,8 @@ import info.hearthsim.hsreplay.parser.replaydata.entities.PlayerEntity;
 import info.hearthsim.hsreplay.parser.replaydata.gameactions.Tag;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.regex.Matcher;
 
 import org.apache.commons.lang.StringUtils;
@@ -56,19 +56,26 @@ public class Helper {
 	}
 
 	private static int getPlayerIdFromName(String data, ParserState state) throws Exception {
-		Optional<GameData> optFirstPlayer = state.getCurrentGame().getData().stream()
-				.filter(x -> x instanceof PlayerEntity && ((PlayerEntity) x).getId() == state.getFirstPlayerId())
-				.findFirst();
+		List<GameData> gameData = state.getCurrentGame().getData();
+		PlayerEntity firstPlayer = null;
+		for (GameData x : gameData) {
+			if (x instanceof PlayerEntity && ((PlayerEntity) x).getId() == state.getFirstPlayerId()) {
+				firstPlayer = (PlayerEntity) x;
+				break;
+			}
+		}
 
-		if (!optFirstPlayer.isPresent()) throw new Exception("Could not find first player " + data + " " + state);
-		PlayerEntity firstPlayer = (PlayerEntity) optFirstPlayer.get();
+		if (firstPlayer == null) throw new Exception("Could not find first player " + data + " " + state);
 
-		Optional<GameData> optSecondPlayer = state.getCurrentGame().getData().stream()
-				.filter(x -> x instanceof PlayerEntity && ((PlayerEntity) x).getId() != state.getFirstPlayerId())
-				.findFirst();
+		PlayerEntity secondPlayer = null;
+		for (GameData x : gameData) {
+			if (x instanceof PlayerEntity && ((PlayerEntity) x).getId() != state.getFirstPlayerId()) {
+				secondPlayer = (PlayerEntity) x;
+				break;
+			}
+		}
 
-		if (!optSecondPlayer.isPresent()) throw new Exception("Could not find second player " + data + " " + state);
-		PlayerEntity secondPlayer = (PlayerEntity) optSecondPlayer.get();
+		if (secondPlayer == null) throw new Exception("Could not find second player " + data + " " + state);
 
 		if (data.equals(firstPlayer.getName())) return firstPlayer.getId();
 		if (data.equals(secondPlayer.getName())) return secondPlayer.getId();
