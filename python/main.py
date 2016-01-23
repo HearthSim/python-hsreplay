@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import re
-import sys
+import sys, os, zipfile
+import json
+from zipfile import ZipFile
 from hearthstone import enums
 from hearthstone.enums import GameTag
 from xml.etree import ElementTree
@@ -684,19 +686,68 @@ class PowerLogParser:
 		root = builder.close()
 		for game in self.ast:
 			root.append(game.xml())
-
 		return pretty_xml(root)
-
-
 def main():
-	fname = sys.argv[1]
-	parser = PowerLogParser()
+	array = []
+	# i add a bash like system to display different options
+	if len(sys.argv) == 1:
+		print( "Usage")
+		print( "main.py [file] : will convert a log file in a .hsreplay file")
+		print( "main.py -all [folder] : will convert all .hdtreplay files in .hsreplay files")
+		print( "main.py -help display help")
+	if len(sys.argv) > 1:
+		if sys.argv[1] == "-help":
+			print( "Usage")
+			print( "main.py [file] : will convert a log file in a .hsreplay file")
+			print( "main.py -all [folder] : will convert all .hdtreplay files in .hsreplay files")
+			print( "main.py -help display help")
+		# I had this -all option 
+		if sys.argv[1] == "-all":
+			dirs = os.listdir( sys.argv[2] )
+			i = 0
+			j = 0
+			for item in dirs:
+				try:
+					if i == 100:
+						break
+					# unzip the output_log.txt file
+					with ZipFile(sys.argv[2]+item, 'r') as myzip:
+						myzip.extractall(sys.argv[2])
+					fname = sys.argv[2]+"output_log.txt"
+					parser = PowerLogParser()
+					#we need to add this line in the hdtreplay file
+					with open(fname, "w") as f:
+						f.write("[Power] GameState.DebugPrintPower() - CREATE_GAME")
+					# we open and read the file as usual
+					with open(fname, "r") as f:
+						parser.read(f)
+					# for php use i need no space in the final filename
+					name = item.replace(' ','-')
+					finalfilename = sys.argv[2]+name[0:len(name)-len(".hdtreplay")]+'.hsreplay'
+					with open(finalfilename, "w") as f:
+						f.write(parser.toxml())
+					i = i+1
+					j = j+1
+					# success convertion ratio
+					rate = (j/i) * 100
+					print(item+" convertion success"+str(rate))
+				except:
+					i = i+1
+					array.append(fname)
+					print('An exception occurred')
 
-	with open(fname, "r") as f:
-		parser.read(f)
+			# errors.txt contains a json file with the list of unsuccessful games
+			
+			with open('errors.txt', 'w') as outfile:
+				json.dump(array, outfile)
 
-	print(parser.toxml())
+		else:
+			fname = sys.argv[1]
+			parser = PowerLogParser()
+			
+			with open(fname, "r") as f:
+				parser.read(f)
 
-
+			print(parser.toxml())
 if __name__ == "__main__":
 	main()
