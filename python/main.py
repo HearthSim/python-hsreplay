@@ -689,6 +689,7 @@ class PowerLogParser:
 		return pretty_xml(root)
 def main():
 	array = []
+	# i add a bash like system to display different options
 	if len(sys.argv) == 1:
 		print( "Usage")
 		print( "main.py [file] : will convert a log file in a .hsreplay file")
@@ -714,23 +715,29 @@ def main():
 						myzip.extractall(sys.argv[2])
 					fname = sys.argv[2]+"output_log.txt"
 					parser = PowerLogParser()
+					#we need to add this line in the hdtreplay file
 					with open(fname, "w") as f:
 						f.write("[Power] GameState.DebugPrintPower() - CREATE_GAME")
+					# we open and read the file as usual
 					with open(fname, "r") as f:
 						parser.read(f)
-					name = item.replace(' ','')
-					print(name)
-					finalfilename = sys.argv[2]+item[0:len(item)-len(".hdtreplay")]+'.hsreplay'
+					# for php use i need no space in the final filename
+					name = item.replace(' ','-')
+					finalfilename = sys.argv[2]+name[0:len(name)-len(".hdtreplay")]+'.hsreplay'
 					with open(finalfilename, "w") as f:
 						f.write(parser.toxml())
 					i = i+1
 					j = j+1
+					# success convertion ratio
 					rate = (j/i) * 100
 					print(item+" convertion success"+str(rate))
 				except:
 					i = i+1
 					array.append(fname)
 					print('An exception occurred')
+
+			# errors.txt contains a json file with the list of unsuccessful games
+			
 			with open('errors.txt', 'w') as outfile:
 				json.dump(array, outfile)
 
