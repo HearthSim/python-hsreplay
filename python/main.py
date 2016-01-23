@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import re
-import sys
+import sys, os, zipfile
+import json
+from zipfile import ZipFile
 from hearthstone import enums
 from hearthstone.enums import GameTag
 from xml.etree import ElementTree
@@ -684,19 +686,59 @@ class PowerLogParser:
 		root = builder.close()
 		for game in self.ast:
 			root.append(game.xml())
-
 		return pretty_xml(root)
-
-
 def main():
-	fname = sys.argv[1]
-	parser = PowerLogParser()
+	array = []
+	if len(sys.argv) < 1:
+		print( "Usage\n")
+		print( "main.py [file] : will convert a log file in a .hsreplay file\n")
+		print( "main.py -all [folder] : will convert all .hdtreplay files in .hsreplay files\n")
+		print( "main.py -help display help\n")
+	if len(sys.argv) > 1:
+		if sys.argv[1] == "-help":
+			print( "Usage\n")
+			print( "main.py [file] : will convert a log file in a .hsreplay file\n")
+			print( "main.py -all [folder] : will convert all .hdtreplay files in .hsreplay files\n")
+			print( "main.py -help display help\n")
+		# I had this -all option 
+		if sys.argv[1] == "-all":
+			dirs = os.listdir( sys.argv[2] )
+			i = 0
+			j = 0
+			for item in dirs:
+				try:
+					if i == 100:
+						break
+					# unzip the output_log.txt file
+					with ZipFile(sys.argv[2]+item, 'r') as myzip:
+						myzip.extractall(sys.argv[2])
+					fname = sys.argv[2]+"output_log.txt"
+					print(item + "\n")
+					parser = PowerLogParser()
+					with open(fname, "w") as f:
+						f.write("[Power] GameState.DebugPrintPower() - CREATE_GAME")
+					with open(fname, "r") as f:
+						parser.read(f)
+					finalfilename = sys.argv[2]+item[0:len(item)-len(".hdtreplay")]+'.hsreplay'
+					with open(finalfilename, "w") as f:
+						f.write(parser.toxml())
+					i = i+1
+					j = j+1
+					print(item+" convertion success \n"+str(i)+"/"+str(j))
+				except:
+					i =i+1
+					array.append(fname)
+					print('An exception occurred')
+			with open('errors.txt', 'w') as outfile:
+				json.dump(array, outfile)
 
-	with open(fname, "r") as f:
-		parser.read(f)
+		else:
+			fname = sys.argv[1]
+			parser = PowerLogParser()
+			
+			with open(fname, "r") as f:
+				parser.read(f)
 
-	print(parser.toxml())
-
-
+			print(parser.toxml())
 if __name__ == "__main__":
 	main()
