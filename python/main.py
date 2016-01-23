@@ -689,17 +689,17 @@ class PowerLogParser:
 		return pretty_xml(root)
 def main():
 	array = []
-	if len(sys.argv) < 1:
-		print( "Usage\n")
-		print( "main.py [file] : will convert a log file in a .hsreplay file\n")
-		print( "main.py -all [folder] : will convert all .hdtreplay files in .hsreplay files\n")
-		print( "main.py -help display help\n")
+	if len(sys.argv) == 1:
+		print( "Usage")
+		print( "main.py [file] : will convert a log file in a .hsreplay file")
+		print( "main.py -all [folder] : will convert all .hdtreplay files in .hsreplay files")
+		print( "main.py -help display help")
 	if len(sys.argv) > 1:
 		if sys.argv[1] == "-help":
-			print( "Usage\n")
-			print( "main.py [file] : will convert a log file in a .hsreplay file\n")
-			print( "main.py -all [folder] : will convert all .hdtreplay files in .hsreplay files\n")
-			print( "main.py -help display help\n")
+			print( "Usage")
+			print( "main.py [file] : will convert a log file in a .hsreplay file")
+			print( "main.py -all [folder] : will convert all .hdtreplay files in .hsreplay files")
+			print( "main.py -help display help")
 		# I had this -all option 
 		if sys.argv[1] == "-all":
 			dirs = os.listdir( sys.argv[2] )
@@ -713,20 +713,22 @@ def main():
 					with ZipFile(sys.argv[2]+item, 'r') as myzip:
 						myzip.extractall(sys.argv[2])
 					fname = sys.argv[2]+"output_log.txt"
-					print(item + "\n")
 					parser = PowerLogParser()
 					with open(fname, "w") as f:
 						f.write("[Power] GameState.DebugPrintPower() - CREATE_GAME")
 					with open(fname, "r") as f:
 						parser.read(f)
+					name = item.replace(' ','')
+					print(name)
 					finalfilename = sys.argv[2]+item[0:len(item)-len(".hdtreplay")]+'.hsreplay'
 					with open(finalfilename, "w") as f:
 						f.write(parser.toxml())
 					i = i+1
 					j = j+1
-					print(item+" convertion success \n"+str(i)+"/"+str(j))
+					rate = (j/i) * 100
+					print(item+" convertion success"+str(rate))
 				except:
-					i =i+1
+					i = i+1
 					array.append(fname)
 					print('An exception occurred')
 			with open('errors.txt', 'w') as outfile:
