@@ -175,12 +175,12 @@
 
 <!--
  ! In verbose mode, Power.log outputs detailed Info for META_DATA packets.
- ! index: The index of the info element
+ ! index: The index of the info element. Only needed if not ordered.
  ! id: The id of the entity in question
  -->
 <!ELEMENT Info EMPTY>
 <!ATTLIST Info
-	index NMTOKEN #REQUIRED
+	index NMTOKEN #IMPLIED
 	id %entity; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
