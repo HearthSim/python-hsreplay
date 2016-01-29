@@ -242,12 +242,12 @@
 <!--
  ! Represents a choice, either being proposed or sent
  ! entity: The id of the choice entity
- ! index: The index of the choice in the choice list
+ ! index: The index of the choice in the choice list. Only needed if unordered.
 -->
 <!ELEMENT Choice EMPTY>
 <!ATTLIST Choice
 	entity %entity; #REQUIRED
-	index NMTOKEN #REQUIRED
+	index NMTOKEN #IMPLIED
 	ts %timestamp; #IMPLIED>
 
 
