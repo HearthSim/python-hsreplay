@@ -215,15 +215,11 @@
  ! but Power.log does not output ChosenEntities for the player who sent
  ! the choices. New in 10357.
  ! entity: The id of the entity that made the choice
- ! playerID: The player ID of the player that made the choice. Obtained
-   from 'Player' in Power.log, but note this is currently bugged and
-   interprets player IDs as entity IDs...
    count: The chosen entity count (not required)
 -->
 <!ELEMENT ChosenEntities (Choice*)>
 <!ATTLIST ChosenEntities
 	entity %entity; #REQUIRED
-	playerID NMTOKEN #REQUIRED
 	count NMTOKEN #IMPLIED
 	ts %timestamp; #IMPLIED>
 
