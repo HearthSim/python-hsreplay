@@ -108,7 +108,7 @@ class MetaDataNode(Node):
 
 class MetaDataInfoNode(Node):
 	tagname = "Info"
-	attributes = ("index", "id")
+	attributes = ("index", "entity")
 	timestamp = False
 
 
