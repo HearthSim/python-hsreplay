@@ -50,7 +50,7 @@ class Node:
 			if isinstance(attrib, int):
 				# Check for enums
 				attrib = str(int(attrib))
-			if attrib:
+			if attrib is not None:
 				element.attrib[attr] = attrib
 		if self.timestamp and self.ts:
 			element.attrib["ts"] = self.ts
