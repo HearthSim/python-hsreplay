@@ -102,7 +102,7 @@ class ActionNode(Node):
 
 class MetaDataNode(Node):
 	tagname = "MetaData"
-	attributes = ("meta", "data", "info")
+	attributes = ("meta", "entity", "info")
 	timestamp = False
 
 
