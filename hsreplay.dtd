@@ -163,13 +163,13 @@
 <!--
  ! Corresponds to META_DATA in Power.log
  ! meta: A MetaDataType enum value
- ! data: An entity definition
+ ! data: An entity definition. Defaults to 0
  ! info: The info count. SHOULD NOT be included if Info tags are available.
 -->
 <!ELEMENT MetaData (Info*)>
 <!ATTLIST MetaData
 	meta %enumValue; #REQUIRED
-	data %entity; #IMPLIED
+	data %entity; "0"
 	info NMTOKEN #IMPLIED
 	ts %timestamp; #IMPLIED>
 
