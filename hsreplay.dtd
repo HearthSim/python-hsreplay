@@ -189,8 +189,8 @@
 
 <!--
  ! Represents data output by DebugPrintEntityChoices() in Power.log
- ! entity: The ID of the entity the choices are presented to
- ! playerID: The player ID of the player the choices are presented to
+ ! id: The ID of the choice
+ ! entity: The entity ID of the player the choices are presented to
  ! taskList: The TaskList element from Power.log (>= 10357) - not needed for replays
  ! type: A ChoiceType enum value representing the type of choice (MULLIGAN vs. GENERAL)
  ! min: The minimum amount of entities that can be chosen
@@ -199,8 +199,8 @@
 -->
 <!ELEMENT Choices (Choice+)>
 <!ATTLIST Choices
+	id NMTOKEN #REQUIRED
 	entity %entity; #REQUIRED
-	playerID NMTOKEN #REQUIRED
 	taskList NMTOKEN #IMPLIED
 	type %enumValue; #REQUIRED
 	min NMTOKEN #REQUIRED
