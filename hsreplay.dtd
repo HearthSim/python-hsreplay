@@ -229,13 +229,13 @@
 
 <!--
  ! Represents data output by SendChoices() in Power.log
- ! entity: The id of the entity making the choice
+ ! id: The id of the choice being sent
  ! type: A ChoiceType enum value representing MULLIGAN or GENERAL, eg. Tracking
  ! May contain no choice as not sending a choice is valid, eg. in Mulligan
 -->
 <!ELEMENT SendChoices (Choice*)>
 <!ATTLIST SendChoices
-	entity %entity; #REQUIRED
+	id NMTOKEN #REQUIRED
 	type %enumValue; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
