@@ -193,8 +193,8 @@
  ! playerID: The player ID of the player the choices are presented to
  ! taskList: The TaskList element from Power.log (>= 10357) - not needed for replays
  ! type: A ChoiceType enum value representing the type of choice (MULLIGAN vs. GENERAL)
- ! min: The min count of the choices
- ! max: The max count of the choices
+ ! min: The minimum amount of entities that can be chosen
+ ! max: The maximum amount of entities that can be chosen
  ! source: The source of the choices
 -->
 <!ELEMENT Choices (Choice+)>
@@ -203,8 +203,8 @@
 	playerID NMTOKEN #REQUIRED
 	taskList NMTOKEN #IMPLIED
 	type %enumValue; #REQUIRED
-	min NMTOKEN #IMPLIED
-	max NMTOKEN #IMPLIED
+	min NMTOKEN #REQUIRED
+	max NMTOKEN #REQUIRED
 	source NMTOKEN #REQUIRED
 	ts %timestamp; #IMPLIED>
 
