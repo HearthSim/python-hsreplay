@@ -214,10 +214,12 @@
  ! outbound. Ideally, SendChoices will be collapsed into ChosenEntities
  ! but Power.log does not output ChosenEntities for the player who sent
  ! the choices. New in 10357.
- ! entity: The id of the entity that made the choice
+ ! id: The id of the choice
+ ! entity: The entity id of the player who made the choice
 -->
 <!ELEMENT ChosenEntities (Choice*)>
 <!ATTLIST ChosenEntities
+	id NMTOKEN #REQUIRED
 	entity %entity; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
