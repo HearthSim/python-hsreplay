@@ -25,6 +25,7 @@ def pretty_xml(xml):
 	doc = imp.createDocument(None, "HSReplay", doctype)
 	for element in list(ret.documentElement.childNodes):
 		doc.documentElement.appendChild(element)
+	doc.documentElement.setAttribute("version", __version__)
 
 	ret = doc.toprettyxml(indent="\t")
 	return "\n".join(line for line in ret.split("\n") if line.strip())
