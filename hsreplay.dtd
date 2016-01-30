@@ -77,6 +77,7 @@
  !       only if the game type is ranked. 25 is Angry Chicken, 1 is Innkeeper
  !       and 0 is Legend. Defaults to "-1"
  ! legendRank: The Player's legend ranking at the beginning of the game.
+ ! cardback: The Player's cardback id at the beginning of the game.
 -->
 <!ELEMENT Player (Tag*)>
 <!ATTLIST Player
@@ -87,6 +88,7 @@
 	accountLo NMTOKEN #IMPLIED
 	rank NMTOKEN "-1"
 	legendRank NMTOKEN "0"
+	cardback NMTOKEN "0"
 	ts %timestamp; #IMPLIED>
 
 <!--
