@@ -73,6 +73,10 @@
  ! id is the entity id and should not be confused with playerID!
  ! name SHOULD be included - it has to be reversed from followup packets
  ! which carry the player's name instead of ID.
+ ! rank: The player's ladder rank. Should only be filled if available and
+ !       only if the game type is ranked. 25 is Angry Chicken, 1 is Innkeeper
+ !       and 0 is Legend. Defaults to "-1"
+ ! legendRank: The Player's legend ranking at the beginning of the game.
 -->
 <!ELEMENT Player (Tag*)>
 <!ATTLIST Player
@@ -81,6 +85,8 @@
 	name CDATA #IMPLIED
 	accountHi NMTOKEN #IMPLIED
 	accountLo NMTOKEN #IMPLIED
+	rank NMTOKEN "-1"
+	legendRank NMTOKEN "0"
 	ts %timestamp; #IMPLIED>
 
 <!--
