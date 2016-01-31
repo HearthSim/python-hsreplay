@@ -7,6 +7,8 @@ from xml.etree import ElementTree
 from xml.dom import minidom
 
 
+__author__ = "Jerome Leclanche"
+__email__ = "jerome@leclan.ch"
 __version__ = "1.0"
 
 SYSTEM_DTD = "http://hearthsim.info/hsreplay/dtd/hsreplay-%s.dtd" % (__version__)
@@ -288,27 +290,36 @@ def add_packets_recursive(entity, entity_element):
 		entity_element.append(packet_element)
 
 
+class Builder:
+
+	def from_file(self, fp):
+		parser = hslog.LogWatcher()
+		parser.read(fp)
+
+		builder = ElementTree.TreeBuilder()
+		builder.start("HSReplay", {"version": __version__})
+		builder.end("HSReplay")
+		root = builder.close()
+
+		for game in parser.games:
+			game_element = GameNode(game.ts)
+
+			add_packets_recursive(game, game_element)
+
+			root.append(game_element.xml())
+
+		return pretty_xml(root)
+
+
 def main():
 	fname = sys.argv[1]
-	parser = hslog.LogWatcher()
+
+	builder = Builder()
 
 	with open(fname, "r") as f:
-		parser.read(f)
-
-	builder = ElementTree.TreeBuilder()
-	builder.start("HSReplay", {"version": __version__})
-	builder.end("HSReplay")
-	root = builder.close()
-
-	for game in parser.games:
-		game_element = GameNode(game.ts)
-
-		add_packets_recursive(game, game_element)
-
-		root.append(game_element.xml())
-
-	print(pretty_xml(root))
+		print(builder.from_file(f))
 
 
 if __name__ == "__main__":
 	main()
+
