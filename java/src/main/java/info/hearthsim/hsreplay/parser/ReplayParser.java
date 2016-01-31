@@ -1,14 +1,13 @@
 package info.hearthsim.hsreplay.parser;
 
-import info.hearthsim.hsreplay.enums.GameType;
-import info.hearthsim.hsreplay.parser.handlers.DataHandler;
-import info.hearthsim.hsreplay.parser.replaydata.Game;
-import info.hearthsim.hsreplay.parser.replaydata.HearthstoneReplay;
-
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import info.hearthsim.hsreplay.enums.GameType;
+import info.hearthsim.hsreplay.parser.handlers.DataHandler;
+import info.hearthsim.hsreplay.parser.replaydata.Game;
+import info.hearthsim.hsreplay.parser.replaydata.HearthstoneReplay;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -27,12 +26,11 @@ public class ReplayParser {
 		read(lines);
 		state.getReplay().setVersion(VERSION);
 		state.getReplay().setBuild(String.valueOf(hsBuild));
-		for (int i = 0; i < state.getReplay().getGames().size(); i++) {
+		for (int i = 0; i < state.getReplay().getGames().size(); i++)
 			if (gameTypes.length == 1)
 				state.getReplay().getGames().get(i).setType(gameTypes[0].getIntValue());
 			else
 				state.getReplay().getGames().get(i).setType(gameTypes.length > i ? gameTypes[i].getIntValue() : 0);
-		}
 		return state.getReplay();
 	}
 
@@ -48,16 +46,21 @@ public class ReplayParser {
 			if (logTypeRegex == null) {
 				match = Regexes.PowerlogLineRegex.matcher(line);
 				if (match.matches()) {
+					log.debug("\tMatching PowerlogLineRegex");
 					logTypeRegex = Regexes.PowerlogLineRegex;
 				}
 				else {
 					match = Regexes.OutputlogLineRegex.matcher(line);
-					if (match.matches()) logTypeRegex = Regexes.OutputlogLineRegex;
+					if (match.matches()) {
+						log.debug("\tMatching OutputLineRegex");
+						logTypeRegex = Regexes.OutputlogLineRegex;
+					}
+					else
+						log.debug("\tNot matching any regex " + line);
 				}
 			}
-			else {
+			else
 				match = logTypeRegex.matcher(line);
-			}
 
 			if (!match.matches()) continue;
 
@@ -68,9 +71,9 @@ public class ReplayParser {
 	private void addData(String timestamp, String method, String data) throws Exception {
 
 		switch (method) {
-		// case "GameState.DebugPrintPower":
-		// DataHandler.handle(timestamp, data, state);
-		// break;
+			// case "GameState.DebugPrintPower":
+			// DataHandler.handle(timestamp, data, state);
+			// break;
 			case "PowerTaskList.DebugPrintPower":
 				DataHandler.handle(timestamp, data, state);
 				break;
@@ -97,7 +100,8 @@ public class ReplayParser {
 			// // Not needed for replays
 			// break;
 			// case "GameState.DebugPrintChoice":
-			// System.out.println("Warning: DebugPrintChoice was removed in 10357. Ignoring.");
+			// System.out.println("Warning: DebugPrintChoice was removed in
+			// 10357. Ignoring.");
 			// break;
 			default:
 				if (!method.startsWith("PowerTaskList.") && !method.startsWith("PowerProcessor.")

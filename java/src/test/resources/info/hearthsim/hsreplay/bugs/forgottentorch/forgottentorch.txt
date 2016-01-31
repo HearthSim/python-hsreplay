@@ -1,0 +1,90 @@
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -         GameEntity EntityID=1
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=10 value=85
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=TURN value=1
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=ZONE value=PLAY
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=ENTITY_ID value=1
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=NEXT_STEP value=BEGIN_MULLIGAN
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=CARDTYPE value=GAME
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=STATE value=RUNNING
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -         Player EntityID=2 PlayerID=1 GameAccountId=[hi=144115198130930503 lo=68026622]
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=TIMEOUT value=75
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=PLAYSTATE value=PLAYING
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=CURRENT_PLAYER value=1
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=FIRST_PLAYER value=1
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=HERO_ENTITY value=72
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=MAXHANDSIZE value=10
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=STARTHANDSIZE value=4
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=PLAYER_ID value=1
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=TEAM_ID value=1
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=ZONE value=PLAY
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=CONTROLLER value=1
+D 15:17:44.8412772 PowerTaskList.DebugPrintPower() -             tag=ENTITY_ID value=2
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=MAXRESOURCES value=10
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=CARDTYPE value=PLAYER
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=NUM_TURNS_LEFT value=1
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=NUM_CARDS_DRAWN_THIS_TURN value=3
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -         Player EntityID=3 PlayerID=2 GameAccountId=[hi=144115198130930503 lo=32311514]
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=TIMEOUT value=75
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=PLAYSTATE value=PLAYING
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=HERO_ENTITY value=74
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=MAXHANDSIZE value=10
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=STARTHANDSIZE value=4
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=PLAYER_ID value=2
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=TEAM_ID value=2
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=ZONE value=PLAY
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=CONTROLLER value=2
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=ENTITY_ID value=3
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=MAXRESOURCES value=10
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=CARDTYPE value=PLAYER
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=NUM_TURNS_LEFT value=1
+D 15:17:44.8422773 PowerTaskList.DebugPrintPower() -             tag=NUM_CARDS_DRAWN_THIS_TURN value=4
+D 15:21:08.8219442 PowerTaskList.DebugPrintPower() - ACTION_START Entity=[name=Forgotten Torch id=51 zone=HAND zonePos=3 cardId=LOE_002 player=2] BlockType=PLAY Index=0 Target=[name=Silver Hand Knight id=28 zone=PLAY zonePos=1 cardId=CS2_151 player=1]
+D 15:21:08.8219442 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=Daedin tag=NUM_RESOURCES_SPENT_THIS_GAME value=16
+D 15:21:08.8219442 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=Daedin tag=RESOURCES_USED value=5
+D 15:21:08.8219442 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=Daedin tag=NUM_CARDS_PLAYED_THIS_TURN value=1
+D 15:21:08.8219442 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[name=Fireball id=58 zone=HAND zonePos=5 cardId=CS2_029 player=2] tag=ZONE_POSITION value=4
+D 15:21:08.8219442 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[name=Duplicate id=60 zone=HAND zonePos=4 cardId=FP1_018 player=2] tag=ZONE_POSITION value=3
+D 15:21:08.8219442 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[name=Forgotten Torch id=51 zone=HAND zonePos=3 cardId=LOE_002 player=2] tag=ZONE value=PLAY
+D 15:21:08.8219442 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[name=Forgotten Torch id=51 zone=HAND zonePos=3 cardId=LOE_002 player=2] tag=ZONE_POSITION value=0
+D 15:21:08.8219442 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[name=Forgotten Torch id=51 zone=HAND zonePos=3 cardId=LOE_002 player=2] tag=JUST_PLAYED value=1
+D 15:21:08.8219442 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=Daedin tag=LAST_CARD_PLAYED value=51
+D 15:21:08.8219442 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[name=Forgotten Torch id=51 zone=HAND zonePos=3 cardId=LOE_002 player=2] tag=CARD_TARGET value=28
+D 15:21:08.8219442 PowerTaskList.DebugDump() - End Action=(null)
+D 15:21:08.8859479 PowerTaskList.DebugDump() - ID=232 ParentID=231 PreviousID=0 TaskCount=7
+D 15:21:08.8859479 PowerTaskList.DebugPrintPower() - ACTION_START Entity=[name=Forgotten Torch id=51 zone=PLAY zonePos=0 cardId=LOE_002 player=2] BlockType=POWER Index=-1 Target=[name=Silver Hand Knight id=28 zone=PLAY zonePos=1 cardId=CS2_151 player=1]
+D 15:21:08.8859479 PowerTaskList.DebugPrintPower() -     META_DATA - Meta=TARGET Data=0 Info=1
+D 15:21:08.8859479 PowerTaskList.DebugPrintPower() -         Info[0] = [name=Silver Hand Knight id=28 zone=PLAY zonePos=1 cardId=CS2_151 player=1]
+D 15:21:08.8859479 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[name=Silver Hand Knight id=28 zone=PLAY zonePos=1 cardId=CS2_151 player=1] tag=PREDAMAGE value=3
+D 15:21:08.8859479 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[name=Silver Hand Knight id=28 zone=PLAY zonePos=1 cardId=CS2_151 player=1] tag=PREDAMAGE value=0
+D 15:21:08.8859479 PowerTaskList.DebugPrintPower() -     META_DATA - Meta=DAMAGE Data=3 Info=1
+D 15:21:08.8859479 PowerTaskList.DebugPrintPower() -         Info[0] = [name=Silver Hand Knight id=28 zone=PLAY zonePos=1 cardId=CS2_151 player=1]
+D 15:21:08.8859479 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[name=Silver Hand Knight id=28 zone=PLAY zonePos=1 cardId=CS2_151 player=1] tag=LAST_AFFECTED_BY value=51
+D 15:21:08.8859479 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[name=Silver Hand Knight id=28 zone=PLAY zonePos=1 cardId=CS2_151 player=1] tag=DAMAGE value=4
+D 15:21:08.8859479 PowerTaskList.DebugPrintPower() -     FULL_ENTITY - Updating [id=78 cardId= type=INVALID zone=DECK zonePos=0 player=2] CardID=
+D 15:21:08.8859479 PowerTaskList.DebugPrintPower() -         tag=ZONE value=DECK
+D 15:21:08.8859479 PowerTaskList.DebugPrintPower() -         tag=CONTROLLER value=2
+D 15:21:08.8859479 PowerTaskList.DebugPrintPower() -         tag=ENTITY_ID value=78
+D 15:21:08.8869479 PowerTaskList.DebugPrintPower() -         tag=ZONE_POSITION value=0
+D 15:21:08.8869479 PowerTaskList.DebugPrintPower() -         tag=CANT_PLAY value=0
+D 15:21:08.8869479 PowerTaskList.DebugPrintPower() -         tag=REVEALED value=0
+D 15:21:08.8869479 PowerTaskList.DebugPrintPower() - ACTION_END
+D 15:21:10.0980172 PowerTaskList.DebugDump() - ID=233 ParentID=0 PreviousID=231 TaskCount=1
+D 15:21:10.0980172 PowerTaskList.DebugDump() - Source Action=(null)
+D 15:21:10.0980172 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[name=Forgotten Torch id=51 zone=PLAY zonePos=0 cardId=LOE_002 player=2] tag=ZONE value=GRAVEYARD
+D 15:21:10.0980172 PowerTaskList.DebugDump() - End Action=(null)
+D 15:21:10.1630209 PowerTaskList.DebugDump() - ID=234 ParentID=231 PreviousID=0 TaskCount=8
+D 15:21:10.1630209 PowerTaskList.DebugPrintPower() - ACTION_START Entity=GameEntity BlockType=DEATHS Index=0 Target=0
+D 15:21:10.1630209 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=kjaran tag=NUM_MINIONS_PLAYER_KILLED_THIS_TURN value=2
+D 15:21:10.1630209 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=GameEntity tag=NUM_MINIONS_KILLED_THIS_TURN value=2
+D 15:21:10.1630209 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[name=Silver Hand Knight id=28 zone=PLAY zonePos=1 cardId=CS2_151 player=1] tag=EXHAUSTED value=0
+D 15:21:10.1630209 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[name=Silver Hand Knight id=28 zone=PLAY zonePos=1 cardId=CS2_151 player=1] tag=ZONE value=GRAVEYARD
+D 15:21:10.1630209 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=kjaran tag=NUM_FRIENDLY_MINIONS_THAT_DIED_THIS_TURN value=2
+D 15:21:10.1630209 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=kjaran tag=NUM_FRIENDLY_MINIONS_THAT_DIED_THIS_GAME value=4
+D 15:21:10.1630209 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[name=Silver Hand Knight id=28 zone=PLAY zonePos=1 cardId=CS2_151 player=1] tag=DAMAGE value=0
+D 15:21:10.1630209 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[name=Silver Hand Knight id=28 zone=PLAY zonePos=1 cardId=CS2_151 player=1] tag=ZONE_POSITION value=0
+D 15:21:10.1630209 PowerTaskList.DebugPrintPower() - ACTION_END
+D 15:21:10.3220300 PowerTaskList.DebugDump() - ID=235 ParentID=0 PreviousID=233 TaskCount=2
+D 15:21:10.3220300 PowerTaskList.DebugDump() - Source Action=(null)
+D 15:21:10.3220300 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=Daedin tag=COMBO_ACTIVE value=1
+D 15:21:10.3220300 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=Daedin tag=NUM_OPTIONS_PLAYED_THIS_TURN value=3
+D 15:21:10.3220300 PowerTaskList.DebugPrintPower() - ACTION_END

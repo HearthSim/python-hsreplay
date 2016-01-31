@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<HSReplay build="10833" version="1.0">
+	<Game ts="15:17:44.8412772" type="0">
+		<GameEntity id="1">
+			<Tag tag="10" value="85"/>
+			<Tag tag="20" value="1"/>
+			<Tag tag="49" value="1"/>
+			<Tag tag="53" value="1"/>
+			<Tag tag="198" value="4"/>
+			<Tag tag="202" value="1"/>
+			<Tag tag="204" value="2"/>
+		</GameEntity>
+		<Player accountHi="144115198130930503" accountLo="68026622" name="Daedin" playerID="1" id="2">
+			<Tag tag="7" value="75"/>
+			<Tag tag="17" value="1"/>
+			<Tag tag="23" value="1"/>
+			<Tag tag="24" value="1"/>
+			<Tag tag="27" value="72"/>
+			<Tag tag="28" value="10"/>
+			<Tag tag="29" value="4"/>
+			<Tag tag="30" value="1"/>
+			<Tag tag="31" value="1"/>
+			<Tag tag="49" value="1"/>
+			<Tag tag="50" value="1"/>
+			<Tag tag="53" value="2"/>
+			<Tag tag="176" value="10"/>
+			<Tag tag="202" value="2"/>
+			<Tag tag="272" value="1"/>
+			<Tag tag="399" value="3"/>
+		</Player>
+		<Player accountHi="144115198130930503" accountLo="32311514" name="kjaran" playerID="2" id="3">
+			<Tag tag="7" value="75"/>
+			<Tag tag="17" value="1"/>
+			<Tag tag="27" value="74"/>
+			<Tag tag="28" value="10"/>
+			<Tag tag="29" value="4"/>
+			<Tag tag="30" value="2"/>
+			<Tag tag="31" value="2"/>
+			<Tag tag="49" value="1"/>
+			<Tag tag="50" value="2"/>
+			<Tag tag="53" value="3"/>
+			<Tag tag="176" value="10"/>
+			<Tag tag="202" value="2"/>
+			<Tag tag="272" value="1"/>
+			<Tag tag="399" value="4"/>
+		</Player>
+		<Action index="0" target="28" type="7" entity="51" ts="15:21:08.8219442">
+			<TagChange tag="418" value="16" entity="2"/>
+			<TagChange tag="25" value="5" entity="2"/>
+			<TagChange tag="269" value="1" entity="2"/>
+			<TagChange tag="263" value="4" entity="58"/>
+			<TagChange tag="263" value="3" entity="60"/>
+			<TagChange tag="49" value="1" entity="51"/>
+			<TagChange tag="263" value="0" entity="51"/>
+			<TagChange tag="261" value="1" entity="51"/>
+			<TagChange tag="397" value="51" entity="2"/>
+			<TagChange tag="267" value="28" entity="51"/>
+			<Action index="-1" target="28" type="3" entity="51" ts="15:21:08.8859479">
+				<MetaData data="0" info="1" meta="0">
+					<Info id="28" index="0"/>
+				</MetaData>
+				<TagChange tag="318" value="3" entity="28"/>
+				<TagChange tag="318" value="0" entity="28"/>
+				<MetaData data="3" info="1" meta="1">
+					<Info id="28" index="0"/>
+				</MetaData>
+				<TagChange tag="18" value="51" entity="28"/>
+				<TagChange tag="44" value="4" entity="28"/>
+				<FullEntity id="78">
+					<Tag tag="49" value="2"/>
+					<Tag tag="50" value="2"/>
+					<Tag tag="53" value="78"/>
+					<Tag tag="263" value="0"/>
+					<Tag tag="231" value="0"/>
+					<Tag tag="410" value="0"/>
+				</FullEntity>
+			</Action>
+			<TagChange tag="49" value="4" entity="51"/>
+			<Action index="0" target="0" type="6" entity="1" ts="15:21:10.1630209">
+				<TagChange tag="368" value="2" entity="3"/>
+				<TagChange tag="369" value="2" entity="1"/>
+				<TagChange tag="43" value="0" entity="28"/>
+				<TagChange tag="49" value="4" entity="28"/>
+				<TagChange tag="398" value="2" entity="3"/>
+				<TagChange tag="412" value="4" entity="3"/>
+				<TagChange tag="44" value="0" entity="28"/>
+				<TagChange tag="263" value="0" entity="28"/>
+			</Action>
+			<TagChange tag="266" value="1" entity="2"/>
+			<TagChange tag="358" value="3" entity="2"/>
+		</Action>
+	</Game>
+</HSReplay>

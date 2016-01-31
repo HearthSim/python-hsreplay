@@ -1,8 +1,5 @@
 package info.hearthsim.hsreplay;
 
-import info.hearthsim.hsreplay.parser.ReplayParser;
-import info.hearthsim.hsreplay.parser.replaydata.HearthstoneReplay;
-
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
@@ -10,11 +7,18 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
+import info.hearthsim.hsreplay.parser.ReplayParser;
+import info.hearthsim.hsreplay.parser.replaydata.HearthstoneReplay;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ReplaySerializer {
 
 	public String xmlFromLogs(String logString) throws Exception {
 		List<String> lines = Arrays.asList(logString.split(System.lineSeparator()));
 		HearthstoneReplay replay = new ReplayParser().fromString(lines);
+		log.debug("Converted into replay: " + replay);
+
 		String xmlReplay = xmlFromReplay(replay);
 		return xmlReplay;
 	}

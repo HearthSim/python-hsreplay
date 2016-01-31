@@ -57,7 +57,12 @@ public class DataHandler {
 		}
 
 		if ("ACTION_END".equals(data)) {
+			state.updateCurrentNode(Game.class, Action.class);
+			// log.info("Setting state node. Parent is " +
+			// state.getNode().getParent());
+			// log.info("Current node is " + state.getNode());
 			state.setNode(state.getNode().getParent() != null ? state.getNode().getParent() : state.getNode());
+			// log.info("New node is " + state.getNode());
 			return;
 		}
 
