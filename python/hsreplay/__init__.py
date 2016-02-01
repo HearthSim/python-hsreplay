@@ -290,36 +290,20 @@ def add_packets_recursive(entity, entity_element):
 		entity_element.append(packet_element)
 
 
-class Builder:
+def log_to_xml(fp):
+	parser = hslog.LogWatcher()
+	parser.read(fp)
 
-	def from_file(self, fp):
-		parser = hslog.LogWatcher()
-		parser.read(fp)
+	builder = ElementTree.TreeBuilder()
+	builder.start("HSReplay", {"version": __version__})
+	builder.end("HSReplay")
+	root = builder.close()
 
-		builder = ElementTree.TreeBuilder()
-		builder.start("HSReplay", {"version": __version__})
-		builder.end("HSReplay")
-		root = builder.close()
+	for game in parser.games:
+		game_element = GameNode(game.ts)
 
-		for game in parser.games:
-			game_element = GameNode(game.ts)
+		add_packets_recursive(game, game_element)
 
-			add_packets_recursive(game, game_element)
+		root.append(game_element.xml())
 
-			root.append(game_element.xml())
-
-		return pretty_xml(root)
-
-
-def main():
-	fname = sys.argv[1]
-
-	builder = Builder()
-
-	with open(fname, "r") as f:
-		print(builder.from_file(f))
-
-
-if __name__ == "__main__":
-	main()
-
+	return pretty_xml(root)
