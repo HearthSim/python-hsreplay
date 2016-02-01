@@ -56,7 +56,7 @@ class Node:
 			if attrib is not None:
 				element.attrib[attr] = attrib
 		if self.timestamp and self.ts:
-			element.attrib["ts"] = self.ts
+			element.attrib["ts"] = self.ts.isoformat()
 		return element
 
 	def __repr__(self):
