@@ -221,9 +221,16 @@ def add_options(ts, packet, packet_element):
 		packet_element.append(option_element)
 
 
+def serialize_entity(entity):
+	if isinstance(entity, str):
+		return entity
+	elif entity:
+		return entity.id
+
+
 def add_packets_recursive(entity, entity_element):
 	for packet in entity:
-		_ent = packet.entity.id if packet.entity else None
+		_ent = serialize_entity(packet.entity)
 		ts = packet.ts
 
 		if isinstance(packet, hslog.packets.CreateGame):
@@ -242,7 +249,7 @@ def add_packets_recursive(entity, entity_element):
 			packet_element = ActionNode(
 				ts, _ent, packet.type,
 				packet.index if packet.index != -1 else None,
-				packet.target.id if packet.target else None
+				serialize_entity(packet.target)
 			)
 			add_packets_recursive(packet, packet_element)
 		elif isinstance(packet, hslog.packets.ActionMetaData):
