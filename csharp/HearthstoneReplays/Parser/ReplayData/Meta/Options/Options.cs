@@ -12,6 +12,7 @@ namespace HearthstoneReplays.Parser.ReplayData.Meta.Options
 		[XmlAttribute("id")]
 		public int Id { get; set; }
 
+		[XmlElement("Option")]
 		public List<Option> OptionList { get; set; }
 	}
 }

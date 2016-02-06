@@ -1,6 +1,7 @@
 ﻿#region
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Xml.Serialization;
 
 #endregion
@@ -16,7 +17,7 @@ namespace HearthstoneReplays.Parser.ReplayData.Meta.Options
 		[XmlAttribute("type")]
 		public int Type { get; set; }
 
-		[XmlAttribute("entity")]
+		[XmlAttribute("entity"), DefaultValue(0)]
 		public int Entity { get; set; }
 
 		[XmlElement("SubOption", typeof(SubOption))]

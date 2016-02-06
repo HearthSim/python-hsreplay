@@ -1,6 +1,7 @@
 ﻿#region
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Xml.Serialization;
 using HearthstoneReplays.Parser.ReplayData.Entities;
 using HearthstoneReplays.Parser.ReplayData.Meta;
@@ -12,10 +13,10 @@ namespace HearthstoneReplays.Parser.ReplayData.GameActions
 {
 	public class Action : GameAction
 	{
-		[XmlAttribute("index")]
+		[XmlAttribute("index"), DefaultValue(-1)]
 		public int Index { get; set; }
 
-		[XmlAttribute("target")]
+		[XmlAttribute("target"), DefaultValue(0)]
 		public int Target { get; set; }
 
 		[XmlAttribute("type")]

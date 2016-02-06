@@ -1,5 +1,7 @@
 #region
 
+using System;
+using System.Linq;
 using HearthstoneReplays.Parser.ReplayData;
 using HearthstoneReplays.Parser.ReplayData.GameActions;
 using HearthstoneReplays.Parser.ReplayData.Meta;
@@ -34,5 +36,13 @@ namespace HearthstoneReplays.Parser
 			Replay = new HearthstoneReplay();
 			CurrentGame = new Game();
 		}
+
+		public void UpdateCurrentNode(params Type[] types)
+		{
+			while(Node.Parent != null && types.All(x => x != Node.Type))
+				Node = Node.Parent;
+		}
+
+
 	}
 }
