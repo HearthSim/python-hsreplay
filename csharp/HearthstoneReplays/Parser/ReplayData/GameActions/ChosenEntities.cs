@@ -15,7 +15,7 @@ namespace HearthstoneReplays.Parser.ReplayData.GameActions
 		[XmlAttribute("count")]
 		public int Count { get; set; }
 		
-		[XmlElement("Chioce", typeof(Choice))]
+		[XmlElement("Choice", typeof(Choice))]
 		public List<Choice> Choices;
 	}
 }

@@ -20,6 +20,7 @@ namespace HearthstoneReplays.Parser.ReplayData
 	[XmlInclude(typeof(ShowEntity))]
 	[XmlInclude(typeof(MetaData))]
 	[XmlInclude(typeof(ChosenEntities))]
+	[XmlInclude(typeof(Game))]
 	public abstract class GameData
 	{
 		[XmlAttribute("ts")]
