@@ -11,11 +11,8 @@ using HearthstoneReplays.Parser.ReplayData.Meta.Options;
 
 namespace HearthstoneReplays.Parser.ReplayData
 {
-	public class Game
+	public class Game : GameData
 	{
-		[XmlAttribute("timestamp")]
-		public string TimeStamp { get; set; }
-
         [XmlAttribute("type")]
         public int Type { get; set; }
 

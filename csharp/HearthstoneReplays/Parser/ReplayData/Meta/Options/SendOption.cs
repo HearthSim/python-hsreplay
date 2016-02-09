@@ -14,7 +14,7 @@ namespace HearthstoneReplays.Parser.ReplayData.Meta.Options
 		[XmlAttribute("position")]
 		public int Position { get; set; }
 
-		[XmlAttribute("suboption")]
+		[XmlAttribute("subOption")]
 		public int SubOption { get; set; }
 
 		[XmlAttribute("target")]
