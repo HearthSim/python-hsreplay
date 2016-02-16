@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 import sys
+from argparse import ArgumentParser
 from hsreplay import log_to_xml
 
 
 def main():
-	filename = sys.argv[1]
-	with open(filename) as f:
-		print(log_to_xml(f))
+	parser = ArgumentParser()
+	parser.add_argument("files", nargs="*")
+	args = parser.parse_args(sys.argv[1:])
+	for filename in args.files:
+		with open(filename) as f:
+			print(log_to_xml(f))
 
 
 if __name__ == "__main__":
