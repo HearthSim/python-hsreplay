@@ -297,9 +297,10 @@ def add_packets_recursive(entity, entity_element):
 		entity_element.append(packet_element)
 
 
-def log_to_xml(fp, processor="GameState"):
+def log_to_xml(fp, processor="GameState", date=None):
 	parser = hslog.LogWatcher()
 	parser._game_state_processor = processor
+	parser._current_date = date
 	parser.read(fp)
 
 	builder = ElementTree.TreeBuilder()
