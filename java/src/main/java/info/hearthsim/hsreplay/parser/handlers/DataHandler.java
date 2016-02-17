@@ -1,5 +1,9 @@
 package info.hearthsim.hsreplay.parser.handlers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+
 import info.hearthsim.hsreplay.enums.GameTag;
 import info.hearthsim.hsreplay.enums.MetaDataType;
 import info.hearthsim.hsreplay.enums.PowSubType;
@@ -20,11 +24,6 @@ import info.hearthsim.hsreplay.parser.replaydata.gameactions.Tag;
 import info.hearthsim.hsreplay.parser.replaydata.gameactions.TagChange;
 import info.hearthsim.hsreplay.parser.replaydata.meta.Info;
 import info.hearthsim.hsreplay.parser.replaydata.meta.MetaData;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -129,7 +128,7 @@ public class DataHandler {
 			int meta = MetaDataType.parseEnum(rawMeta);
 
 			MetaData metaData = MetaData.builder().data(parsedData).info(Integer.parseInt(info)).meta(meta)
-					.metaInfo(new ArrayList<Info>()).build();
+					.timestamp(timestamp).metaInfo(new ArrayList<Info>()).build();
 			state.updateCurrentNode(Action.class);
 			log.debug("\tHandling metaData " + metaData + " on node " + state.getNode().getType());
 
@@ -165,7 +164,7 @@ public class DataHandler {
 			int entity = Helper.parseEntity(rawEntity, state);
 
 			ShowEntity showEntity = ShowEntity.builder().cardId(cardId).entity(entity).tags(new ArrayList<Tag>())
-					.build();
+					.timestamp(timestamp).build();
 			state.updateCurrentNode(Game.class, Action.class);
 
 			if (state.getNode().getType().isAssignableFrom(Game.class))
@@ -208,7 +207,7 @@ public class DataHandler {
 			String cardId = match.group(2);
 			int entity = Helper.parseEntity(rawEntity, state);
 
-			FullEntity fullEntity = new FullEntity(cardId, entity, new ArrayList<Tag>());
+			FullEntity fullEntity = new FullEntity(timestamp, cardId, entity, new ArrayList<Tag>());
 			state.updateCurrentNode(Game.class, Action.class);
 
 			if (state.getNode().getType().isAssignableFrom(Game.class))
@@ -272,19 +271,18 @@ public class DataHandler {
 	}
 
 	private static int updatePlayerEntity(ParserState state, String rawEntity, Tag tag, int entity) {
-		if (!Utils.isInteger(rawEntity) && !rawEntity.startsWith("[") && !rawEntity.equals("GameEntity")) {
+		if (!Utils.isInteger(rawEntity) && !rawEntity.startsWith("[") && !rawEntity.equals("GameEntity"))
 			if (entity != tag.getValue()) {
-				entity = tag.getValue();
-				String tmpName = ((PlayerEntity) state.getCurrentGame().getData().get(1)).getName();
+			entity = tag.getValue();
+			String tmpName = ((PlayerEntity) state.getCurrentGame().getData().get(1)).getName();
 
-				((PlayerEntity) state.getCurrentGame().getData().get(1)).setName(((PlayerEntity) state.getCurrentGame()
-						.getData().get(2)).getName());
-				((PlayerEntity) state.getCurrentGame().getData().get(2)).setName(tmpName);
+			((PlayerEntity) state.getCurrentGame().getData().get(1))
+					.setName(((PlayerEntity) state.getCurrentGame().getData().get(2)).getName());
+			((PlayerEntity) state.getCurrentGame().getData().get(2)).setName(tmpName);
 
-				for (Object obj : ((Game) state.getNode().getObject()).getData()) {
-					TagChange tChange = obj instanceof TagChange ? (TagChange) obj : null;
-					if (tChange != null) tChange.setEntity(tChange.getEntity() == 2 ? 3 : 2);
-				}
+			for (Object obj : ((Game) state.getNode().getObject()).getData()) {
+				TagChange tChange = obj instanceof TagChange ? (TagChange) obj : null;
+				if (tChange != null) tChange.setEntity(tChange.getEntity() == 2 ? 3 : 2);
 			}
 		}
 		return entity;
@@ -292,30 +290,27 @@ public class DataHandler {
 
 	private static void updateCurrentPlayer(ParserState state, String rawEntity, Tag tag) throws Exception {
 		List<GameData> data = state.getCurrentGame().getData();
-		if (tag.getValue() == 0) {
+		if (tag.getValue() == 0)
 			try {
 				Helper.parseEntity(rawEntity, state);
 			}
 			catch (Exception e) {
-				for (GameData x : data) {
+				for (GameData x : data)
 					if (x instanceof PlayerEntity && ((PlayerEntity) x).getId() == state.getCurrentPlayerId()) {
 						((PlayerEntity) x).setName(rawEntity);
 						break;
 					}
-				}
 			}
-		}
 		else if (tag.getValue() == 1) {
 			try {
 				Helper.parseEntity(rawEntity, state);
 			}
 			catch (Exception e) {
-				for (GameData x : data) {
+				for (GameData x : data)
 					if (x instanceof PlayerEntity && ((PlayerEntity) x).getId() != state.getCurrentPlayerId()) {
 						((PlayerEntity) x).setName(rawEntity);
 						break;
 					}
-				}
 			}
 			state.setCurrentPlayerId(Helper.parseEntity(rawEntity, state));
 		}

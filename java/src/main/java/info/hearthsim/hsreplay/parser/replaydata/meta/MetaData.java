@@ -1,7 +1,5 @@
 package info.hearthsim.hsreplay.parser.replaydata.meta;
 
-import info.hearthsim.hsreplay.parser.replaydata.GameData;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +10,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+import info.hearthsim.hsreplay.parser.replaydata.GameData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +20,6 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -40,4 +38,14 @@ public class MetaData extends GameData {
 
 	@XmlElement(name = "Info")
 	private List<Info> metaInfo = new ArrayList<>();
+
+	@Builder
+	public MetaData(String timestamp, int data, int info, int meta, List<Info> metaInfo) {
+		super(timestamp);
+		this.data = data;
+		this.info = info;
+		this.meta = meta;
+		this.metaInfo = metaInfo;
+	}
+
 }

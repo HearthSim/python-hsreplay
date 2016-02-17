@@ -1,7 +1,5 @@
 package info.hearthsim.hsreplay.parser.replaydata.gameactions;
 
-import info.hearthsim.hsreplay.parser.replaydata.GameData;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +10,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+import info.hearthsim.hsreplay.parser.replaydata.GameData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +20,6 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -37,4 +35,14 @@ public class ShowEntity extends GameData {
 
 	@XmlElement(name = "Tag")
 	private List<Tag> tags = new ArrayList<>();
+
+	@Builder
+	public ShowEntity(String timestamp, String cardId, int entity, List<Tag> tags) {
+		super(timestamp);
+		this.cardId = cardId;
+		this.entity = entity;
+		this.tags = tags;
+		this.timestamp = timestamp;
+	}
+
 }
