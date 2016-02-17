@@ -190,7 +190,7 @@ class OptionTargetNode(Node):
 class SendOptionNode(Node):
 	tagname = "SendOption"
 	attributes = ("option", "subOption", "target", "position")
-	timestamp = False
+	timestamp = True
 
 
 def add_initial_tags(ts, packet, packet_element):
