@@ -40,6 +40,12 @@
 <!ENTITY % timestamp "NMTOKEN">
 
 
+<!--
+ ! A card ID (aka a "mini guid")
+-->
+<!ENTITY % cardID "NMTOKEN">
+
+
 <!-- Core tags -->
 
 <!-- HSReplay root tag
@@ -145,7 +151,7 @@
 -->
 <!ELEMENT FullEntity (Tag*)>
 <!ATTLIST FullEntity
-	cardID NMTOKEN #IMPLIED
+	cardID %cardID; #IMPLIED
 	id %entity; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
@@ -157,7 +163,7 @@
 -->
 <!ELEMENT ShowEntity (Tag*)>
 <!ATTLIST ShowEntity
-	cardID NMTOKEN #IMPLIED
+	cardID %cardID; #IMPLIED
 	entity %entity; #REQUIRED
 	ts %timestamp; #IMPLIED>
 
