@@ -71,9 +71,9 @@ public class ReplayParser {
 	private void addData(String timestamp, String method, String data) throws Exception {
 
 		switch (method) {
-			// case "GameState.DebugPrintPower":
-			// DataHandler.handle(timestamp, data, state);
-			// break;
+			case "GameState.DebugPrintPower":
+				DataHandler.handle(timestamp, data, state);
+				break;
 			case "PowerTaskList.DebugPrintPower":
 				DataHandler.handle(timestamp, data, state);
 				break;
