@@ -335,9 +335,12 @@
  ! by appending it to the Player entity. These are only the cards that
  ! the player started the game with, in no particular order.
  ! This must not be added unless the entire deck list is available.
+ ! type: The type of deck (DeckType enum)
 -->
 
 <!ELEMENT Deck (Card+)>
+<!ATTLIST Deck
+	type NMTOKEN #REQUIRED>
 
 <!--
  ! A card in the player's deck
