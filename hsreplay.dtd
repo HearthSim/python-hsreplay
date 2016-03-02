@@ -64,7 +64,7 @@
 -->
 <!ELEMENT Game (Action | Choices | ChosenEntities | FullEntity | GameEntity | HideEntity | Options | Player | SendChoices | SendOption | ShowEntity | TagChange)*>
 <!ATTLIST Game
-	id %NMTOKEN; #IMPLIED
+	id NMTOKEN #IMPLIED
 	type %enumValue; #IMPLIED
 	ts %timestamp; #IMPLIED>
 
