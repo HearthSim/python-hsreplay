@@ -9,7 +9,7 @@ from xml.dom import minidom
 
 __author__ = "Jerome Leclanche"
 __email__ = "jerome@leclan.ch"
-__version__ = "1.0"
+__version__ = "1.1"
 
 SYSTEM_DTD = "http://hearthsim.info/hsreplay/dtd/hsreplay-%s.dtd" % (__version__)
 
