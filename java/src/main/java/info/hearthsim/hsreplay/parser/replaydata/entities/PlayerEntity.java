@@ -34,4 +34,14 @@ public class PlayerEntity extends BaseEntity {
 
 	@XmlAttribute(name = "name")
 	private String name;
+
+	@XmlAttribute(name = "rank")
+	private String rank;
+
+	@XmlAttribute(name = "legendRank")
+	private String legendRank;
+
+	@XmlAttribute(name = "cardback")
+	private String cardback;
+
 }

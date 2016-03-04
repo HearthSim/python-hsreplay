@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import info.hearthsim.hsreplay.enums.GameType;
 import info.hearthsim.hsreplay.parser.handlers.DataHandler;
+import info.hearthsim.hsreplay.parser.handlers.OptionsHandler;
 import info.hearthsim.hsreplay.parser.replaydata.Game;
 import info.hearthsim.hsreplay.parser.replaydata.HearthstoneReplay;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +27,14 @@ public class ReplayParser {
 		read(lines);
 		state.getReplay().setVersion(VERSION);
 		state.getReplay().setBuild(String.valueOf(hsBuild));
-		for (int i = 0; i < state.getReplay().getGames().size(); i++)
-			if (gameTypes.length == 1)
+		for (int i = 0; i < state.getReplay().getGames().size(); i++) {
+			if (gameTypes.length == 1) {
 				state.getReplay().getGames().get(i).setType(gameTypes[0].getIntValue());
-			else
+			}
+			else {
 				state.getReplay().getGames().get(i).setType(gameTypes.length > i ? gameTypes[i].getIntValue() : 0);
+			}
+		}
 		return state.getReplay();
 	}
 
@@ -55,14 +59,18 @@ public class ReplayParser {
 						log.debug("\tMatching OutputLineRegex");
 						logTypeRegex = Regexes.OutputlogLineRegex;
 					}
-					else
+					else {
 						log.debug("\tNot matching any regex " + line);
+					}
 				}
 			}
-			else
+			else {
 				match = logTypeRegex.matcher(line);
+			}
 
-			if (!match.matches()) continue;
+			if (!match.matches()) {
+				continue;
+			}
 
 			addData(match.group(1), match.group(2), match.group(3));
 		}
@@ -87,9 +95,9 @@ public class ReplayParser {
 			// case "GameState.DebugPrintEntitiesChosen":
 			// EntityChosenHandler.handle(timestamp, data, state);
 			// break;
-			// case "GameState.DebugPrintOptions":
-			// OptionsHandler.handle(timestamp, data, state);
-			// break;
+			case "GameState.DebugPrintOptions":
+				OptionsHandler.handle(timestamp, data, state);
+				break;
 			// case "GameState.SendOption":
 			// SendOptionHandler.handle(timestamp, data, state);
 			// break;
@@ -105,8 +113,9 @@ public class ReplayParser {
 			// break;
 			default:
 				if (!method.startsWith("PowerTaskList.") && !method.startsWith("PowerProcessor.")
-						&& !method.startsWith("PowerSpellController"))
+						&& !method.startsWith("PowerSpellController")) {
 					log.warn("Warning: Unhandled method: " + method);
+				}
 				break;
 		}
 	}

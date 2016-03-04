@@ -30,6 +30,9 @@ public class MetaData extends GameData {
 	@XmlAttribute(name = "data")
 	private int data;
 
+	@XmlAttribute(name = "entity")
+	private int entity;
+
 	@XmlAttribute(name = "info")
 	private int info;
 
@@ -40,11 +43,12 @@ public class MetaData extends GameData {
 	private List<Info> metaInfo = new ArrayList<>();
 
 	@Builder
-	public MetaData(String timestamp, int data, int info, int meta, List<Info> metaInfo) {
+	public MetaData(String timestamp, int data, int info, int meta, int entity, List<Info> metaInfo) {
 		super(timestamp);
 		this.data = data;
 		this.info = info;
 		this.meta = meta;
+		this.entity = entity;
 		this.metaInfo = metaInfo;
 	}
 

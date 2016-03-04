@@ -1,13 +1,12 @@
 package info.hearthsim.hsreplay.parser.replaydata.meta;
 
-import info.hearthsim.hsreplay.parser.replaydata.GameData;
-
 import javax.xml.bind.annotation.XmlAccessOrder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
+import info.hearthsim.hsreplay.parser.replaydata.GameData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,4 +27,7 @@ public class Info extends GameData {
 
 	@XmlAttribute(name = "id")
 	private int id;
+
+	@XmlAttribute(name = "entity")
+	private int entity;
 }

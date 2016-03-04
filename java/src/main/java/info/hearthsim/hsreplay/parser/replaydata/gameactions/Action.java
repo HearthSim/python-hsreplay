@@ -1,15 +1,5 @@
 package info.hearthsim.hsreplay.parser.replaydata.gameactions;
 
-import info.hearthsim.hsreplay.parser.replaydata.GameData;
-import info.hearthsim.hsreplay.parser.replaydata.entities.FullEntity;
-import info.hearthsim.hsreplay.parser.replaydata.entities.GameEntity;
-import info.hearthsim.hsreplay.parser.replaydata.entities.PlayerEntity;
-import info.hearthsim.hsreplay.parser.replaydata.meta.Choices;
-import info.hearthsim.hsreplay.parser.replaydata.meta.MetaData;
-import info.hearthsim.hsreplay.parser.replaydata.meta.SendChoices;
-import info.hearthsim.hsreplay.parser.replaydata.meta.options.Options;
-import info.hearthsim.hsreplay.parser.replaydata.meta.options.SendOption;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +11,15 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 
+import info.hearthsim.hsreplay.parser.replaydata.GameData;
+import info.hearthsim.hsreplay.parser.replaydata.entities.FullEntity;
+import info.hearthsim.hsreplay.parser.replaydata.entities.GameEntity;
+import info.hearthsim.hsreplay.parser.replaydata.entities.PlayerEntity;
+import info.hearthsim.hsreplay.parser.replaydata.meta.Choices;
+import info.hearthsim.hsreplay.parser.replaydata.meta.MetaData;
+import info.hearthsim.hsreplay.parser.replaydata.meta.SendChoices;
+import info.hearthsim.hsreplay.parser.replaydata.meta.options.Options;
+import info.hearthsim.hsreplay.parser.replaydata.meta.options.SendOption;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,7 +38,7 @@ public class Action extends GameAction {
 	private int index = -1;
 
 	@XmlAttribute(name = "target")
-	private int target;
+	private int target = 0;
 
 	@XmlAttribute(name = "type")
 	private int type;
