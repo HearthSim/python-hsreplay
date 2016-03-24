@@ -3872,12 +3872,12 @@ D 19:14:33.6755258 GameState.DebugPrintPower() - TAG_CHANGE Entity=TwoSteps tag=
 D 19:14:33.6755258 GameState.DebugPrintPower() - TAG_CHANGE Entity=TwoSteps tag=PLAYSTATE value=LOST
 D 19:14:33.6755258 GameState.DebugPrintPower() - TAG_CHANGE Entity=ratking420 tag=PLAYSTATE value=WON
 D 19:14:33.6755258 GameState.DebugPrintPower() - TAG_CHANGE Entity=GameEntity tag=NEXT_STEP value=FINAL_WRAPUP
-D 19:14:33.6755258 GameState.DebugPrintPower() - TAG_CHANGE Entity=GameEntity tag=STEP value=FINAL_WRAPUP
-D 19:14:33.6755258 GameState.DebugPrintPower() - ACTION_START Entity=GameEntity BlockType=TRIGGER Index=-1 Target=0
-D 19:14:33.6755258 GameState.DebugPrintPower() -     TAG_CHANGE Entity=GameEntity tag=NEXT_STEP value=FINAL_GAMEOVER
-D 19:14:33.6755258 GameState.DebugPrintPower() - ACTION_END
-D 19:14:33.6755258 GameState.DebugPrintPower() - TAG_CHANGE Entity=GameEntity tag=STEP value=FINAL_GAMEOVER
-D 19:14:33.6755258 GameState.DebugPrintPower() - TAG_CHANGE Entity=GameEntity tag=STATE value=COMPLETE
-D 19:14:33.7926377 GameState.DebugPrintPowerList() - Count=2
-D 19:14:33.7926377 GameState.DebugPrintPower() - TAG_CHANGE Entity=ratking420 tag=GOLD_REWARD_STATE value=1
-D 19:14:33.7926377 GameState.DebugPrintPower() - TAG_CHANGE Entity=TwoSteps tag=GOLD_REWARD_STATE value=1
+D 23:14:33.6755258 GameState.DebugPrintPower() - TAG_CHANGE Entity=GameEntity tag=STEP value=FINAL_WRAPUP
+D 00:14:33.6755258 GameState.DebugPrintPower() - ACTION_START Entity=GameEntity BlockType=TRIGGER Index=-1 Target=0
+D 00:14:33.6755258 GameState.DebugPrintPower() -     TAG_CHANGE Entity=GameEntity tag=NEXT_STEP value=FINAL_GAMEOVER
+D 00:14:33.6755258 GameState.DebugPrintPower() - ACTION_END
+D 00:14:33.6755258 GameState.DebugPrintPower() - TAG_CHANGE Entity=GameEntity tag=STEP value=FINAL_GAMEOVER
+D 00:14:33.6755258 GameState.DebugPrintPower() - TAG_CHANGE Entity=GameEntity tag=STATE value=COMPLETE
+D 00:14:33.7926377 GameState.DebugPrintPowerList() - Count=2
+D 00:14:33.7926377 GameState.DebugPrintPower() - TAG_CHANGE Entity=ratking420 tag=GOLD_REWARD_STATE value=1
+D 00:14:33.7926377 GameState.DebugPrintPower() - TAG_CHANGE Entity=TwoSteps tag=GOLD_REWARD_STATE value=1

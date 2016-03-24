@@ -21,8 +21,11 @@ public class Regexes {
 	public static final Pattern ActionCreategameRegex = Pattern.compile("GameEntity EntityID=(\\d+)");
 	public static final Pattern ActionCreategamePlayerRegex = Pattern
 			.compile("Player EntityID=(\\d+) PlayerID=(\\d+) GameAccountId=\\[hi=(\\d+) lo=(\\d+)\\]$");
-	public static final Pattern ActionStartRegex = Pattern.compile(MessageFormat
+	public static final Pattern ActionStartRegex_OLD = Pattern.compile(MessageFormat
 			.format("ACTION_START Entity={0} (?:SubType|BlockType)=(\\w+) Index=(-1|\\d+) Target={0}$", Entity));
+	public static final Pattern ActionStartRegex = Pattern.compile(MessageFormat.format(
+			"ACTION_START (?:SubType|BlockType)=(\\w+) Entity={0} EffectCardId=(.*) EffectIndex=(-1|\\d+) Target={0}$",
+			Entity));
 	public static final Pattern ActionMetadataRegex = Pattern
 			.compile(MessageFormat.format("META_DATA - Meta=(\\w+) Data={0} Info=(\\d+)", Entity));
 	public static final Pattern ActionMetaDataInfoRegex = Pattern

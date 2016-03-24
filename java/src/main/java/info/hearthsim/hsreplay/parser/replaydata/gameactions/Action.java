@@ -37,6 +37,12 @@ public class Action extends GameAction {
 	@XmlAttribute(name = "index")
 	private int index = -1;
 
+	@XmlAttribute(name = "effectId")
+	private int effectId = -1;
+
+	@XmlAttribute(name = "effectIndex")
+	private int effectIndex = -1;
+
 	@XmlAttribute(name = "target")
 	private int target = 0;
 
@@ -63,7 +69,8 @@ public class Action extends GameAction {
 	private List<GameData> data = new ArrayList<>();
 
 	@Builder
-	public Action(int index, int target, int type, List<GameData> data, int entity, String timestamp) {
+	public Action(int index, int target, int type, List<GameData> data, int entity, int effectIndex, int effectId,
+			String timestamp) {
 		super();
 		this.index = index;
 		this.target = target;

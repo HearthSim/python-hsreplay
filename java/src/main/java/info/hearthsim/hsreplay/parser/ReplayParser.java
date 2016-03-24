@@ -82,9 +82,9 @@ public class ReplayParser {
 			case "GameState.DebugPrintPower":
 				DataHandler.handle(timestamp, data, state);
 				break;
-			case "PowerTaskList.DebugPrintPower":
-				DataHandler.handle(timestamp, data, state);
-				break;
+			// case "PowerTaskList.DebugPrintPower":
+			// DataHandler.handle(timestamp, data, state);
+			// break;
 			// case "GameState.SendChoices":
 			// SendChoicesHandler.handle(timestamp, data, state);
 			// break;

@@ -18,6 +18,7 @@ import info.hearthsim.hsreplay.parser.replaydata.entities.FullEntity;
 import info.hearthsim.hsreplay.parser.replaydata.entities.GameEntity;
 import info.hearthsim.hsreplay.parser.replaydata.entities.PlayerEntity;
 import info.hearthsim.hsreplay.parser.replaydata.gameactions.Action;
+import info.hearthsim.hsreplay.parser.replaydata.gameactions.Action.ActionBuilder;
 import info.hearthsim.hsreplay.parser.replaydata.gameactions.HideEntity;
 import info.hearthsim.hsreplay.parser.replaydata.gameactions.ShowEntity;
 import info.hearthsim.hsreplay.parser.replaydata.gameactions.Tag;
@@ -29,7 +30,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DataHandler {
 
+	private static int previousTimestampHours;
+
 	public static void handle(String timestamp, String data, ParserState state) throws Exception {
+
+		timestamp = normalizeTimestamp(timestamp);
+
 		String trimmed = data.trim();
 		int indentLevel = data.length() - trimmed.length();
 		data = trimmed;
@@ -93,7 +99,7 @@ public class DataHandler {
 			return;
 		}
 
-		match = Regexes.ActionStartRegex.matcher(data);
+		match = Regexes.ActionStartRegex_OLD.matcher(data);
 		if (match.matches()) {
 			String rawEntity = match.group(1);
 			String rawType = match.group(2);
@@ -105,6 +111,45 @@ public class DataHandler {
 
 			Action action = Action.builder().data(new ArrayList<GameData>()).entity(entity)
 					.index(Integer.parseInt(index)).target(target).timestamp(timestamp).type(type).build();
+			state.updateCurrentNode(Game.class, Action.class);
+
+			if (state.getNode().getType().isAssignableFrom(Game.class)) {
+				((Game) state.getNode().getObject()).getData().add(action);
+			}
+			else if (state.getNode().getType().isAssignableFrom(Action.class)) {
+				((Action) state.getNode().getObject()).getData().add(action);
+			}
+			else {
+				throw new Exception("Invalid node " + state.getNode().getType());
+			}
+
+			Node node = new Node(Action.class, action, indentLevel, state.getNode());
+			state.setNode(node);
+			return;
+		}
+
+		match = Regexes.ActionStartRegex.matcher(data);
+		if (match.matches()) {
+			String rawType = match.group(1);
+			String rawEntity = match.group(2);
+			String effectId = match.group(3);
+			String effectIndex = match.group(4);
+			String rawTarget = match.group(5);
+			int entity = Helper.parseEntity(rawEntity, state);
+			int target = Helper.parseEntity(rawTarget, state);
+			int type = PowSubType.parseEnum(rawType);
+
+			ActionBuilder builder = Action.builder().data(new ArrayList<GameData>()).entity(entity).target(target)
+					.timestamp(timestamp).type(type);
+
+			if (effectId != null && effectId.length() > 0) {
+				builder.effectId(Integer.parseInt(effectId));
+			}
+			if (effectIndex != null && effectIndex.length() > 0) {
+				builder.effectIndex(Integer.parseInt(effectIndex));
+			}
+
+			Action action = builder.build();
 			state.updateCurrentNode(Game.class, Action.class);
 
 			if (state.getNode().getType().isAssignableFrom(Game.class)) {
@@ -298,6 +343,19 @@ public class DataHandler {
 				throw new Exception("Invalid node " + state.getNode().getType());
 			}
 		}
+	}
+
+	private static String normalizeTimestamp(String timestamp) {
+		String[] split = timestamp.split(":");
+		int hours = Integer.parseInt(split[0]);
+		if (hours < previousTimestampHours) {
+			log.debug("Computed new ts " + hours);
+			hours = previousTimestampHours + 1;
+			String newTs = hours + ":" + split[1] + ":" + split[2];
+			return newTs;
+		}
+		previousTimestampHours = hours;
+		return timestamp;
 	}
 
 	private static int updatePlayerEntity(ParserState state, String rawEntity, Tag tag, int entity) {
