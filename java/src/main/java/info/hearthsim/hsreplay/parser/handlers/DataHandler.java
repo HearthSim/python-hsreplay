@@ -30,11 +30,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DataHandler {
 
-	private static int previousTimestampHours;
+	public int previousTimestampHours;
 
-	public static void handle(String timestamp, String data, ParserState state) throws Exception {
+	public void handle(String timestamp, String data, ParserState state) throws Exception {
 
+		log.info("handling original timestamp " + timestamp);
 		timestamp = normalizeTimestamp(timestamp);
+		log.info("\tnormalized timestamp " + timestamp);
 
 		String trimmed = data.trim();
 		int indentLevel = data.length() - trimmed.length();
@@ -345,11 +347,11 @@ public class DataHandler {
 		}
 	}
 
-	private static String normalizeTimestamp(String timestamp) {
+	private String normalizeTimestamp(String timestamp) {
 		String[] split = timestamp.split(":");
 		int hours = Integer.parseInt(split[0]);
 		if (hours < previousTimestampHours) {
-			log.debug("Computed new ts " + hours);
+			log.info("Computed new ts " + hours);
 			hours = previousTimestampHours + 1;
 			String newTs = hours + ":" + split[1] + ":" + split[2];
 			return newTs;
@@ -358,7 +360,7 @@ public class DataHandler {
 		return timestamp;
 	}
 
-	private static int updatePlayerEntity(ParserState state, String rawEntity, Tag tag, int entity) {
+	private int updatePlayerEntity(ParserState state, String rawEntity, Tag tag, int entity) {
 		if (!Utils.isInteger(rawEntity) && !rawEntity.startsWith("[") && !rawEntity.equals("GameEntity")) {
 			if (entity != tag.getValue()) {
 				entity = tag.getValue();
@@ -379,7 +381,7 @@ public class DataHandler {
 		return entity;
 	}
 
-	private static void updateCurrentPlayer(ParserState state, String rawEntity, Tag tag) throws Exception {
+	private void updateCurrentPlayer(ParserState state, String rawEntity, Tag tag) throws Exception {
 		List<GameData> data = state.getCurrentGame().getData();
 		if (tag.getValue() == 0) {
 			try {

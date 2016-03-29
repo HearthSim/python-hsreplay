@@ -18,6 +18,7 @@ public class ReplayParser {
 	public static final int HEARTHSTONE_BUILD = 10833;
 
 	private final ParserState state = new ParserState();
+	private final DataHandler dataHandler = new DataHandler();
 
 	public HearthstoneReplay fromString(Iterable<String> lines, GameType... gameTypes) throws Exception {
 		return fromString(lines, HEARTHSTONE_BUILD, gameTypes);
@@ -80,7 +81,7 @@ public class ReplayParser {
 
 		switch (method) {
 			case "GameState.DebugPrintPower":
-				DataHandler.handle(timestamp, data, state);
+				dataHandler.handle(timestamp, data, state);
 				break;
 			// case "PowerTaskList.DebugPrintPower":
 			// DataHandler.handle(timestamp, data, state);
