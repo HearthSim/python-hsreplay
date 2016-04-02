@@ -348,15 +348,17 @@ public class DataHandler {
 	}
 
 	private String normalizeTimestamp(String timestamp) {
-		String[] split = timestamp.split(":");
-		int hours = Integer.parseInt(split[0]);
-		if (hours < previousTimestampHours) {
-			log.info("Computed new ts " + hours);
-			hours = previousTimestampHours + 1;
-			String newTs = hours + ":" + split[1] + ":" + split[2];
-			return newTs;
+		if (timestamp != null && !timestamp.isEmpty()) {
+			String[] split = timestamp.split(":");
+			int hours = Integer.parseInt(split[0]);
+			if (hours < previousTimestampHours) {
+				log.info("Computed new ts " + hours);
+				hours = previousTimestampHours + 1;
+				String newTs = hours + ":" + split[1] + ":" + split[2];
+				return newTs;
+			}
+			previousTimestampHours = hours;
 		}
-		previousTimestampHours = hours;
 		return timestamp;
 	}
 
