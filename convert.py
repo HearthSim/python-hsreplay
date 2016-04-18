@@ -3,7 +3,7 @@ import sys
 import codecs
 from argparse import ArgumentParser, ArgumentTypeError
 from datetime import datetime
-from hsreplay import log_to_xml
+from hsreplay.dumper import log_to_xml
 
 
 def date_arg(s):
