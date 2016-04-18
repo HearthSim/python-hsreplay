@@ -109,12 +109,16 @@ def add_packets_recursive(entity, entity_element):
 		entity_element.append(packet_element)
 
 
-def log_to_xml(fp, processor="GameState", date=None):
+def parse_log(fp, processor="GameState", date=None):
 	parser = hslog.LogWatcher()
 	parser._game_state_processor = processor
 	parser._current_date = date
 	parser.read(fp)
 
+	return parser
+
+
+def packet_tree_to_xml(parser):
 	builder = ElementTree.TreeBuilder()
 	builder.start("HSReplay", {"version": __version__})
 	builder.end("HSReplay")
@@ -122,9 +126,13 @@ def log_to_xml(fp, processor="GameState", date=None):
 
 	for game in parser.games:
 		game_element = GameNode(game.ts)
-
 		add_packets_recursive(game, game_element)
-
 		root.append(game_element.xml())
 
+	return root
+
+
+def log_to_xml(fp, *args, **kwargs):
+	parser = parse_log(fp, *args, **kwargs)
+	root = packet_tree_to_xml(parser)
 	return pretty_xml(root)
