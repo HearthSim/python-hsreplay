@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 from hearthstone import hslog
 from xml.etree import ElementTree
-from xml.dom import minidom
 from .elements import *
 
 
@@ -10,25 +9,6 @@ __email__ = "jerome@leclan.ch"
 __version__ = "1.1"
 
 SYSTEM_DTD = "https://hearthsim.info/hsreplay/dtd/hsreplay-%s.dtd" % (__version__)
-
-
-def pretty_xml(xml):
-	ret = ElementTree.tostring(xml)
-	ret = minidom.parseString(ret)
-
-	imp = minidom.DOMImplementation()
-	doctype = imp.createDocumentType(
-		qualifiedName="hsreplay",
-		publicId="",
-		systemId=SYSTEM_DTD,
-	)
-	doc = imp.createDocument(None, "HSReplay", doctype)
-	for element in list(ret.documentElement.childNodes):
-		doc.documentElement.appendChild(element)
-	doc.documentElement.setAttribute("version", __version__)
-
-	ret = doc.toprettyxml(indent="\t")
-	return "\n".join(line for line in ret.split("\n") if line.strip())
 
 
 def add_initial_tags(ts, packet, packet_element):
@@ -136,6 +116,8 @@ def add_packets_recursive(entity, entity_element):
 
 
 def log_to_xml(fp, processor="GameState", date=None):
+	from .utils import pretty_xml
+
 	parser = hslog.LogWatcher()
 	parser._game_state_processor = processor
 	parser._current_date = date
