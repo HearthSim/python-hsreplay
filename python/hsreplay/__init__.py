@@ -1,8 +1,5 @@
 #!/usr/bin/env python
-import re
-import sys
-from hearthstone import enums, hslog
-from hearthstone.enums import GameTag
+from hearthstone import hslog
 from xml.etree import ElementTree
 from xml.dom import minidom
 from .elements import *
