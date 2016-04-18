@@ -12,7 +12,7 @@ __author__ = "Jerome Leclanche"
 __email__ = "jerome@leclan.ch"
 __version__ = "1.1"
 
-SYSTEM_DTD = "http://hearthsim.info/hsreplay/dtd/hsreplay-%s.dtd" % (__version__)
+SYSTEM_DTD = "https://hearthsim.info/hsreplay/dtd/hsreplay-%s.dtd" % (__version__)
 
 
 def pretty_xml(xml):
