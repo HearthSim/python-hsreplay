@@ -2,4 +2,4 @@
 
 A python module for HSReplay support
 
-http://hearthsim.info/hsreplay/
+https://hearthsim.info/hsreplay/
