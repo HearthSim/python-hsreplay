@@ -118,9 +118,12 @@ def parse_log(fp, processor="GameState", date=None):
 	return parser
 
 
-def packet_tree_to_xml(parser):
+def packet_tree_to_xml(parser, version=__version__, build=None):
 	builder = ElementTree.TreeBuilder()
-	builder.start("HSReplay", {"version": __version__})
+	attrs = {"version": version}
+	if build is not None:
+		attrs["build"] = int(build)
+	builder.start("HSReplay", attrs)
 	builder.end("HSReplay")
 	root = builder.close()
 
