@@ -118,24 +118,26 @@ def parse_log(fp, processor="GameState", date=None):
 	return parser
 
 
-def packet_tree_to_xml(parser, version=__version__, build=None):
+def create_document(version=__version__, build=None):
 	builder = ElementTree.TreeBuilder()
 	attrs = {"version": version}
 	if build is not None:
 		attrs["build"] = int(build)
 	builder.start("HSReplay", attrs)
 	builder.end("HSReplay")
-	root = builder.close()
 
-	for game in parser.games:
-		game_element = GameNode(game.ts)
-		add_packets_recursive(game, game_element)
-		root.append(game_element.xml())
+	return builder.close()
 
-	return root
+
+def game_to_xml(game):
+	game_element = GameNode(game.ts)
+	add_packets_recursive(game, game_element)
+	return game_element.xml()
 
 
 def log_to_xml(fp, *args, **kwargs):
+	root = create_document()
 	parser = parse_log(fp, *args, **kwargs)
-	root = packet_tree_to_xml(parser)
+	for game in parser.games:
+		root.append(game_to_xml(game))
 	return pretty_xml(root)
