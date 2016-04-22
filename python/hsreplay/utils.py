@@ -1,6 +1,6 @@
 from xml.dom import minidom
 from xml.etree import ElementTree
-from . import __version__, SYSTEM_DTD
+from . import SYSTEM_DTD
 
 
 def pretty_xml(xml):
@@ -16,7 +16,8 @@ def pretty_xml(xml):
 	doc = imp.createDocument(None, "HSReplay", doctype)
 	for element in list(ret.documentElement.childNodes):
 		doc.documentElement.appendChild(element)
-	doc.documentElement.setAttribute("version", __version__)
+	for k, v in xml.attrib.items():
+		doc.documentElement.setAttribute(k, v)
 
 	ret = doc.toprettyxml(indent="\t")
 	return "\n".join(line for line in ret.split("\n") if line.strip())
