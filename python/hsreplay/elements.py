@@ -52,6 +52,18 @@ class PlayerNode(Node):
 	attributes = ("id", "playerID", "accountHi", "accountLo", "name")
 	timestamp = False
 
+	def xml(self):
+		ret = super().xml()
+		if hasattr(self, "deck"):
+			element = ElementTree.Element("Deck")
+			ret.append(element)
+			for card in self.deck:
+				e = ElementTree.Element("Card")
+				e.attrib["id"] = card
+				element.append(e)
+
+		return ret
+
 
 class FullEntityNode(Node):
 	tagname = "FullEntity"
