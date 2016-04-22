@@ -109,7 +109,7 @@ def add_packets_recursive(entity, entity_element):
 		entity_element.append(packet_element)
 
 
-def parse_log(fp, processor="GameState", date=None):
+def parse_log(fp, processor, date):
 	parser = hslog.LogWatcher()
 	parser._game_state_processor = processor
 	parser._current_date = date
@@ -118,7 +118,7 @@ def parse_log(fp, processor="GameState", date=None):
 	return parser
 
 
-def create_document(version=__version__, build=None):
+def create_document(version, build):
 	builder = ElementTree.TreeBuilder()
 	attrs = {"version": version}
 	if build is not None:
@@ -135,9 +135,9 @@ def game_to_xml(game):
 	return game_element.xml()
 
 
-def log_to_xml(fp, *args, **kwargs):
-	root = create_document()
-	parser = parse_log(fp, *args, **kwargs)
+def log_to_xml(fp, processor="GameState", date=None, version=__version__, build=None):
+	root = create_document(version, build)
+	parser = parse_log(fp, processor, date)
 	for game in parser.games:
 		root.append(game_to_xml(game))
 	return pretty_xml(root)
