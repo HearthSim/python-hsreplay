@@ -129,9 +129,12 @@ def create_document(version, build):
 	return builder.close()
 
 
-def game_to_xml(game):
+def game_to_xml(game, decks=None):
 	game_element = GameNode(game.ts)
 	add_packets_recursive(game, game_element)
+	if decks is not None:
+		for player, deck in zip(game_element.nodes[1:3], decks):
+			player.deck = deck
 	return game_element.xml()
 
 
