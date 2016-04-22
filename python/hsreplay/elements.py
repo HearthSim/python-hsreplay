@@ -5,6 +5,7 @@ class Node:
 	attributes = ()
 
 	def __init__(self, *args):
+		self._attributes = {}
 		self.nodes = []
 		for k, arg in zip(("ts", ) + self.attributes, args):
 			setattr(self, k, arg)
@@ -25,6 +26,10 @@ class Node:
 				element.attrib[attr] = attrib
 		if self.timestamp and self.ts:
 			element.attrib["ts"] = self.ts.isoformat()
+
+		for k, v in self._attributes.items():
+			element.attrib[k] = v
+
 		return element
 
 	def __repr__(self):
