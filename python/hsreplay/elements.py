@@ -1,7 +1,7 @@
 from xml.etree import ElementTree
 
 
-class Node:
+class Node(object):
 	attributes = ()
 
 	def __init__(self, *args):
@@ -41,7 +41,7 @@ class GameNode(Node):
 	timestamp = True
 
 	def __init__(self, ts):
-		super().__init__(ts)
+		super(GameNode, self).__init__(ts)
 		self.first_player = None
 		self.second_player = None
 
@@ -58,7 +58,7 @@ class PlayerNode(Node):
 	timestamp = False
 
 	def xml(self):
-		ret = super().xml()
+		ret = super(PlayerNode, self).xml()
 		if hasattr(self, "deck"):
 			element = ElementTree.Element("Deck")
 			ret.append(element)
