@@ -110,7 +110,7 @@ def add_packets_recursive(entity, entity_element):
 
 
 def parse_log(fp, processor, date):
-	parser = hslog.LogWatcher()
+	parser = hslog.LogParser()
 	parser._game_state_processor = processor
 	parser._current_date = date
 	parser.read(fp)
