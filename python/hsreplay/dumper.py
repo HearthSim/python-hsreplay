@@ -122,7 +122,7 @@ def create_document(version, build):
 	builder = ElementTree.TreeBuilder()
 	attrs = {"version": version}
 	if build is not None:
-		attrs["build"] = int(build)
+		attrs["build"] = str(build)
 	builder.start("HSReplay", attrs)
 	builder.end("HSReplay")
 
