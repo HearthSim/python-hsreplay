@@ -24,7 +24,7 @@ languages, please get in touch through our `#hearthsim` channel (see below).
 
 ## Community
 
-HSReplay is a [HearthSim](http://hearthsim.info) project. All development
+HSReplay is a [HearthSim](https://hearthsim.info) project. All development
 happens on our IRC channel `#hearthsim` on [Freenode](https://freenode.net).
 
 
