@@ -59,10 +59,11 @@ class PlayerNode(Node):
 
 	def xml(self):
 		ret = super(PlayerNode, self).xml()
-		if hasattr(self, "deck"):
+		deck = getattr(self, "deck", None)
+		if deck is not None:
 			element = ElementTree.Element("Deck")
 			ret.append(element)
-			for card in self.deck:
+			for card in deck:
 				e = ElementTree.Element("Card")
 				e.attrib["id"] = card
 				element.append(e)
