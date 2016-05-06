@@ -135,7 +135,7 @@ def game_to_xml(game, game_meta=None, player_meta=None, decks=None):
 	players = game_element.nodes[1:3]
 
 	if game_meta is not None:
-		game_element.nodes[0]._attributes = game_meta
+		game_element._attributes = game_meta
 
 	if player_meta is not None:
 		for player, meta in zip(players, player_meta):
