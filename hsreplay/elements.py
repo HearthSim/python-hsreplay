@@ -119,6 +119,12 @@ class HideEntityNode(Node):
 	timestamp = True
 
 
+class ChangeEntityNode(Node):
+	tagname = "ChangeEntity"
+	attributes = ("entity", "cardID")
+	timestamp = True
+
+
 ##
 # Choices
 
