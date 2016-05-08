@@ -85,6 +85,9 @@ def add_packets_recursive(entity, entity_element):
 		elif isinstance(packet, hslog.packets.FullEntity):
 			packet_element = FullEntityNode(ts, _ent, packet.cardid)
 			add_initial_tags(ts, packet, packet_element)
+		elif isinstance(packet, hslog.packets.ChangeEntity):
+			packet_element = ChangeEntityNode(ts, _ent, packet.cardid)
+			add_initial_tags(ts, packet, packet_element)
 		elif isinstance(packet, hslog.packets.Choices):
 			packet_element = ChoicesNode(
 				ts, _ent, packet.id, packet.tasklist, packet.type,
