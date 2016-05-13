@@ -62,7 +62,7 @@
  ! type: A GameType (BnetGameType) enum value. Optional because it cannot be
  !       read directly from Power.log.
 -->
-<!ELEMENT Game (Action | ChangeEntity | Choices | ChosenEntities | FullEntity | GameEntity | HideEntity | Options | Player | SendChoices | SendOption | ShowEntity | TagChange)*>
+<!ELEMENT Game (Block | ChangeEntity | Choices | ChosenEntities | FullEntity | GameEntity | HideEntity | Options | Player | SendChoices | SendOption | ShowEntity | TagChange)*>
 <!ATTLIST Game
 	id NMTOKEN #IMPLIED
 	type %enumValue; #IMPLIED
@@ -101,13 +101,14 @@
 	ts %timestamp; #IMPLIED>
 
 <!--
- ! Contains a full action (from ACTION_START to corresponding ACTION_END)
- ! This is recursive: Actions may contain further Actions.
- ! index: The index the action is performed at (-1 if not provided)
+ ! Contains a full action block (from BLOCK_START to corresponding BLOCK_END)
+ ! Previously known as ACTION_START / ACTION_END.
+ ! This is recursive: Blocks may contain further Blocks.
+ ! index: The index the block action is performed at (-1 if not provided)
  ! target: The id of the entity being targeted (0 if not provided)
- ! type: A PowSubType enum value representing the type of action performed
+ ! type: A PowSubType enum value representing the type of block
 -->
-<!ELEMENT Action (Action | ChangeEntity | FullEntity | HideEntity | TagChange | MetaData | ShowEntity | Choices | ChosenEntities | SendChoices)*>
+<!ELEMENT Action (Block | ChangeEntity | FullEntity | HideEntity | TagChange | MetaData | ShowEntity | Choices | ChosenEntities | SendChoices)*>
 <!ATTLIST Action
 	entity %entity; #REQUIRED
 	index NMTOKEN "-1"
