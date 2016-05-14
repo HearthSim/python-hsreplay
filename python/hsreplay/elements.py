@@ -83,8 +83,8 @@ class ShowEntityNode(Node):
 	timestamp = False
 
 
-class ActionNode(Node):
-	tagname = "Action"
+class BlockNode(Node):
+	tagname = "Block"
 	attributes = ("entity", "type", "index", "target")
 	timestamp = True
 

@@ -57,14 +57,14 @@ def add_packets_recursive(entity, entity_element):
 				entity_element.append(player_element)
 				add_initial_tags(ts, player, player_element)
 			continue
-		elif isinstance(packet, hslog.packets.Action):
-			packet_element = ActionNode(
+		elif isinstance(packet, hslog.packets.Block):
+			packet_element = BlockNode(
 				ts, _ent, packet.type,
 				packet.index if packet.index != -1 else None,
 				serialize_entity(packet.target)
 			)
 			add_packets_recursive(packet, packet_element)
-		elif isinstance(packet, hslog.packets.ActionMetaData):
+		elif isinstance(packet, hslog.packets.MetaData):
 			# With verbose=false, we always have 0 packet.info :(
 			assert len(packet.info) in (0, packet.count)
 			packet_element = MetaDataNode(
