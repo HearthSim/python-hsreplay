@@ -243,7 +243,7 @@ class GameElement(ReplayBaseElement):
 			"Player": self._start_player_entity,
 			"FullEntity": self._start_full_entity,
 			"TagChange": self._start_tag_change,
-			"Action": self._start_action,
+			"Block": self._start_block,
 			"Choices": self._start_choices,
 			"SendChoices": self._start_send_choices,
 			"ChosenEntities": self._start_chosen_entities,
@@ -399,9 +399,9 @@ class GameElement(ReplayBaseElement):
 		show_entity = ShowEntityElement(attributes, self, self._game)
 		return show_entity
 
-	def _start_action(self, attributes):
-		action = ActionElement(attributes, self, self._game)
-		return action
+	def _start_block(self, attributes):
+		block = BlockElement(attributes, self, self._game)
+		return block
 
 	def _start_choices(self, attributes):
 		choices_element = ChoicesElement(attributes, self, self._game)
@@ -659,11 +659,11 @@ class InfoElement(ReplayBaseElement):
 	element = "Info"
 
 
-class ActionElement(ReplayBaseElement):
-	element = "Action"
+class BlockElement(ReplayBaseElement):
+	element = "Block"
 
 	def __init__(self, attributes, parent, game):
-		super(ActionElement, self).__init__(attributes, parent, game)
+		super(BlockElement, self).__init__(attributes, parent, game)
 
 		self._current = None
 		self._start_element_handlers = {
@@ -673,7 +673,7 @@ class ActionElement(ReplayBaseElement):
 			"ChosenEntities": self._start_chosen_entities,
 			"ShowEntity": self._start_show_entity,
 			"HideEntity": self._start_hide_entity,
-			"Action": self._start_action,
+			"Block": self._start_block,
 			"MetaData": self._start_meta_data,
 			"FullEntity": self._start_full_entity,
 		}
@@ -718,18 +718,18 @@ class ActionElement(ReplayBaseElement):
 		self._current = hide_entity
 		return hide_entity
 
-	def _start_action(self, attributes):
-		action = ActionElement(attributes, self, self._game)
-		self._current = action
-		return action
+	def _start_block(self, attributes):
+		block = BlockElement(attributes, self, self._game)
+		self._current = block
+		return block
 
 	def start_element(self, name, attributes):
 		if name in self._start_element_handlers:
 			return self._start_element_handlers[name](attributes)
-		raise ReplayParserError("<%s> is not a valid child type of <Action>." % (name))
+		raise ReplayParserError("<%s> is not a valid child type of <Block>." % (name))
 
 	def end_element(self, name):
-		return super(ActionElement, self).end_element(name)
+		return super(BlockElement, self).end_element(name)
 
 
 class ChoicesElement(ReplayBaseElement):

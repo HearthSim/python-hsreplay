@@ -76,10 +76,10 @@ class Player(_EntityPacket):
 		return self.id, int(self.playerID), int(self.accountHi), int(self.accountLo)
 
 
-class Action(Packet):
+class Block(Packet):
 	def __str__(self):
-		start = "ACTION_START Entity=%s BlockType=%s Index=%i Target=%s\n" % self.args()
-		return start + "%s\nACTION_END" % (indented(self.packets))
+		start = "BLOCK_START Entity=%s BlockType=%s Index=%i Target=%s\n" % self.args()
+		return start + "%s\nBLOCK_END" % (indented(self.packets))
 
 	def args(self):
 		return self.entity, self.type, int(self.index), getattr(self, "target", 0)
