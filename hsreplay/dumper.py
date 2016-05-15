@@ -1,8 +1,7 @@
 from hearthstone import hslog
-from xml.etree import ElementTree
 from . import __version__
 from .elements import *
-from .utils import pretty_xml
+from .utils import ElementTree, toxml
 
 
 def add_initial_tags(ts, packet, packet_element):
@@ -151,9 +150,10 @@ def game_to_xml(game, game_meta=None, player_meta=None, decks=None):
 	return game_element.xml()
 
 
-def log_to_xml(fp, processor="GameState", date=None, version=__version__, build=None):
+def log_to_xml(fp, processor="GameState", date=None, version=__version__, build=None, pretty=False):
 	root = create_document(version, build)
 	parser = parse_log(fp, processor, date)
 	for game in parser.games:
 		root.append(game_to_xml(game))
-	return pretty_xml(root)
+
+	return toxml(root, pretty)
