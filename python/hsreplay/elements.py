@@ -1,4 +1,4 @@
-from xml.etree import ElementTree
+from .utils import ElementTree
 
 
 class Node(object):

@@ -1,11 +1,29 @@
+try:
+	from lxml import etree as ElementTree
+	LXML = True
+except ImportError:
+	from xml.etree import ElementTree
+	LXML = False
 from xml.dom import minidom
-from xml.etree import ElementTree
 from . import SYSTEM_DTD
 
 
-def pretty_xml(xml):
-	ret = ElementTree.tostring(xml)
-	ret = minidom.parseString(ret)
+def toxml(root, pretty):
+	if LXML:
+		doctype = '<!DOCTYPE hsreplay SYSTEM "%s">' % (SYSTEM_DTD)
+		xml = ElementTree.tostring(root, doctype=doctype, pretty_print=pretty)
+		return xml.decode("utf-8")
+
+	xml = ElementTree.tostring(root)
+
+	if pretty:
+		return pretty_xml(root)
+	return ElementTree.tostring(root).decode("utf-8")
+
+
+def pretty_xml(root):
+	xml = ElementTree.tostring(root)
+	ret = minidom.parseString(xml)
 
 	imp = minidom.DOMImplementation()
 	doctype = imp.createDocumentType(
@@ -16,7 +34,7 @@ def pretty_xml(xml):
 	doc = imp.createDocument(None, "HSReplay", doctype)
 	for element in list(ret.documentElement.childNodes):
 		doc.documentElement.appendChild(element)
-	for k, v in xml.attrib.items():
+	for k, v in root.attrib.items():
 		doc.documentElement.setAttribute(k, v)
 
 	ret = doc.toprettyxml(indent="\t")
