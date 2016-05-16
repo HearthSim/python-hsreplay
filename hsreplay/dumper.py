@@ -33,10 +33,10 @@ def add_options(ts, packet, packet_element):
 
 
 def serialize_entity(entity):
-	if isinstance(entity, str):
-		return entity
-	elif entity:
+	if isinstance(entity, hslog.entities.Entity):
 		return entity.id
+	elif entity:
+		return entity
 
 
 def add_packets_recursive(entity, entity_element):
