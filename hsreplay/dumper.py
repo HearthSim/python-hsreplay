@@ -70,7 +70,8 @@ def add_packets_recursive(entity, entity_element):
 				ts, packet.type, _ent, packet.count
 			)
 			for i, info in enumerate(packet.info):
-				e = MetaDataInfoNode(packet.ts, i, info.id)
+				id = info and info.id or 0
+				e = MetaDataInfoNode(packet.ts, i, id)
 				packet_element.append(e)
 		elif isinstance(packet, hslog.packets.TagChange):
 			packet_element = TagChangeNode(
