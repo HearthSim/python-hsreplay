@@ -41,7 +41,8 @@ def serialize_entity(entity):
 
 def add_packets_recursive(entity, entity_element):
 	for packet in entity:
-		_ent = serialize_entity(packet.entity)
+		if hasattr(packet, "entity"):
+			_ent = serialize_entity(packet.entity)
 		ts = packet.ts
 
 		if isinstance(packet, hslog.packets.CreateGame):
@@ -67,7 +68,7 @@ def add_packets_recursive(entity, entity_element):
 			# With verbose=false, we always have 0 packet.info :(
 			assert len(packet.info) in (0, packet.count)
 			packet_element = MetaDataNode(
-				ts, packet.type, _ent, packet.count
+				ts, packet.meta, packet.data, packet.count
 			)
 			for i, info in enumerate(packet.info):
 				id = info and info.id or 0

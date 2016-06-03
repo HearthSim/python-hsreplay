@@ -91,7 +91,7 @@ class BlockNode(Node):
 
 class MetaDataNode(Node):
 	tagname = "MetaData"
-	attributes = ("meta", "entity", "info")
+	attributes = ("meta", "data", "info")
 	timestamp = False
 
 
