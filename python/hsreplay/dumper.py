@@ -51,7 +51,7 @@ def add_packets_recursive(entity, entity_element):
 			entity_element.append(packet_element)
 			for player in packet.players:
 				player_element = PlayerNode(
-					ts, player.entity, player.playerid,
+					ts, player.entity.id, player.playerid,
 					player.hi, player.lo, player.name
 				)
 				entity_element.append(player_element)
