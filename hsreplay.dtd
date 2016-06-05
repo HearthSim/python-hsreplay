@@ -31,9 +31,9 @@
  ! different timestamp than their parent element.
  ! The `ts` attribute on the main Game element represents the time at which
  ! the game started.
- ! Timestamps MUST be in ISO8601 datetime format. If only the time is
+ ! Timestamps SHOULD be in RFC3339 datetime format. If only the time is
  ! available, the date can be inferred from the original file's lastmod or
- ! the timestamp can be saved in ISO8601 time-only format.
+ ! the timestamp can instead be saved in ISO8601 time-only format.
 -->
 <!ENTITY % timestamp "NMTOKEN">
 
