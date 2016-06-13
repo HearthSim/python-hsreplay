@@ -40,11 +40,6 @@ class GameNode(Node):
 	tagname = "Game"
 	timestamp = True
 
-	def __init__(self, ts):
-		super(GameNode, self).__init__(ts)
-		self.first_player = None
-		self.second_player = None
-
 
 class GameEntityNode(Node):
 	tagname = "GameEntity"
