@@ -1,14 +1,43 @@
+from dateutil.parser import parse as parse_timestamp
 from .utils import ElementTree
+
+
+def node_for_tagname(tag):
+	for k, v in globals().items():
+		if k.endswith("Node") and v.tagname == tag:
+			return v
 
 
 class Node(object):
 	attributes = ()
+	tagname = None
 
 	def __init__(self, *args):
 		self._attributes = {}
 		self.nodes = []
 		for k, arg in zip(("ts", ) + self.attributes, args):
 			setattr(self, k, arg)
+
+	def __repr__(self):
+		return "<%s>" % (self.__class__.__name__)
+
+	@classmethod
+	def from_xml(cls, xml):
+		if xml.tag != cls.tagname:
+			raise ValueError("%s.from_xml() called with %r, not %r" % (
+				cls.__name__, xml.tag, cls.tagname
+			))
+		ts = xml.attrib.get("ts")
+		if ts:
+			ts = parse_timestamp(ts)
+		ret = cls(ts)
+		for element in xml:
+			ecls = node_for_tagname(element.tag)
+			node = ecls.from_xml(element)
+			for attrname in ecls.attributes:
+				setattr(node, attrname, element.attrib.get(attrname))
+			ret.nodes.append(node)
+		return ret
 
 	def append(self, node):
 		self.nodes.append(node)
@@ -31,9 +60,6 @@ class Node(object):
 			element.attrib[k] = v
 
 		return element
-
-	def __repr__(self):
-		return "<%s>" % (self.__class__.__name__)
 
 
 class GameNode(Node):
