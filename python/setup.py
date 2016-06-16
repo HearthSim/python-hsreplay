@@ -16,11 +16,9 @@ CLASSIFIERS = [
 	"Topic :: Games/Entertainment :: Simulation",
 ]
 
-PATCH_VERSION = 1
-
 setup(
 	name="hsreplay",
-	version="%s.%s" % (hsreplay.__version__, PATCH_VERSION),
+	version=hsreplay.__version__,
 	packages=find_packages(),
 	author=hsreplay.__author__,
 	author_email=hsreplay.__email__,
