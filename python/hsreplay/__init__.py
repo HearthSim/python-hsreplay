@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-DTD_VERSION = "1.2"
+DTD_VERSION = "1.3"
 LIB_VERSION = 1
 __author__ = "Jerome Leclanche"
 __email__ = "jerome@leclan.ch"
