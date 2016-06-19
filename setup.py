@@ -1,10 +1,7 @@
 #!/usr/bin/env python
-import os.path
 import hsreplay
 from setuptools import setup, find_packages
 
-
-README = open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "README.md")).read()
 
 CLASSIFIERS = [
 	"Intended Audience :: Developers",
@@ -25,7 +22,6 @@ setup(
 	description="A library for creating and parsing HSReplay files",
 	classifiers=CLASSIFIERS,
 	download_url="https://github.com/HearthSim/HSReplay/tarball/master",
-	long_description=README,
 	url="https://github.com/HearthSim/HSReplay",
 	license="MIT",
 )
