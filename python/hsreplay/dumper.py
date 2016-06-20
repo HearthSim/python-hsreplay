@@ -1,7 +1,6 @@
 from hearthstone import hslog
-from . import DTD_VERSION
 from .elements import *
-from .utils import ElementTree, toxml
+from .utils import toxml
 
 
 def add_initial_tags(ts, packet, packet_element):
@@ -122,17 +121,6 @@ def parse_log(fp, processor, date):
 	return parser
 
 
-def create_document(version, build):
-	builder = ElementTree.TreeBuilder()
-	attrs = {"version": version}
-	if build is not None:
-		attrs["build"] = str(build)
-	builder.start("HSReplay", attrs)
-	builder.end("HSReplay")
-
-	return builder.close()
-
-
 def game_to_xml(game, game_meta=None, player_meta=None, decks=None):
 	game_element = GameNode(game.ts)
 	add_packets_recursive(game, game_element)
@@ -152,10 +140,10 @@ def game_to_xml(game, game_meta=None, player_meta=None, decks=None):
 	return game_element.xml()
 
 
-def log_to_xml(fp, processor="GameState", date=None, version=DTD_VERSION, build=None, pretty=False):
-	root = create_document(version, build)
-	parser = parse_log(fp, processor, date)
-	for game in parser.games:
-		root.append(game_to_xml(game))
+def log_to_xml(fp, processor="GameState", date=None, build=None, pretty=False):
+	from .document import HSReplayDocument
 
-	return toxml(root, pretty)
+	parser = parse_log(fp, processor, date)
+	doc = HSReplayDocument.from_parser(parser, build)
+
+	return toxml(doc.root, pretty)
