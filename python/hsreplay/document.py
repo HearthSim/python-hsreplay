@@ -14,10 +14,11 @@ class HSReplayDocument:
 	@classmethod
 	def from_parser(cls, parser, build=None):
 		ret = cls(build)
-		root = ret._create_document()
+		ret._update_document()
 
 		for game in parser.games:
-			root.append(game_to_xml(game))
+			gamenode = game_to_xml(game)
+			ret.games.append(gamenode)
 
 		return ret
 
@@ -38,8 +39,13 @@ class HSReplayDocument:
 		self.root = builder.close()
 		return self.root
 
-	def to_xml(self, pretty=False):
+	def _update_document(self):
 		if self.root is None:
-			raise ValueError("HSReplayDocument is uninitialized and empty.")
+			self._create_document()
 
+		for game in self.games:
+			self.root.append(game.xml())
+
+	def to_xml(self, pretty=False):
+		self._update_document()
 		return toxml(self.root, pretty=pretty)
