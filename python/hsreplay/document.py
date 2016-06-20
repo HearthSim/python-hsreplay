@@ -1,10 +1,15 @@
 from hsreplay import DTD_VERSION
-from .dumper import game_to_xml
-from .utils import ElementTree
+from .dumper import game_to_xml, parse_log
+from .utils import ElementTree, toxml
 
 
 class HSReplayDocument:
 	ROOT_NAME = "HSReplay"
+
+	@classmethod
+	def from_log_file(cls, fp, processor="GameState", date=None, build=None):
+		parser = parse_log(fp, processor, date)
+		return cls.from_parser(parser, build)
 
 	@classmethod
 	def from_parser(cls, parser, build=None):
@@ -32,3 +37,9 @@ class HSReplayDocument:
 
 		self.root = builder.close()
 		return self.root
+
+	def to_xml(self, pretty=False):
+		if self.root is None:
+			raise ValueError("HSReplayDocument is uninitialized and empty.")
+
+		return toxml(self.root, pretty=pretty)
