@@ -1,4 +1,5 @@
 from hearthstone import hslog
+from hearthstone.enums import MetaDataType
 from .elements import *
 
 
@@ -52,7 +53,7 @@ def add_packets_recursive(entity, entity_element):
 					ts, player.entity.id, player.playerid,
 					player.hi, player.lo, player.name
 				)
-				entity_element.append(player_element)
+				entity_element
 				add_initial_tags(ts, player, player_element)
 			continue
 		elif isinstance(packet, hslog.packets.Block):
@@ -65,8 +66,12 @@ def add_packets_recursive(entity, entity_element):
 		elif isinstance(packet, hslog.packets.MetaData):
 			# With verbose=false, we always have 0 packet.info :(
 			assert len(packet.info) in (0, packet.count)
+			if packet.meta == MetaDataType.JOUST:
+				data = serialize_entity(packet.data)
+			else:
+				data = packet.data
 			packet_element = MetaDataNode(
-				ts, packet.meta, packet.data, packet.count
+				ts, packet.meta, data, packet.count
 			)
 			for i, info in enumerate(packet.info):
 				id = info and info.id or 0
