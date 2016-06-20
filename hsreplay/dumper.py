@@ -1,5 +1,5 @@
 from hearthstone import hslog
-from . import __version__
+from . import DTD_VERSION
 from .elements import *
 from .utils import ElementTree, toxml
 
@@ -152,7 +152,7 @@ def game_to_xml(game, game_meta=None, player_meta=None, decks=None):
 	return game_element.xml()
 
 
-def log_to_xml(fp, processor="GameState", date=None, version=__version__, build=None, pretty=False):
+def log_to_xml(fp, processor="GameState", date=None, version=DTD_VERSION, build=None, pretty=False):
 	root = create_document(version, build)
 	parser = parse_log(fp, processor, date)
 	for game in parser.games:
