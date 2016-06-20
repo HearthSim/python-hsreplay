@@ -1,6 +1,5 @@
 from hearthstone import hslog
 from .elements import *
-from .utils import toxml
 
 
 def add_initial_tags(ts, packet, packet_element):
@@ -138,12 +137,3 @@ def game_to_xml(game, game_meta=None, player_meta=None, decks=None):
 			player.deck = deck
 
 	return game_element.xml()
-
-
-def log_to_xml(fp, processor="GameState", date=None, build=None, pretty=False):
-	from .document import HSReplayDocument
-
-	parser = parse_log(fp, processor, date)
-	doc = HSReplayDocument.from_parser(parser, build)
-
-	return toxml(doc.root, pretty)

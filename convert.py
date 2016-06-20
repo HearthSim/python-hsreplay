@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 import sys
-import codecs
 from argparse import ArgumentParser, ArgumentTypeError
 from datetime import datetime
-from hsreplay.dumper import log_to_xml
+from hsreplay.document import HSReplayDocument
 
 
 def date_arg(s):
@@ -22,7 +21,8 @@ def main():
 	args = parser.parse_args(sys.argv[1:])
 	for filename in args.files:
 		with open(filename) as f:
-			print(log_to_xml(f, args.processor, args.date))
+			doc = HSReplayDocument.from_log_file(f, args.processor, args.date)
+			print(doc.to_xml())
 
 
 if __name__ == "__main__":
