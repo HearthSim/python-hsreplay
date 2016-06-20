@@ -1,5 +1,6 @@
 from hsreplay import DTD_VERSION
 from .dumper import game_to_xml, parse_log
+from .elements import GameNode
 from .utils import ElementTree, toxml
 
 
@@ -18,6 +19,23 @@ class HSReplayDocument:
 
 		for game in parser.games:
 			gamenode = game_to_xml(game)
+			ret.games.append(gamenode)
+
+		return ret
+
+	@classmethod
+	def from_xml_file(cls, fp):
+		xml = ElementTree.parse(fp)
+		return cls.from_xml(xml)
+
+	@classmethod
+	def from_xml(cls, xml):
+		root = xml.getroot()
+		build = root.attrib.get("build")
+		ret = cls(build)
+		ret.version = root.attrib.get("version")
+		for game in xml.findall("Game"):
+			gamenode = GameNode.from_xml(game)
 			ret.games.append(gamenode)
 
 		return ret
