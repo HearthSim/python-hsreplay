@@ -136,4 +136,4 @@ def game_to_xml(game, game_meta=None, player_meta=None, decks=None):
 		for player, deck in zip(players, decks):
 			player.deck = deck
 
-	return game_element.xml()
+	return game_element
