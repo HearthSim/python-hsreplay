@@ -66,6 +66,10 @@ class GameNode(Node):
 	tagname = "Game"
 	timestamp = True
 
+	@property
+	def players(self):
+		return self.nodes[1:3]
+
 
 class GameEntityNode(Node):
 	tagname = "GameEntity"
