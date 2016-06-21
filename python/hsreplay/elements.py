@@ -49,7 +49,9 @@ class Node(object):
 		for attr in self.attributes:
 			attrib = getattr(self, attr, None)
 			if attrib is not None:
-				if isinstance(attrib, int):
+				if isinstance(attrib, bool):
+					attrib = str(attrib).lower()
+				elif isinstance(attrib, int):
 					# Check for enums
 					attrib = str(int(attrib))
 				element.attrib[attr] = attrib
