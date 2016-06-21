@@ -64,6 +64,7 @@ class Node(object):
 
 class GameNode(Node):
 	tagname = "Game"
+	attributes = ("id", "reconnecting")
 	timestamp = True
 
 	@property
@@ -79,7 +80,10 @@ class GameEntityNode(Node):
 
 class PlayerNode(Node):
 	tagname = "Player"
-	attributes = ("id", "playerID", "accountHi", "accountLo", "name")
+	attributes = (
+		"id", "playerID", "accountHi", "accountLo", "name",
+		"rank", "legendRank", "cardback"
+	)
 	timestamp = False
 
 	def xml(self):
