@@ -47,11 +47,11 @@ class Node(object):
 		for node in self.nodes:
 			element.append(node.xml())
 		for attr in self.attributes:
-			attrib = getattr(self, attr)
-			if isinstance(attrib, int):
-				# Check for enums
-				attrib = str(int(attrib))
+			attrib = getattr(self, attr, None)
 			if attrib is not None:
+				if isinstance(attrib, int):
+					# Check for enums
+					attrib = str(int(attrib))
 				element.attrib[attr] = attrib
 		if self.timestamp and self.ts:
 			element.attrib["ts"] = self.ts.isoformat()
