@@ -53,7 +53,7 @@ def add_packets_recursive(entity, entity_element):
 					ts, player.entity.id, player.playerid,
 					player.hi, player.lo, player.name
 				)
-				entity_element
+				entity_element.append(player_element)
 				add_initial_tags(ts, player, player_element)
 			continue
 		elif isinstance(packet, hslog.packets.Block):
