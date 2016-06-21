@@ -128,7 +128,7 @@ def parse_log(fp, processor, date):
 def game_to_xml(game, game_meta=None, player_meta=None, decks=None):
 	game_element = GameNode(game.ts)
 	add_packets_recursive(game, game_element)
-	players = game_element.nodes[1:3]
+	players = game_element.players
 
 	if game_meta is not None:
 		game_element._attributes = game_meta
