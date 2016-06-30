@@ -1,4 +1,5 @@
 from hearthstone import hslog
+from hearthstone.entities import Entity
 from hearthstone.enums import MetaDataType
 from .elements import *
 
@@ -32,7 +33,7 @@ def add_options(ts, packet, packet_element):
 
 
 def serialize_entity(entity):
-	if isinstance(entity, hslog.entities.Entity):
+	if isinstance(entity, Entity):
 		return entity.id
 	elif entity:
 		return entity
