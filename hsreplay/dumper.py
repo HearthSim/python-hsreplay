@@ -26,7 +26,7 @@ def add_options(ts, packet, packet_element):
 			cls = SubOptionNode
 		else:
 			raise NotImplementedError("Unhandled option type: %r" % (option.optype))
-		entity = option.entity.id if option.entity else None
+		entity = serialize_entity(option.entity)
 		option_element = cls(ts, i, entity, option.type)
 		add_options(ts, option, option_element)
 		packet_element.append(option_element)
