@@ -10,8 +10,13 @@ from . import SYSTEM_DTD
 
 def toxml(root, pretty):
 	if LXML:
-		doctype = '<!DOCTYPE hsreplay SYSTEM "%s">' % (SYSTEM_DTD)
-		xml = ElementTree.tostring(root, doctype=doctype, pretty_print=pretty)
+		kwargs = {
+			"doctype": '<!DOCTYPE hsreplay SYSTEM "%s">' % (SYSTEM_DTD),
+			"pretty_print": pretty,
+			"xml_declaration": True,
+			"encoding": "utf-8",
+		}
+		xml = ElementTree.tostring(root, **kwargs)
 		return xml.decode("utf-8")
 
 	xml = ElementTree.tostring(root)
