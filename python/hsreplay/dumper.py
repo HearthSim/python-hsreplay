@@ -1,3 +1,4 @@
+import logging
 from hearthstone import hslog
 from hearthstone.entities import Entity
 from hearthstone.enums import MetaDataType
@@ -69,7 +70,9 @@ def add_packets_recursive(game, packets, entity_element):
 			add_packets_recursive(game, packet.packets, packet_element)
 		elif isinstance(packet, hslog.packets.MetaData):
 			# With verbose=false, we always have 0 packet.info :(
-			assert len(packet.info) in (0, packet.count)
+			if len(packet.info) not in (0, packet.count):
+				logging.warning("META_DATA count is %r for %r", packet.count, packet.info)
+
 			if packet.meta == MetaDataType.JOUST:
 				data = serialize_entity(game, packet.data)
 			else:
