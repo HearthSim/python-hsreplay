@@ -13,15 +13,17 @@ class HSReplayDocument:
 		return cls.from_parser(parser, build)
 
 	@classmethod
-	def from_parser(cls, parser, build=None):
+	def from_packet_tree(cls, packet_tree, build=None):
 		ret = cls(build)
 		ret._update_document()
-
-		for game in parser.games:
-			gamenode = game_to_xml(game)
-			ret.games.append(gamenode)
-
+		for tree in packet_tree:
+			game = game_to_xml(tree)
+			ret.games.append(game)
 		return ret
+
+	@classmethod
+	def from_parser(cls, parser, build=None):
+		return cls.from_packet_tree(parser.games)
 
 	@classmethod
 	def from_xml_file(cls, fp):
