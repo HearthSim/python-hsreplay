@@ -235,7 +235,10 @@ class ChangeEntityNode(Node):
 	packet_class = packets.ChangeEntity
 
 	def export(self):
-		return self.packet_class(self.ts, self.id, self.cardID)
+		packet = self.packet_class(self.ts, self.entity, self.cardID)
+		for node in self.nodes:
+			packet.tags.append(node.export())
+		return packet
 
 
 ##
@@ -332,7 +335,10 @@ class SubOptionNode(Node):
 	def export(self, id):
 		optype = "subOption"
 		type = None
-		return self.packet_class(self.ts, self.entity, id, type, optype)
+		packet = self.packet_class(self.ts, self.entity, id, type, optype)
+		for i, node in enumerate(self.nodes):
+			packet.options.append(node.export(i))
+		return packet
 
 
 class OptionTargetNode(Node):
