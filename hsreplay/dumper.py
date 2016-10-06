@@ -53,7 +53,7 @@ def add_packets_recursive(packets, entity_element):
 				entity_id = serialize_entity(player.entity)
 				player_element = PlayerNode(
 					ts, entity_id, player.player_id,
-					player.hi, player.lo, ""
+					player.hi, player.lo, player.name
 				)
 				entity_element.append(player_element)
 				add_initial_tags(ts, player, player_element)
@@ -147,6 +147,7 @@ def game_to_xml(tree, game_meta=None, player_meta=None, decks=None):
 
 	# Set the player names
 	for player in players:
-		player.name = tree.manager.get_player_by_id(player.id).name
+		if not player.name:
+			player.name = tree.manager.get_player_by_id(player.id).name
 
 	return game_element
