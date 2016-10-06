@@ -1,4 +1,4 @@
-from hsreplay import DTD_VERSION
+from . import DTD_VERSION
 from .dumper import game_to_xml, parse_log
 from .elements import GameNode
 from .utils import ElementTree, toxml
