@@ -14,19 +14,30 @@ def main():
 	for filename in args.files:
 		with open(filename) as f:
 			doc_in = HSReplayDocument.from_log_file(f, date=default_date)
-			xml_in = doc_in.to_xml()
+			xml_in = doc_in.to_xml(pretty=True)
 			xml_file_in = BytesIO(xml_in.encode("utf-8"))
 			doc_out = HSReplayDocument.from_xml_file(xml_file_in)
-			xml_out = doc_out.to_xml()
+			xml_out = doc_out.to_xml(pretty=True)
 
-			with open("in.xml", "w") as f:
-				f.write(xml_in)
+			if xml_in != xml_out:
+				with open("in.xml", "w") as f, open("out.xml", "w") as f2:
+					f.write(xml_in)
+					f2.write(xml_out)
+				raise Exception("%r: Log -> XML -> Document -> XML: FAIL" % (filename))
+			else:
+				print("%r: Log -> XML -> Document -> XML: SUCCESS" % (filename))
 
-			with open("out.xml", "w") as f:
-				f.write(xml_out)
+			packet_tree_in = doc_in.to_packet_tree()
+			doc_out2 = HSReplayDocument.from_packet_tree(packet_tree_in)
+			xml_out2 = doc_out2.to_xml(pretty=True)
 
-			assert xml_in == xml_out
-			print("OK!")
+			if xml_in != xml_out2:
+				with open("in.xml", "w") as f, open("out2.xml", "w") as f2:
+					f.write(xml_in)
+					f2.write(xml_out2)
+				raise Exception("%r: Document -> PacketTree -> Document: FAIL" % (filename))
+			else:
+				print("%r: Document -> PacketTree -> Document: SUCCESS" % (filename))
 
 
 if __name__ == "__main__":
