@@ -62,6 +62,13 @@ class HSReplayDocument:
 		for game in self.games:
 			self.root.append(game.xml())
 
+	def to_packet_tree(self):
+		self._update_document()
+		ret = []
+		for game in self.games:
+			ret.append(game.export())
+		return ret
+
 	def to_xml(self, pretty=False):
 		self._update_document()
 		return toxml(self.root, pretty=pretty)

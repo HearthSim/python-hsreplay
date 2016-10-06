@@ -1,4 +1,5 @@
 from dateutil.parser import parse as parse_timestamp
+from hearthstone.hslog import packets
 from .utils import ElementTree
 
 
@@ -68,16 +69,36 @@ class GameNode(Node):
 	tagname = "Game"
 	attributes = ("id", "reconnecting")
 	timestamp = True
+	packet_class = packets.PacketTree
 
 	@property
 	def players(self):
 		return self.nodes[1:3]
+
+	def export(self):
+		tree = self.packet_class(self.ts)
+		create_game = self.nodes[0].export()
+
+		for player in self.players:
+			create_game.players.append(player.export())
+		tree.packets.append(create_game)
+
+		for node in self.nodes[3:]:
+			tree.packets.append(node.export())
+		return tree
 
 
 class GameEntityNode(Node):
 	tagname = "GameEntity"
 	attributes = ("id", )
 	timestamp = False
+	packet_class = packets.CreateGame
+
+	def export(self):
+		packet = self.packet_class(self.ts, self.id)
+		for node in self.nodes:
+			packet.tags.append(node.export())
+		return packet
 
 
 class PlayerNode(Node):
@@ -87,6 +108,17 @@ class PlayerNode(Node):
 		"rank", "legendRank", "cardback"
 	)
 	timestamp = False
+	packet_class = packets.CreateGame.Player
+
+	def export(self):
+		packet = self.packet_class(
+			self.ts, self.id, self.playerID,
+			self.accountHi, self.accountLo
+		)
+		packet.name = self.name
+		for node in self.nodes:
+			packet.tags.append(node.export())
+		return packet
 
 	def xml(self):
 		ret = super(PlayerNode, self).xml()
@@ -106,24 +138,56 @@ class FullEntityNode(Node):
 	tagname = "FullEntity"
 	attributes = ("id", "cardID")
 	timestamp = False
+	packet_class = packets.FullEntity
+
+	def export(self):
+		packet = self.packet_class(self.ts, self.id, self.cardID)
+		for node in self.nodes:
+			packet.tags.append(node.export())
+		return packet
 
 
 class ShowEntityNode(Node):
 	tagname = "ShowEntity"
 	attributes = ("entity", "cardID")
 	timestamp = False
+	packet_class = packets.ShowEntity
+
+	def export(self):
+		packet = self.packet_class(self.ts, self.entity, self.cardID)
+		for node in self.nodes:
+			packet.tags.append(node.export())
+		return packet
 
 
 class BlockNode(Node):
 	tagname = "Block"
 	attributes = ("entity", "type", "index", "target")
 	timestamp = True
+	packet_class = packets.Block
+
+	def export(self):
+		packet = self.packet_class(
+			self.ts, self.entity, self.type, self.index,
+			None, None, self.target
+		)
+		for node in self.nodes:
+			packet.packets.append(node.export())
+		packet.ended = True
+		return packet
 
 
 class MetaDataNode(Node):
 	tagname = "MetaData"
 	attributes = ("meta", "data", "info")
 	timestamp = False
+	packet_class = packets.MetaData
+
+	def export(self):
+		packet = self.packet_class(self.ts, self.meta, self.data, self.info)
+		for node in self.nodes:
+			packet.info.append(node.export())
+		return packet
 
 
 class MetaDataInfoNode(Node):
@@ -131,29 +195,47 @@ class MetaDataInfoNode(Node):
 	attributes = ("index", "entity")
 	timestamp = False
 
+	def export(self):
+		return int(self.entity)
+
 
 class TagNode(Node):
 	tagname = "Tag"
 	attributes = ("tag", "value")
 	timestamp = False
 
+	def export(self):
+		return (int(self.tag), int(self.value))
+
 
 class TagChangeNode(Node):
 	tagname = "TagChange"
 	attributes = ("entity", "tag", "value")
 	timestamp = False
+	packet_class = packets.TagChange
+
+	def export(self):
+		return self.packet_class(self.ts, self.entity, self.tag, self.value)
 
 
 class HideEntityNode(Node):
 	tagname = "HideEntity"
 	attributes = ("entity", "zone")
 	timestamp = True
+	packet_class = packets.HideEntity
+
+	def export(self):
+		return self.packet_class(self.ts, self.entity, self.zone)
 
 
 class ChangeEntityNode(Node):
 	tagname = "ChangeEntity"
 	attributes = ("entity", "cardID")
 	timestamp = True
+	packet_class = packets.ChangeEntity
+
+	def export(self):
+		return self.packet_class(self.ts, self.id, self.cardID)
 
 
 ##
@@ -163,6 +245,17 @@ class ChoicesNode(Node):
 	tagname = "Choices"
 	attributes = ("entity", "id", "taskList", "type", "min", "max", "source")
 	timestamp = True
+	packet_class = packets.Choices
+
+	def export(self):
+		packet = self.packet_class(
+			self.ts, self.entity, self.id, self.taskList,
+			self.type, self.min, self.max
+		)
+		packet.source = self.source
+		for node in self.nodes:
+			packet.choices.append(node.export())
+		return packet
 
 
 class ChoiceNode(Node):
@@ -170,17 +263,34 @@ class ChoiceNode(Node):
 	attributes = ("index", "entity")
 	timestamp = False
 
+	def export(self):
+		return int(self.entity)
+
 
 class ChosenEntitiesNode(Node):
 	tagname = "ChosenEntities"
 	attributes = ("entity", "id")
 	timestamp = True
+	packet_class = packets.ChosenEntities
+
+	def export(self):
+		packet = self.packet_class(self.ts, self.entity, self.id)
+		for node in self.nodes:
+			packet.choices.append(node.export())
+		return packet
 
 
 class SendChoicesNode(Node):
 	tagname = "SendChoices"
 	attributes = ("id", "type")
 	timestamp = True
+	packet_class = packets.SendChoices
+
+	def export(self):
+		packet = self.packet_class(self.ts, self.id, self.type)
+		for node in self.nodes:
+			packet.choices.append(node.export())
+		return packet
 
 
 ##
@@ -190,27 +300,58 @@ class OptionsNode(Node):
 	tagname = "Options"
 	attributes = ("id", )
 	timestamp = True
+	packet_class = packets.Options
+
+	def export(self):
+		packet = self.packet_class(self.ts, self.id)
+		for i, node in enumerate(self.nodes):
+			packet.options.append(node.export(i))
+		return packet
 
 
 class OptionNode(Node):
 	tagname = "Option"
 	attributes = ("index", "entity", "type")
 	timestamp = False
+	packet_class = packets.Option
+
+	def export(self, id):
+		optype = "option"
+		packet = self.packet_class(self.ts, self.entity, id, self.type, optype)
+		for i, node in enumerate(self.nodes):
+			packet.options.append(node.export(i))
+		return packet
 
 
 class SubOptionNode(Node):
 	tagname = "SubOption"
 	attributes = ("index", "entity")
 	timestamp = False
+	packet_class = packets.Option
+
+	def export(self, id):
+		optype = "subOption"
+		type = None
+		return self.packet_class(self.ts, self.entity, id, type, optype)
 
 
 class OptionTargetNode(Node):
 	tagname = "Target"
 	attributes = ("index", "entity")
 	timestamp = False
+	packet_class = packets.Option
+
+	def export(self, id):
+		optype = "target"
+		type = None
+		return self.packet_class(self.ts, self.entity, id, type, optype)
 
 
 class SendOptionNode(Node):
 	tagname = "SendOption"
 	attributes = ("option", "subOption", "target", "position")
 	timestamp = True
+	packet_class = packets.SendOption
+
+	def export(self):
+		return self.packet_class(self.ts, self.option, self.subOption, self.target, self.position)
