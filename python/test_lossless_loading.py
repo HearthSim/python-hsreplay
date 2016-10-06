@@ -2,7 +2,7 @@
 import sys
 from argparse import ArgumentParser
 from datetime import datetime
-from io import StringIO
+from io import BytesIO
 from hsreplay.document import HSReplayDocument
 
 
@@ -15,7 +15,7 @@ def main():
 		with open(filename) as f:
 			doc_in = HSReplayDocument.from_log_file(f, date=default_date)
 			xml_in = doc_in.to_xml()
-			xml_file_in = StringIO(xml_in)
+			xml_file_in = BytesIO(xml_in.encode("utf-8"))
 			doc_out = HSReplayDocument.from_xml_file(xml_file_in)
 			xml_out = doc_out.to_xml()
 
