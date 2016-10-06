@@ -58,9 +58,7 @@ class HSReplayDocument:
 		return self.root
 
 	def _update_document(self):
-		if self.root is None:
-			self._create_document()
-
+		self._create_document()
 		for game in self.games:
 			self.root.append(game.xml())
 
