@@ -23,7 +23,7 @@ class HSReplayDocument:
 
 	@classmethod
 	def from_parser(cls, parser, build=None):
-		return cls.from_packet_tree(parser.games)
+		return cls.from_packet_tree(parser.games, build)
 
 	@classmethod
 	def from_xml_file(cls, fp):
