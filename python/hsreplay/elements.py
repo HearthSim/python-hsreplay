@@ -95,7 +95,7 @@ class GameEntityNode(Node):
 	packet_class = packets.CreateGame
 
 	def export(self):
-		packet = self.packet_class(self.ts, self.id)
+		packet = self.packet_class(self.ts, int(self.id))
 		for node in self.nodes:
 			packet.tags.append(node.export())
 		return packet
@@ -112,8 +112,8 @@ class PlayerNode(Node):
 
 	def export(self):
 		packet = self.packet_class(
-			self.ts, self.id, self.playerID,
-			self.accountHi, self.accountLo
+			self.ts, int(self.id), int(self.playerID),
+			int(self.accountHi), int(self.accountLo)
 		)
 		packet.name = self.name
 		for node in self.nodes:
@@ -141,7 +141,7 @@ class FullEntityNode(Node):
 	packet_class = packets.FullEntity
 
 	def export(self):
-		packet = self.packet_class(self.ts, self.id, self.cardID)
+		packet = self.packet_class(self.ts, int(self.id), self.cardID)
 		for node in self.nodes:
 			packet.tags.append(node.export())
 		return packet
@@ -154,7 +154,7 @@ class ShowEntityNode(Node):
 	packet_class = packets.ShowEntity
 
 	def export(self):
-		packet = self.packet_class(self.ts, self.entity, self.cardID)
+		packet = self.packet_class(self.ts, int(self.entity), self.cardID)
 		for node in self.nodes:
 			packet.tags.append(node.export())
 		return packet
@@ -167,9 +167,10 @@ class BlockNode(Node):
 	packet_class = packets.Block
 
 	def export(self):
+		index = int(self.index) if self.index is not None else -1
 		packet = self.packet_class(
-			self.ts, self.entity, self.type, self.index,
-			None, None, self.target
+			self.ts, int(self.entity or 0), int(self.type), index,
+			None, None, int(self.target or 0)
 		)
 		for node in self.nodes:
 			packet.packets.append(node.export())
@@ -184,7 +185,9 @@ class MetaDataNode(Node):
 	packet_class = packets.MetaData
 
 	def export(self):
-		packet = self.packet_class(self.ts, self.meta, self.data, self.info)
+		packet = self.packet_class(
+			self.ts, int(self.meta), int(self.data or 0), int(self.info)
+		)
 		for node in self.nodes:
 			packet.info.append(node.export())
 		return packet
@@ -215,7 +218,7 @@ class TagChangeNode(Node):
 	packet_class = packets.TagChange
 
 	def export(self):
-		return self.packet_class(self.ts, self.entity, self.tag, self.value)
+		return self.packet_class(self.ts, int(self.entity), int(self.tag), int(self.value))
 
 
 class HideEntityNode(Node):
@@ -225,7 +228,7 @@ class HideEntityNode(Node):
 	packet_class = packets.HideEntity
 
 	def export(self):
-		return self.packet_class(self.ts, self.entity, self.zone)
+		return self.packet_class(self.ts, int(self.entity), int(self.zone))
 
 
 class ChangeEntityNode(Node):
@@ -235,7 +238,7 @@ class ChangeEntityNode(Node):
 	packet_class = packets.ChangeEntity
 
 	def export(self):
-		packet = self.packet_class(self.ts, self.entity, self.cardID)
+		packet = self.packet_class(self.ts, int(self.entity), self.cardID)
 		for node in self.nodes:
 			packet.tags.append(node.export())
 		return packet
@@ -251,9 +254,10 @@ class ChoicesNode(Node):
 	packet_class = packets.Choices
 
 	def export(self):
+		taskList = int(self.taskList) if self.taskList else None
 		packet = self.packet_class(
-			self.ts, self.entity, self.id, self.taskList,
-			self.type, self.min, self.max
+			self.ts, int(self.entity or 0), int(self.id), taskList,
+			int(self.type), int(self.min), int(self.max)
 		)
 		packet.source = self.source
 		for node in self.nodes:
@@ -277,7 +281,7 @@ class ChosenEntitiesNode(Node):
 	packet_class = packets.ChosenEntities
 
 	def export(self):
-		packet = self.packet_class(self.ts, self.entity, self.id)
+		packet = self.packet_class(self.ts, int(self.entity), int(self.id))
 		for node in self.nodes:
 			packet.choices.append(node.export())
 		return packet
@@ -290,7 +294,7 @@ class SendChoicesNode(Node):
 	packet_class = packets.SendChoices
 
 	def export(self):
-		packet = self.packet_class(self.ts, self.id, self.type)
+		packet = self.packet_class(self.ts, int(self.id), int(self.type))
 		for node in self.nodes:
 			packet.choices.append(node.export())
 		return packet
@@ -306,7 +310,7 @@ class OptionsNode(Node):
 	packet_class = packets.Options
 
 	def export(self):
-		packet = self.packet_class(self.ts, self.id)
+		packet = self.packet_class(self.ts, int(self.id))
 		for i, node in enumerate(self.nodes):
 			packet.options.append(node.export(i))
 		return packet
@@ -320,7 +324,7 @@ class OptionNode(Node):
 
 	def export(self, id):
 		optype = "option"
-		packet = self.packet_class(self.ts, self.entity, id, self.type, optype)
+		packet = self.packet_class(self.ts, int(self.entity or 0), id, int(self.type), optype)
 		for i, node in enumerate(self.nodes):
 			packet.options.append(node.export(i))
 		return packet
@@ -335,7 +339,7 @@ class SubOptionNode(Node):
 	def export(self, id):
 		optype = "subOption"
 		type = None
-		packet = self.packet_class(self.ts, self.entity, id, type, optype)
+		packet = self.packet_class(self.ts, int(self.entity), id, type, optype)
 		for i, node in enumerate(self.nodes):
 			packet.options.append(node.export(i))
 		return packet
@@ -350,7 +354,7 @@ class OptionTargetNode(Node):
 	def export(self, id):
 		optype = "target"
 		type = None
-		return self.packet_class(self.ts, self.entity, id, type, optype)
+		return self.packet_class(self.ts, int(self.entity), id, type, optype)
 
 
 class SendOptionNode(Node):
@@ -360,4 +364,6 @@ class SendOptionNode(Node):
 	packet_class = packets.SendOption
 
 	def export(self):
-		return self.packet_class(self.ts, self.option, self.subOption, self.target, self.position)
+		return self.packet_class(
+			self.ts, int(self.option), int(self.subOption), int(self.target), int(self.position)
+		)
