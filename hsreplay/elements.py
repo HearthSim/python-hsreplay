@@ -7,6 +7,7 @@ def node_for_tagname(tag):
 	for k, v in globals().items():
 		if k.endswith("Node") and v.tagname == tag:
 			return v
+	raise ValueError("No matching node for tag %r" % (tag))
 
 
 class Node(object):
