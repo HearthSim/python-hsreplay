@@ -118,7 +118,8 @@ class PlayerNode(Node):
 		)
 		packet.name = self.name
 		for node in self.nodes:
-			packet.tags.append(node.export())
+			if node.tagname == "Tag":
+				packet.tags.append(node.export())
 		return packet
 
 	def xml(self):
