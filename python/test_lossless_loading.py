@@ -16,12 +16,15 @@ def main():
 	default_date = datetime.now()
 	for filename in args.files:
 		with open(filename) as f:
-			doc_in = HSReplayDocument.from_log_file(f, date=default_date, build=BUILD)
-			xml_in = doc_in.to_xml(pretty=True)
+			if filename.endswith(".xml"):
+				xml_in = f.read()
+			else:
+				doc_in = HSReplayDocument.from_log_file(f, date=default_date, build=BUILD)
+				xml_in = doc_in.to_xml(pretty=True)
 			xml_file_in = BytesIO(xml_in.encode("utf-8"))
 			doc_out = HSReplayDocument.from_xml_file(xml_file_in)
+			assert doc_out.build, "Can't find build in output file"
 			xml_out = doc_out.to_xml(pretty=True)
-			assert 'build="%i"' % (BUILD) in xml_out, "Can't find build in output file!"
 
 			if xml_in != xml_out:
 				with open("in.xml", "w") as f, open("out.xml", "w") as f2:
@@ -31,8 +34,8 @@ def main():
 			else:
 				print("%r: Log -> XML -> Document -> XML: SUCCESS" % (filename))
 
-			packet_tree_in = doc_in.to_packet_tree()
-			doc_out2 = HSReplayDocument.from_packet_tree(packet_tree_in, build=BUILD)
+			packet_tree_in = doc_out.to_packet_tree()
+			doc_out2 = HSReplayDocument.from_packet_tree(packet_tree_in, build=doc_out.build)
 			xml_out2 = doc_out2.to_xml(pretty=True)
 
 			if xml_in != xml_out2:
