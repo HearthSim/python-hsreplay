@@ -135,6 +135,20 @@ class PlayerNode(Node):
 		return ret
 
 
+class DeckNode(Node):
+	tagname = "Deck"
+	attributes = ()
+	timestamp = False
+	packet_class = None
+
+
+class CardNode(Node):
+	tagname = "Card"
+	attributes = ("id", "premium")
+	timestamp = False
+	packet_class = None
+
+
 class FullEntityNode(Node):
 	tagname = "FullEntity"
 	attributes = ("id", "cardID")
