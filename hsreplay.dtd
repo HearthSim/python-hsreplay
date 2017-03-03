@@ -108,8 +108,8 @@
  ! target: The id of the entity being targeted (0 if not provided)
  ! type: A PowSubType enum value representing the type of block
 -->
-<!ELEMENT Action (Block | ChangeEntity | FullEntity | HideEntity | TagChange | MetaData | ShowEntity | Choices | ChosenEntities | SendChoices)*>
-<!ATTLIST Action
+<!ELEMENT Block (Block | ChangeEntity | FullEntity | HideEntity | TagChange | MetaData | ShowEntity | Choices | ChosenEntities | SendChoices)*>
+<!ATTLIST Block
 	entity %entity; #REQUIRED
 	index NMTOKEN "-1"
 	target %entity; "0"
