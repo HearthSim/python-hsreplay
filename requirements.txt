@@ -1,1 +1,0 @@
--e git+https://github.com/HearthSim/python-hearthstone.git#egg=hearthstone
