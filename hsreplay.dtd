@@ -304,6 +304,8 @@
 	entity %entity; #IMPLIED
 	index NMTOKEN #REQUIRED
 	type %enumValue; #REQUIRED
+	error %enumValue; #IMPLIED
+	errorParam NMTOKEN #IMPLIED
 	ts %timestamp; #IMPLIED>
 
 <!--
@@ -314,6 +316,8 @@
 <!ATTLIST SubOption
 	entity %entity; #REQUIRED
 	index NMTOKEN #REQUIRED
+	error %enumValue; #IMPLIED
+	errorParam NMTOKEN #IMPLIED
 	ts %timestamp; #IMPLIED>
 
 <!--
@@ -325,6 +329,8 @@
 <!ATTLIST Target
 	entity %entity; #REQUIRED
 	index NMTOKEN #REQUIRED
+	error %enumValue; #IMPLIED
+	errorParam NMTOKEN #IMPLIED
 	ts %timestamp; #IMPLIED>
 
 <!--
