@@ -334,13 +334,16 @@ class OptionsNode(Node):
 
 class OptionNode(Node):
 	tagname = "Option"
-	attributes = ("index", "entity", "type")
+	attributes = ("index", "entity", "error", "errorParam", "type")
 	timestamp = False
 	packet_class = packets.Option
 
 	def export(self, id):
 		optype = "option"
-		packet = self.packet_class(self.ts, int(self.entity or 0), id, int(self.type), optype)
+		packet = self.packet_class(
+			self.ts, int(self.entity or 0), id, int(self.type), optype,
+			self.error, self.errorParam
+		)
 		for i, node in enumerate(self.nodes):
 			packet.options.append(node.export(i))
 		return packet
@@ -348,14 +351,17 @@ class OptionNode(Node):
 
 class SubOptionNode(Node):
 	tagname = "SubOption"
-	attributes = ("index", "entity")
+	attributes = ("index", "entity", "error", "errorParam")
 	timestamp = False
 	packet_class = packets.Option
 
 	def export(self, id):
 		optype = "subOption"
 		type = None
-		packet = self.packet_class(self.ts, int(self.entity), id, type, optype)
+		packet = self.packet_class(
+			self.ts, int(self.entity), id, type, optype,
+			self.error, self.errorParam
+		)
 		for i, node in enumerate(self.nodes):
 			packet.options.append(node.export(i))
 		return packet
@@ -363,14 +369,18 @@ class SubOptionNode(Node):
 
 class OptionTargetNode(Node):
 	tagname = "Target"
-	attributes = ("index", "entity")
+	attributes = ("index", "entity", "error", "errorParam")
 	timestamp = False
 	packet_class = packets.Option
 
 	def export(self, id):
 		optype = "target"
 		type = None
-		return self.packet_class(self.ts, int(self.entity), id, type, optype)
+		packet = self.packet_class(
+			self.ts, int(self.entity), id, type, optype,
+			self.error, self.errorParam
+		)
+		return packet
 
 
 class SendOptionNode(Node):
