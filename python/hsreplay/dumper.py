@@ -33,7 +33,12 @@ def add_options(ts, packet, packet_element):
 			cls = SubOptionNode
 		else:
 			raise NotImplementedError("Unhandled option type: %r" % (option.optype))
-		entity = serialize_entity(option.entity)
+		try:
+			entity = serialize_entity(option.entity)
+		except RuntimeError:
+			# This is a hack to ensure we can serialize games from Hearthstone 18336.
+			# Real names are shoved in the options, not used anywhere else...
+			entity = None
 		option_element = cls(ts, i, entity, option.error, option.error_param, option.type)
 		add_options(ts, option, option_element)
 		packet_element.append(option_element)
