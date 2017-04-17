@@ -1,7 +1,7 @@
 import logging
 from hearthstone import hslog
 from hearthstone.enums import MetaDataType
-from .elements import *
+from . import elements
 
 
 def serialize_entity(entity):
@@ -13,24 +13,24 @@ def serialize_entity(entity):
 
 def add_initial_tags(ts, packet, packet_element):
 	for tag, value in packet.tags:
-		tag_element = TagNode(ts, tag, value)
+		tag_element = elements.TagNode(ts, tag, value)
 		packet_element.append(tag_element)
 
 
 def add_choices(ts, packet, packet_element):
 	for i, entity_id in enumerate(packet.choices):
-		choice_element = ChoiceNode(ts, i, entity_id)
+		choice_element = elements.ChoiceNode(ts, i, entity_id)
 		packet_element.append(choice_element)
 
 
 def add_options(ts, packet, packet_element):
 	for i, option in enumerate(packet.options):
 		if option.optype == "option":
-			cls = OptionNode
+			cls = elements.OptionNode
 		elif option.optype == "target":
-			cls = OptionTargetNode
+			cls = elements.OptionTargetNode
 		elif option.optype == "subOption":
-			cls = SubOptionNode
+			cls = elements.SubOptionNode
 		else:
 			raise NotImplementedError("Unhandled option type: %r" % (option.optype))
 		try:
@@ -51,12 +51,12 @@ def add_packets_recursive(packets, entity_element):
 		ts = packet.ts
 
 		if isinstance(packet, hslog.packets.CreateGame):
-			packet_element = GameEntityNode(ts, _ent)
+			packet_element = elements.GameEntityNode(ts, _ent)
 			add_initial_tags(ts, packet, packet_element)
 			entity_element.append(packet_element)
 			for player in packet.players:
 				entity_id = serialize_entity(player.entity)
-				player_element = PlayerNode(
+				player_element = elements.PlayerNode(
 					ts, entity_id, player.player_id,
 					player.hi, player.lo, player.name
 				)
@@ -64,7 +64,7 @@ def add_packets_recursive(packets, entity_element):
 				add_initial_tags(ts, player, player_element)
 			continue
 		elif isinstance(packet, hslog.packets.Block):
-			packet_element = BlockNode(
+			packet_element = elements.BlockNode(
 				ts, _ent, packet.type,
 				packet.index if packet.index != -1 else None,
 				serialize_entity(packet.target)
@@ -79,44 +79,44 @@ def add_packets_recursive(packets, entity_element):
 				data = serialize_entity(packet.data)
 			else:
 				data = packet.data
-			packet_element = MetaDataNode(
+			packet_element = elements.MetaDataNode(
 				ts, packet.meta, data, packet.count
 			)
 			for i, info in enumerate(packet.info):
-				e = MetaDataInfoNode(packet.ts, i, info)
+				e = elements.MetaDataInfoNode(packet.ts, i, info)
 				packet_element.append(e)
 		elif isinstance(packet, hslog.packets.TagChange):
-			packet_element = TagChangeNode(
+			packet_element = elements.TagChangeNode(
 				packet.ts, _ent, packet.tag, packet.value
 			)
 		elif isinstance(packet, hslog.packets.HideEntity):
-			packet_element = HideEntityNode(ts, _ent, packet.zone)
+			packet_element = elements.HideEntityNode(ts, _ent, packet.zone)
 		elif isinstance(packet, hslog.packets.ShowEntity):
-			packet_element = ShowEntityNode(ts, _ent, packet.card_id)
+			packet_element = elements.ShowEntityNode(ts, _ent, packet.card_id)
 			add_initial_tags(ts, packet, packet_element)
 		elif isinstance(packet, hslog.packets.FullEntity):
-			packet_element = FullEntityNode(ts, _ent, packet.card_id)
+			packet_element = elements.FullEntityNode(ts, _ent, packet.card_id)
 			add_initial_tags(ts, packet, packet_element)
 		elif isinstance(packet, hslog.packets.ChangeEntity):
-			packet_element = ChangeEntityNode(ts, _ent, packet.card_id)
+			packet_element = elements.ChangeEntityNode(ts, _ent, packet.card_id)
 			add_initial_tags(ts, packet, packet_element)
 		elif isinstance(packet, hslog.packets.Choices):
-			packet_element = ChoicesNode(
+			packet_element = elements.ChoicesNode(
 				ts, _ent, packet.id, packet.tasklist, packet.type,
 				packet.min, packet.max, serialize_entity(packet.source)
 			)
 			add_choices(ts, packet, packet_element)
 		elif isinstance(packet, hslog.packets.SendChoices):
-			packet_element = SendChoicesNode(ts, packet.id, packet.type)
+			packet_element = elements.SendChoicesNode(ts, packet.id, packet.type)
 			add_choices(ts, packet, packet_element)
 		elif isinstance(packet, hslog.packets.ChosenEntities):
-			packet_element = ChosenEntitiesNode(ts, _ent, packet.id)
+			packet_element = elements.ChosenEntitiesNode(ts, _ent, packet.id)
 			add_choices(ts, packet, packet_element)
 		elif isinstance(packet, hslog.packets.Options):
-			packet_element = OptionsNode(ts, packet.id)
+			packet_element = elements.OptionsNode(ts, packet.id)
 			add_options(ts, packet, packet_element)
 		elif isinstance(packet, hslog.packets.SendOption):
-			packet_element = SendOptionNode(
+			packet_element = elements.SendOptionNode(
 				ts, packet.option, packet.suboption, packet.target, packet.position
 			)
 		else:
@@ -135,7 +135,7 @@ def parse_log(fp, processor, date):
 
 def game_to_xml(tree, game_meta=None, player_meta=None, decks=None):
 	game_tree = tree.export()
-	game_element = GameNode(tree.ts)
+	game_element = elements.GameNode(tree.ts)
 	add_packets_recursive(tree.packets, game_element)
 	players = game_element.players
 
