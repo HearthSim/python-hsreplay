@@ -1,4 +1,5 @@
 # python-hsreplay
+[![Build Status](https://api.travis-ci.org/HearthSim/HSReplay.svg?branch=master)](https://travis-ci.org/HearthSim/HSReplay)
 
 A python module for HSReplay support.
 
