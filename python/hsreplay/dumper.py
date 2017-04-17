@@ -134,7 +134,7 @@ def parse_log(fp, processor, date):
 
 
 def game_to_xml(tree, game_meta=None, player_meta=None, decks=None):
-	game_tree = tree.export()
+	# game_tree = tree.export()
 	game_element = elements.GameNode(tree.ts)
 	add_packets_recursive(tree.packets, game_element)
 	players = game_element.players
