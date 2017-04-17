@@ -65,6 +65,9 @@ class Node(object):
 
 		return element
 
+	def to_xml_string(self):
+		return ElementTree.tostring(self.xml()).decode("utf-8")
+
 
 class GameNode(Node):
 	tagname = "Game"
