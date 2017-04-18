@@ -3,7 +3,7 @@
 
 A python module for HSReplay support.
 
-https://hearthsim.info/hsreplay/
+<https://hearthsim.info/hsreplay/>
 
 
 ## Installation
@@ -12,7 +12,8 @@ The library is available on PyPI. `pip install hsreplay` will install it.
 
 Dependencies:
 
-* [`hearthstone`](https://github.com/hearthsim/python-hearthstone) for log parsing and more
+* [`hearthstone`](https://github.com/HearthSim/python-hearthstone)
+* [`hslog`](https://github.com/HearthSim/python-hslog)
 * `lxml` (optional) for faster XML parsing and writing. Will use `xml.etree` if not available.
 * `aniso8601` or `dateutil` for timestamp parsing
 
