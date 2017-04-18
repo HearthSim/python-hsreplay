@@ -1,4 +1,4 @@
-from hearthstone.hslog import packets
+from hslog import packets
 from .utils import ElementTree, parse_time
 
 
