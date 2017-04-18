@@ -1,6 +1,5 @@
-from dateutil.parser import parse as parse_timestamp
 from hearthstone.hslog import packets
-from .utils import ElementTree
+from .utils import ElementTree, parse_time
 
 
 def node_for_tagname(tag):
@@ -31,7 +30,7 @@ class Node(object):
 			))
 		ts = xml.attrib.get("ts")
 		if ts:
-			ts = parse_timestamp(ts)
+			ts = parse_time(ts)
 		ret = cls(ts)
 		for element in xml:
 			ecls = node_for_tagname(element.tag)

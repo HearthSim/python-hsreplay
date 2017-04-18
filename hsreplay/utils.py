@@ -4,8 +4,15 @@ try:
 except ImportError:
 	from xml.etree import ElementTree
 	LXML = False
+try:
+	from aniso8601 import parse_time
+except ImportError:
+	from dateutil.parser import parse as parse_time
 from xml.dom import minidom
 from . import SYSTEM_DTD
+
+
+__all__ = ["ElementTree", "parse_time", "pretty_xml", "toxml"]
 
 
 def toxml(root, pretty):
