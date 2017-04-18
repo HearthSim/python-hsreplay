@@ -14,7 +14,7 @@ Dependencies:
 
 * [`hearthstone`](https://github.com/hearthsim/python-hearthstone) for log parsing and more
 * `lxml` (optional) for faster XML parsing and writing. Will use `xml.etree` if not available.
-* `dateutil` for timestamp parsing
+* `aniso8601` or `dateutil` for timestamp parsing
 
 
 ## Usage
