@@ -1,5 +1,5 @@
 from hslog import packets
-from .utils import ElementTree, parse_time
+from .utils import ElementTree, parse_datetime
 
 
 def node_for_tagname(tag):
@@ -30,7 +30,7 @@ class Node(object):
 			))
 		ts = xml.attrib.get("ts")
 		if ts:
-			ts = parse_time(ts)
+			ts = parse_datetime(ts)
 		ret = cls(ts)
 		for element in xml:
 			ecls = node_for_tagname(element.tag)
