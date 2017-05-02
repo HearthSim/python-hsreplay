@@ -1,5 +1,7 @@
 ## HSReplay
 
+[![Join the chat at https://gitter.im/HearthSim/HSReplay](https://badges.gitter.im/HearthSim/HSReplay.svg)](https://gitter.im/HearthSim/HSReplay?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 HSReplay is a replay format for [Hearthstone](http://playhearthstone.com/).
 
 It is an XML-based format, with a structure closely mirroring that of the
