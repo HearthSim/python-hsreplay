@@ -72,7 +72,9 @@ def add_packets_recursive(packets, entity_element):
 			packet_element = elements.BlockNode(
 				ts, _ent, packet.type,
 				packet.index if packet.index != -1 else None,
-				serialize_entity(packet.target)
+				serialize_entity(packet.target),
+				packet.suboption if packet.suboption != -1 else None,
+				packet.trigger_keyword if packet.trigger_keyword else None
 			)
 			add_packets_recursive(packet.packets, packet_element)
 		elif isinstance(packet, MetaData):
