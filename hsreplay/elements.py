@@ -180,7 +180,7 @@ class ShowEntityNode(Node):
 
 class BlockNode(Node):
 	tagname = "Block"
-	attributes = ("entity", "type", "index", "target")
+	attributes = ("entity", "type", "index", "target", "subOption", "triggerKeyword")
 	timestamp = True
 	packet_class = packets.Block
 
@@ -188,7 +188,8 @@ class BlockNode(Node):
 		index = int(self.index) if self.index is not None else -1
 		packet = self.packet_class(
 			self.ts, int(self.entity or 0), int(self.type), index,
-			None, None, int(self.target or 0)
+			None, None, int(self.target or 0),
+			int(self.subOption), int(self.triggerKeyword)
 		)
 		for node in self.nodes:
 			packet.packets.append(node.export())
