@@ -94,7 +94,8 @@ def add_packets_recursive(packets, entity_element):
 				packet_element.append(e)
 		elif isinstance(packet, TagChange):
 			packet_element = elements.TagChangeNode(
-				packet.ts, _ent, packet.tag, packet.value
+				packet.ts, _ent, packet.tag, packet.value,
+				packet.has_change_def if packet.has_change_def else None
 			)
 		elif isinstance(packet, HideEntity):
 			packet_element = elements.HideEntityNode(ts, _ent, packet.zone)

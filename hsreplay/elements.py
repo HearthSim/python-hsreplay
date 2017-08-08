@@ -232,12 +232,19 @@ class TagNode(Node):
 
 class TagChangeNode(Node):
 	tagname = "TagChange"
-	attributes = ("entity", "tag", "value")
+	attributes = ("entity", "tag", "value", "hasChangeDef")
 	timestamp = False
 	packet_class = packets.TagChange
 
 	def export(self):
-		return self.packet_class(self.ts, int(self.entity), int(self.tag), int(self.value))
+		return self.packet_class(
+			self.ts, int(self.entity), int(self.tag), int(self.value),
+			self.has_change_def
+		)
+
+	@property
+	def has_change_def(self):
+		return True if self.hasChangeDef.lower() == "true" else False
 
 
 class HideEntityNode(Node):
