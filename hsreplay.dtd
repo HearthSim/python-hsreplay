@@ -107,6 +107,8 @@
  ! index: The index the block action is performed at (-1 if not provided)
  ! target: The id of the entity being targeted (0 if not provided)
  ! type: A PowSubType enum value representing the type of block
+ ! subOption: An option ID defaulting to 0 or -1 depending on the type of block
+ ! triggerKeyword: The GameTag which triggered this block (0 if not provided)
 -->
 <!ELEMENT Block (Block | ChangeEntity | FullEntity | HideEntity | TagChange | MetaData | ShowEntity | Choices | ChosenEntities | SendChoices)*>
 <!ATTLIST Block
@@ -114,6 +116,8 @@
 	index NMTOKEN "-1"
 	target %entity; "0"
 	type %enumValue; #REQUIRED
+	subOption NMTOKEN "-1"
+	triggerKeyword %gameTag; "0"
 	ts %timestamp; #IMPLIED>
 
 <!--
