@@ -189,7 +189,7 @@ class BlockNode(Node):
 		packet = self.packet_class(
 			self.ts, int(self.entity or 0), int(self.type), index,
 			None, None, int(self.target or 0),
-			int(self.subOption), int(self.triggerKeyword)
+			int(self.subOption) if self.subOption else None, int(self.triggerKeyword or 0)
 		)
 		for node in self.nodes:
 			packet.packets.append(node.export())
@@ -244,6 +244,8 @@ class TagChangeNode(Node):
 
 	@property
 	def has_change_def(self):
+		if not self.hasChangeDef:
+			return False
 		return True if self.hasChangeDef.lower() == "true" else False
 
 
