@@ -172,7 +172,7 @@ class ShowEntityNode(Node):
 	packet_class = packets.ShowEntity
 
 	def export(self):
-		packet = self.packet_class(self.ts, int(self.entity), self.cardID)
+		packet = self.packet_class(self.ts, int(self.entity or 0), self.cardID)
 		for node in self.nodes:
 			packet.tags.append(node.export())
 		return packet
@@ -218,7 +218,7 @@ class MetaDataInfoNode(Node):
 	timestamp = False
 
 	def export(self):
-		return int(self.entity)
+		return int(self.entity or 0)
 
 
 class TagNode(Node):
@@ -238,7 +238,7 @@ class TagChangeNode(Node):
 
 	def export(self):
 		return self.packet_class(
-			self.ts, int(self.entity), int(self.tag), int(self.value),
+			self.ts, int(self.entity or 0), int(self.tag), int(self.value),
 			self.has_change_def
 		)
 
@@ -256,7 +256,7 @@ class HideEntityNode(Node):
 	packet_class = packets.HideEntity
 
 	def export(self):
-		return self.packet_class(self.ts, int(self.entity), int(self.zone))
+		return self.packet_class(self.ts, int(self.entity or 0), int(self.zone))
 
 
 class ChangeEntityNode(Node):
@@ -266,7 +266,7 @@ class ChangeEntityNode(Node):
 	packet_class = packets.ChangeEntity
 
 	def export(self):
-		packet = self.packet_class(self.ts, int(self.entity), self.cardID)
+		packet = self.packet_class(self.ts, int(self.entity or 0), self.cardID)
 		for node in self.nodes:
 			packet.tags.append(node.export())
 		return packet
@@ -299,7 +299,7 @@ class ChoiceNode(Node):
 	timestamp = False
 
 	def export(self):
-		return int(self.entity)
+		return int(self.entity or 0)
 
 
 class ChosenEntitiesNode(Node):
@@ -309,7 +309,7 @@ class ChosenEntitiesNode(Node):
 	packet_class = packets.ChosenEntities
 
 	def export(self):
-		packet = self.packet_class(self.ts, int(self.entity), int(self.id))
+		packet = self.packet_class(self.ts, int(self.entity or 0), int(self.id))
 		for node in self.nodes:
 			packet.choices.append(node.export())
 		return packet
@@ -371,7 +371,7 @@ class SubOptionNode(Node):
 		optype = "subOption"
 		type = None
 		packet = self.packet_class(
-			self.ts, int(self.entity), id, type, optype,
+			self.ts, int(self.entity or 0), id, type, optype,
 			self.error, self.errorParam
 		)
 		for i, node in enumerate(self.nodes):
@@ -389,7 +389,7 @@ class OptionTargetNode(Node):
 		optype = "target"
 		type = None
 		packet = self.packet_class(
-			self.ts, int(self.entity), id, type, optype,
+			self.ts, int(self.entity or 0), id, type, optype,
 			self.error, self.errorParam
 		)
 		return packet
