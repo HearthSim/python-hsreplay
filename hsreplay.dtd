@@ -61,11 +61,15 @@
  ! id: The game's ID (as output by Net.log)
  ! type: A GameType (BnetGameType) enum value. Optional because it cannot be
  !       read directly from Power.log.
+ ! format: A FormatType enum value. Optional.
+ ! scenarioID: A Scenario ID value. Optional.
 -->
 <!ELEMENT Game (Block | ChangeEntity | Choices | ChosenEntities | FullEntity | GameEntity | HideEntity | Options | Player | SendChoices | SendOption | ShowEntity | TagChange)*>
 <!ATTLIST Game
 	id NMTOKEN #IMPLIED
 	type %enumValue; #IMPLIED
+	format %enumValue; #IMPLIED
+	scenarioID %enumValue; #IMPLIED
 	ts %timestamp; #IMPLIED>
 
 <!--
