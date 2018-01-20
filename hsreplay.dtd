@@ -59,8 +59,7 @@
 <!-- A Hearthstone game
  ! Contains a full or partial Hearthstone game. Begins on CREATE_GAME.
  ! id: The game's ID (as output by Net.log)
- ! type: A GameType (BnetGameType) enum value. Optional because it cannot be
- !       read directly from Power.log.
+ ! type: A GameType (GameType) enum value. Optional.
  ! format: A FormatType enum value. Optional.
  ! scenarioID: A Scenario ID value. Optional.
 -->
