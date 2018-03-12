@@ -70,7 +70,7 @@ class Node(object):
 
 class GameNode(Node):
 	tagname = "Game"
-	attributes = ("id", "reconnecting", "type")
+	attributes = ("id", "type", "format", "scenarioID", "reconnecting")
 	timestamp = True
 	packet_class = packets.PacketTree
 
