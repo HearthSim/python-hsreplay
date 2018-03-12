@@ -5,7 +5,6 @@ python: "3.6"
 
 env:
   - TOXENV=py27
-  - TOXENV=py34
   - TOXENV=py36
   - TOXENV=flake8
 
