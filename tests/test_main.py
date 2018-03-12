@@ -5,6 +5,14 @@ from hsreplay import elements
 TS = datetime(2016, 6, 7)
 
 
+def test_game_node():
+	node = elements.GameNode(TS, None, 1, 2, False)
+
+	assert node.to_xml_string() == (
+		'<Game type="1" format="2" scenarioID="false" ts="2016-06-07T00:00:00"/>'
+	)
+
+
 def test_game_entity_node():
 	node = elements.GameEntityNode(TS, 1)
 
