@@ -2,6 +2,7 @@
 import sys
 from argparse import ArgumentParser, ArgumentTypeError
 from datetime import datetime
+
 from hsreplay.document import HSReplayDocument
 
 

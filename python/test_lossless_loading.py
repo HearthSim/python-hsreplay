@@ -3,6 +3,7 @@ import sys
 from argparse import ArgumentParser
 from datetime import datetime
 from io import BytesIO
+
 from hsreplay.document import HSReplayDocument
 
 
