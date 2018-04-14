@@ -117,6 +117,8 @@
 <!ATTLIST Block
 	entity %entity; #REQUIRED
 	index NMTOKEN "-1"
+	effectCardId %cardID; #IMPLIED
+	effectIndex NMTOKEN "-1"
 	target %entity; "0"
 	type %enumValue; #REQUIRED
 	subOption NMTOKEN "-1"
