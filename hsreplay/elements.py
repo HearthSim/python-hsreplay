@@ -1,4 +1,5 @@
 from hslog import packets
+
 from .utils import ElementTree, parse_datetime
 
 
@@ -180,15 +181,19 @@ class ShowEntityNode(Node):
 
 class BlockNode(Node):
 	tagname = "Block"
-	attributes = ("entity", "type", "index", "target", "subOption", "triggerKeyword")
+	attributes = (
+		"entity", "type", "index", "effectCardId", "effectIndex",
+		"target", "subOption", "triggerKeyword"
+	)
 	timestamp = True
 	packet_class = packets.Block
 
 	def export(self):
 		index = int(self.index) if self.index is not None else -1
+		effectIndex = int(self.effectIndex) if self.effectIndex is not None else -1
 		packet = self.packet_class(
 			self.ts, int(self.entity or 0), int(self.type), index,
-			None, None, int(self.target or 0),
+			self.effectCardId, effectIndex, int(self.target or 0),
 			int(self.subOption) if self.subOption else None, int(self.triggerKeyword or 0)
 		)
 		for node in self.nodes:

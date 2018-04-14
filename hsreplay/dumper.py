@@ -1,4 +1,5 @@
 import logging
+
 from hearthstone.enums import MetaDataType
 from hslog import LogParser
 from hslog.packets import (
@@ -6,6 +7,7 @@ from hslog.packets import (
 	HideEntity, MetaData, Options, SendChoices, SendOption, ShowEntity,
 	TagChange
 )
+
 from . import elements
 
 
@@ -69,9 +71,12 @@ def add_packets_recursive(packets, entity_element):
 				add_initial_tags(ts, player, player_element)
 			continue
 		elif isinstance(packet, Block):
+			effect_index = int(packet.effectindex)
 			packet_element = elements.BlockNode(
 				ts, _ent, packet.type,
 				packet.index if packet.index != -1 else None,
+				packet.effectid or None,
+				effect_index if effect_index != -1 else None,
 				serialize_entity(packet.target),
 				packet.suboption if packet.suboption != -1 else None,
 				packet.trigger_keyword if packet.trigger_keyword else None
