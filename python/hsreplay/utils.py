@@ -211,4 +211,4 @@ def annotate_replay(infile, outfile):
 		):
 			target.set("EntityName", db[entities[target.attrib["entity"]]].name)
 
-	tree.write(outfile)
+	tree.write(outfile, pretty_print=True)
