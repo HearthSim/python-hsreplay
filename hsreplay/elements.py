@@ -10,7 +10,7 @@ def node_for_tagname(tag):
 	raise ValueError("No matching node for tag %r" % (tag))
 
 
-class Node(object):
+class Node:
 	attributes = ()
 	tagname = None
 
@@ -126,7 +126,7 @@ class PlayerNode(Node):
 		return packet
 
 	def xml(self):
-		ret = super(PlayerNode, self).xml()
+		ret = super().xml()
 		deck = getattr(self, "deck", None)
 		if deck is not None:
 			element = ElementTree.Element("Deck")
