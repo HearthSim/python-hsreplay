@@ -10,24 +10,15 @@ env:
 cache:
   directories:
     - $HOME/.cache/pip
-    - $TRAVIS_BUILD_DIR/python/.tox
+    - $TRAVIS_BUILD_DIR/.tox
 
 install:
   - pip install tox
 
 script:
-  - tox -c "$TRAVIS_BUILD_DIR/python/tox.ini"
+  - tox
 
 notifications:
   email:
     on_failure: always
     on_success: change
-  irc:
-    channels:
-      - "chat.freenode.net#hearthsim-commits"
-    use_notice: true
-    skip_join: true
-    on_failure: always
-    on_success: change
-    template:
-      - "(%{branch} @ %{commit} : %{author}): %{message} %{build_url}"
