@@ -71,7 +71,7 @@ def add_packets_recursive(packets, entity_element):
 				add_initial_tags(ts, player, player_element)
 			continue
 		elif isinstance(packet, Block):
-			effect_index = int(packet.effectindex)
+			effect_index = int(packet.effectindex or 0)
 			packet_element = elements.BlockNode(
 				ts, _ent, packet.type,
 				packet.index if packet.index != -1 else None,
