@@ -1,24 +1,40 @@
 # https://travis-ci.org/HearthSim/python-hsreplay
 sudo: false
 language: python
+
 python: "3.6"
 
 env:
   - TOXENV=py36
   - TOXENV=flake8
 
-cache:
-  directories:
-    - $HOME/.cache/pip
-    - $TRAVIS_BUILD_DIR/.tox
+matrix:
+  fast_finish: true
 
 install:
+  - pip install --upgrade pip setuptools wheel
   - pip install tox
 
 script:
   - tox
 
-notifications:
-  email:
-    on_failure: always
-    on_success: change
+stages:
+  - name: test
+  - name: deploy
+    if: tag IS present
+
+jobs:
+  include:
+    - stage: deploy
+      install:
+        - pip install --upgrade pip setuptools wheel
+
+      script: echo Releasing $TRAVIS_TAG
+
+      deploy:
+        provider: pypi
+        user: $PYPI_USERNAME
+        password: $PYPI_PASSWORD
+        distributions: "sdist bdist_wheel"
+        on:
+          tags: true
