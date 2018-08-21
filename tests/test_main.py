@@ -177,3 +177,9 @@ def test_send_option_node():
 	assert node.to_xml_string() == (
 		'<SendOption option="1" subOption="0" target="0" position="-1" ts="2016-06-07T00:00:00"/>'
 	)
+
+def test_target_no_entity():
+	node = elements.OptionTargetNode(TS, 1, None, None, None)
+	assert node.to_xml_string() == (
+		'<Target index="1"/>'
+	)
