@@ -65,6 +65,12 @@ def _to_string(tag):
 	return result
 
 
+def _get_card_name(db, card_id):
+	if card_id not in db:
+		return "Unknown card %s" % card_id
+	return db[card_id].name
+
+
 def annotate_replay(infile, outfile):
 	from hearthstone import cardxml
 	from hearthstone.enums import (
@@ -95,11 +101,11 @@ def annotate_replay(infile, outfile):
 	for tag in root.iter("ShowEntity"):
 		if "cardID" in tag.attrib:
 			entities[tag.attrib["entity"]] = tag.attrib["cardID"]
-			tag.set("EntityName", db[tag.attrib["cardID"]].name)
+			tag.set("EntityName", _get_card_name(db, tag.attrib["cardID"]))
 
 	for tag in root.iter("FullEntity"):
 		if tag.attrib["id"] in entities:
-			tag.set("EntityName", db[entities[tag.attrib["id"]]].name)
+			tag.set("EntityName", _get_card_name(db, entities[tag.attrib["id"]]))
 
 	block_counter = 1
 	for tag in root.iter("Block"):
@@ -112,10 +118,10 @@ def annotate_replay(infile, outfile):
 			elif tag.attrib["entity"] in ("2", "3"):
 				tag.set("EntityCardName", entities[tag.attrib["entity"]])
 			else:
-				tag.set("EntityCardName", db[entities[tag.attrib["entity"]]].name)
+				tag.set("EntityCardName", _get_card_name(db, entities[tag.attrib["entity"]]))
 
 		if "target" in tag.attrib and tag.attrib["target"] in entities:
-			tag.set("TargetName", db[entities[tag.attrib["target"]]].name)
+			tag.set("TargetName", _get_card_name(db, entities[tag.attrib["target"]]))
 
 		if "triggerKeyword" in tag.attrib:
 			try:
@@ -145,7 +151,7 @@ def annotate_replay(infile, outfile):
 			elif tag_change.attrib["entity"] in ("2", "3"):
 				tag_change.set("EntityCardName", entities[tag_change.attrib["entity"]])
 			else:
-				tag_change.set("EntityCardName", db[entities[tag_change.attrib["entity"]]].name)
+				tag_change.set("EntityCardName", _get_card_name(db, entities[tag_change.attrib["entity"]]))
 
 		if int(tag_change.attrib["tag"]) in entity_ref_tags and tag_change.attrib["value"] in entities:
 			tag_change.set("ValueReferenceCardID", entities[tag_change.attrib["value"]])
@@ -154,7 +160,10 @@ def annotate_replay(infile, outfile):
 			elif tag_change.attrib["value"] in ("2", "3"):
 				tag_change.set("ValueReferenceCardName", entities[tag_change.attrib["value"]])
 			else:
-				tag_change.set("ValueReferenceCardName", db[entities[tag_change.attrib["value"]]].name)
+				tag_change.set(
+					"ValueReferenceCardName",
+					_get_card_name(db, entities[tag_change.attrib["value"]])
+				)
 
 		if tag_change.attrib["tag"] == str(GameTag.STATE.value):
 			tag_change.set("StateName", State(int(tag_change.attrib["value"])).name)
@@ -192,23 +201,19 @@ def annotate_replay(infile, outfile):
 	for option in root.iter("Option"):
 		if "entity" in option.attrib and option.attrib["entity"] in entities:
 			if option.attrib["entity"] not in ("1", "2", "3"):
-				option.set("EntityName", db[entities[option.attrib["entity"]]].name)
+				option.set("EntityName", _get_card_name(db, entities[option.attrib["entity"]]))
 
 	for target in root.iter("Target"):
 		if "entity" in target.attrib and target.attrib["entity"] in entities:
 			if target.attrib["entity"] not in ("1", "2", "3"):
-				target.set("EntityName", db[entities[target.attrib["entity"]]].name)
+				target.set("EntityName", _get_card_name(db, entities[target.attrib["entity"]]))
 
 	for meta in root.iter("MetaData"):
 		if "meta" in meta.attrib:
 			meta.set("MetaName", MetaDataType(int(meta.attrib["meta"])).name)
 
 	for target in root.iter("Info"):
-		if (
-			"entity" in target.attrib and
-			target.attrib["entity"] in entities and
-			entities[target.attrib["entity"]] in db
-		):
-			target.set("EntityName", db[entities[target.attrib["entity"]]].name)
+		if "entity" in target.attrib and target.attrib["entity"] in entities:
+			target.set("EntityName", _get_card_name(db, entities[target.attrib["entity"]]))
 
 	tree.write(outfile, pretty_print=True)
