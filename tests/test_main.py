@@ -184,3 +184,10 @@ def test_target_no_entity():
 	assert node.to_xml_string() == (
 		'<Target index="1"/>'
 	)
+
+
+def test_reset_game_node():
+	node = elements.ResetGameNode(TS)
+	assert node.to_xml_string() == (
+		'<ResetGame ts="2016-06-07T00:00:00"/>'
+	)

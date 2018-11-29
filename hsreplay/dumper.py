@@ -2,11 +2,10 @@ import logging
 
 from hearthstone.enums import MetaDataType
 from hslog import LogParser
-from hslog.packets import (
-	Block, ChangeEntity, Choices, ChosenEntities, CreateGame, FullEntity,
-	HideEntity, MetaData, Options, SendChoices, SendOption, ShowEntity,
-	TagChange
-)
+from hslog.packets import (Block, ChangeEntity, Choices, ChosenEntities,
+                           CreateGame, FullEntity, HideEntity, MetaData,
+                           Options, ResetGame, SendChoices, SendOption,
+                           ShowEntity, TagChange)
 
 from . import elements
 
@@ -132,6 +131,8 @@ def add_packets_recursive(packets, entity_element):
 			packet_element = elements.SendOptionNode(
 				ts, packet.option, packet.suboption, packet.target, packet.position
 			)
+		elif isinstance(packet, ResetGame):
+			packet_element = elements.ResetGameNode(ts)
 		else:
 			raise NotImplementedError(repr(packet))
 		entity_element.append(packet_element)
