@@ -2,7 +2,6 @@ from datetime import datetime
 
 from hsreplay import elements
 
-
 TS = datetime(2016, 6, 7)
 
 
