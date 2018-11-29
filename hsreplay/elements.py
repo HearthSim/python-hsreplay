@@ -410,3 +410,13 @@ class SendOptionNode(Node):
 		return self.packet_class(
 			self.ts, int(self.option), int(self.subOption), int(self.target), int(self.position)
 		)
+
+
+class ResetGameNode(Node):
+	tagname = "ResetGame"
+	attributes = ()
+	timestamp = True
+	packet_class = packets.ResetGame
+
+	def export(self):
+		return self.packet_class(self.ts)

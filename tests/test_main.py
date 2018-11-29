@@ -2,7 +2,6 @@ from datetime import datetime
 
 from hsreplay import elements
 
-
 TS = datetime(2016, 6, 7)
 
 
@@ -183,4 +182,11 @@ def test_target_no_entity():
 	node = elements.OptionTargetNode(TS, 1, None, None, None)
 	assert node.to_xml_string() == (
 		'<Target index="1"/>'
+	)
+
+
+def test_reset_game_node():
+	node = elements.ResetGameNode(TS)
+	assert node.to_xml_string() == (
+		'<ResetGame ts="2016-06-07T00:00:00"/>'
 	)

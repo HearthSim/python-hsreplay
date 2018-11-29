@@ -12,7 +12,6 @@ from xml.dom import minidom
 
 from . import SYSTEM_DTD
 
-
 __all__ = [
 	"ElementTree", "annotate_replay", "parse_datetime", "pretty_xml", "toxml"
 ]
