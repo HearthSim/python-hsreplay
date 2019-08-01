@@ -204,13 +204,13 @@ class BlockNode(Node):
 
 class MetaDataNode(Node):
 	tagname = "MetaData"
-	attributes = ("meta", "data", "info")
+	attributes = ("meta", "data", "infoCount")
 	timestamp = False
 	packet_class = packets.MetaData
 
 	def export(self):
 		packet = self.packet_class(
-			self.ts, int(self.meta), int(self.data or 0), int(self.info)
+			self.ts, int(self.meta), int(self.data or 0), int(self.infoCount)
 		)
 		for node in self.nodes:
 			packet.info.append(node.export())

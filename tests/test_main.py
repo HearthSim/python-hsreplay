@@ -73,10 +73,10 @@ def test_block_node():
 
 def test_meta_data_node():
 	node = elements.MetaDataNode(TS, 1, None, 1)
-	assert node.to_xml_string() == '<MetaData meta="1" info="1"/>'
+	assert node.to_xml_string() == '<MetaData meta="1" infoCount="1"/>'
 
 	node = elements.MetaDataNode(TS, 1, 2, 1)
-	assert node.to_xml_string() == '<MetaData meta="1" data="2" info="1"/>'
+	assert node.to_xml_string() == '<MetaData meta="1" data="2" infoCount="1"/>'
 
 
 def test_meta_data_node_with_info():
@@ -84,7 +84,7 @@ def test_meta_data_node_with_info():
 	info_node = elements.MetaDataInfoNode(TS, 3, 4)
 	node.nodes.append(info_node)
 	assert node.to_xml_string() == (
-		'<MetaData meta="1" data="2" info="1">'
+		'<MetaData meta="1" data="2" infoCount="1">'
 		'<Info index="3" entity="4"/></MetaData>'
 	)
 
