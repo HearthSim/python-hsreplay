@@ -420,3 +420,28 @@ class ResetGameNode(Node):
 
 	def export(self):
 		return self.packet_class(self.ts)
+
+
+class SubSpellNode(Node):
+	tagname = "SubSpell"
+	attributes = ("spellPrefabGuid", "source", "targetCount")
+	timestamp = True
+	packet_class = packets.SubSpell
+
+	def export(self):
+		packet = self.packet_class(
+			self.ts, self.spellPrefabGuid, int(self.source), int(self.targetCount)
+		)
+		for node in self.nodes:
+			packet.packets.append(node.export())
+		packet.ended = True
+		return packet
+
+
+class SubSpellTargetNode(Node):
+	tagname = "SubSpellTarget"
+	attributes = ("index", "entity")
+	timestamp = False
+
+	def export(self):
+		return int(self.entity or 0)

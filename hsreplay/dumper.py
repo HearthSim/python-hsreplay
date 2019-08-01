@@ -5,7 +5,7 @@ from hslog import LogParser
 from hslog.packets import (Block, ChangeEntity, Choices, ChosenEntities,
                            CreateGame, FullEntity, HideEntity, MetaData,
                            Options, ResetGame, SendChoices, SendOption,
-                           ShowEntity, TagChange)
+                           ShowEntity, SubSpell, TagChange)
 
 from . import elements
 
@@ -133,6 +133,14 @@ def add_packets_recursive(packets, entity_element):
             )
         elif isinstance(packet, ResetGame):
             packet_element = elements.ResetGameNode(ts)
+        elif isinstance(packet, SubSpell):
+            packet_element = elements.SubSpellNode(
+                ts, packet.spell_prefab_guid, packet.source, packet.target_count
+            )
+            for i, target in enumerate(packet.targets):
+                e = elements.SubSpellTargetNode(ts, i, target)
+                packet_element.append(e)
+            add_packets_recursive(packet.packets, packet_element)
         else:
             raise NotImplementedError(repr(packet))
         entity_element.append(packet_element)

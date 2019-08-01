@@ -190,3 +190,20 @@ def test_reset_game_node():
 	assert node.to_xml_string() == (
 		'<ResetGame ts="2016-06-07T00:00:00"/>'
 	)
+
+
+def test_sub_spell_node():
+	node = elements.SubSpellNode(TS, "Nothing:123456", 1, 1)
+	assert node.to_xml_string() == (
+		'<SubSpell spellPrefabGuid="Nothing:123456" source="1" targetCount="1" ts="2016-06-07T00:00:00"/>'
+	)
+
+
+def test_spell_node_with_target():
+	node = elements.SubSpellNode(TS, "Nothing:123456", 1, 1)
+	target_node = elements.SubSpellTargetNode(TS, 3, 4)
+	node.nodes.append(target_node)
+	assert node.to_xml_string() == (
+		'<SubSpell spellPrefabGuid="Nothing:123456" source="1" targetCount="1" ts="2016-06-07T00:00:00">'
+		'<SubSpellTarget index="3" entity="4"/></SubSpell>'
+	)
