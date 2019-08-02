@@ -210,7 +210,7 @@ class MetaDataNode(Node):
 
 	def export(self):
 		packet = self.packet_class(
-			self.ts, int(self.meta), int(self.data or 0), int(self.infoCount or self.info)
+			self.ts, int(self.meta), int(self.data or 0), int(self.infoCount or 0)
 		)
 		for node in self.nodes:
 			packet.info.append(node.export())
