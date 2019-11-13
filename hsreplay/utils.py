@@ -64,7 +64,13 @@ def _to_string(tag):
 	return result
 
 
+class ResolvedString(str):
+	is_resolved = True
+
+
 def _get_card_name(db, card_id):
+	if hasattr(card_id, "is_resolved") and card_id.is_resolved:
+		return card_id
 	if card_id not in db:
 		return "Unknown card %s" % card_id
 	return db[card_id].name
@@ -93,9 +99,11 @@ def annotate_replay(infile, outfile):
 		if "cardID" in tag.attrib:
 			entities[tag.attrib["id"]] = tag.attrib["cardID"]
 
+	for tag in root.iter("GameEntity"):
+		entities[tag.attrib["id"]] = ResolvedString("GameEntity")
+
 	for tag in root.iter("Player"):
-		entities[tag.attrib["id"]] = tag.attrib["name"]
-	entities["1"] = "GameEntity"
+		entities[tag.attrib["id"]] = ResolvedString(tag.attrib["name"])
 
 	for tag in root.iter("ShowEntity"):
 		if "cardID" in tag.attrib:
@@ -145,24 +153,14 @@ def annotate_replay(infile, outfile):
 	for tag_change in root.iter("TagChange"):
 		if "entity" in tag_change.attrib and tag_change.attrib["entity"] in entities:
 			tag_change.set("EntityCardID", entities[tag_change.attrib["entity"]])
-			if tag_change.attrib["entity"] == "1":
-				tag_change.set("EntityCardName", "GameEntity")
-			elif tag_change.attrib["entity"] in ("2", "3"):
-				tag_change.set("EntityCardName", entities[tag_change.attrib["entity"]])
-			else:
-				tag_change.set("EntityCardName", _get_card_name(db, entities[tag_change.attrib["entity"]]))
+			tag_change.set("EntityCardName", _get_card_name(db, entities[tag_change.attrib["entity"]]))
 
 		if int(tag_change.attrib["tag"]) in entity_ref_tags and tag_change.attrib["value"] in entities:
 			tag_change.set("ValueReferenceCardID", entities[tag_change.attrib["value"]])
-			if tag_change.attrib["value"] == "1":
-				tag_change.set("ValueReferenceCardName", "GameEntity")
-			elif tag_change.attrib["value"] in ("2", "3"):
-				tag_change.set("ValueReferenceCardName", entities[tag_change.attrib["value"]])
-			else:
-				tag_change.set(
-					"ValueReferenceCardName",
-					_get_card_name(db, entities[tag_change.attrib["value"]])
-				)
+			tag_change.set(
+				"ValueReferenceCardName",
+				_get_card_name(db, entities[tag_change.attrib["value"]])
+			)
 
 		if tag_change.attrib["tag"] == str(GameTag.STATE.value):
 			tag_change.set("StateName", State(int(tag_change.attrib["value"])).name)
@@ -199,13 +197,26 @@ def annotate_replay(infile, outfile):
 
 	for option in root.iter("Option"):
 		if "entity" in option.attrib and option.attrib["entity"] in entities:
-			if option.attrib["entity"] not in ("1", "2", "3"):
-				option.set("EntityName", _get_card_name(db, entities[option.attrib["entity"]]))
+			option.set("EntityCardID", entities[option.attrib["entity"]])
+			option.set("EntityName", _get_card_name(db, entities[option.attrib["entity"]]))
 
 	for target in root.iter("Target"):
 		if "entity" in target.attrib and target.attrib["entity"] in entities:
-			if target.attrib["entity"] not in ("1", "2", "3"):
-				target.set("EntityName", _get_card_name(db, entities[target.attrib["entity"]]))
+			target.set("EntityCardID", entities[target.attrib["entity"]])
+			target.set("EntityName", _get_card_name(db, entities[target.attrib["entity"]]))
+
+	for choices in root.iter("Choices"):
+		if "entity" in choices.attrib and choices.attrib["entity"] in entities:
+			choices.set("EntityCardID", entities[choices.attrib["entity"]])
+			choices.set("EntityName", _get_card_name(db, entities[choices.attrib["entity"]]))
+		if "source" in choices.attrib and choices.attrib["source"] in entities:
+			choices.set("SourceCardID", entities[choices.attrib["source"]])
+			choices.set("SourceName", _get_card_name(db, entities[choices.attrib["source"]]))
+
+	for choice in root.iter("Choice"):
+		if "entity" in choice.attrib and choice.attrib["entity"] in entities:
+			choice.set("EntityCardID", entities[choice.attrib["entity"]])
+			choice.set("EntityName", _get_card_name(db, entities[choice.attrib["entity"]]))
 
 	for meta in root.iter("MetaData"):
 		if "meta" in meta.attrib:
