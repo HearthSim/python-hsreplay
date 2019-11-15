@@ -430,9 +430,14 @@ class SubSpellNode(Node):
 
 	def export(self):
 		packet = self.packet_class(
-			self.ts, self.spellPrefabGuid, int(self.source), int(self.targetCount)
+			self.ts, self.spellPrefabGuid,
+			int(self.source) if self.source is not None else None,
+			int(self.targetCount)
 		)
 		for node in self.nodes:
+			if isinstance(node, SubSpellTargetNode):
+				packet.targets.append(node.entity)
+				continue
 			packet.packets.append(node.export())
 		packet.ended = True
 		return packet
@@ -443,5 +448,5 @@ class SubSpellTargetNode(Node):
 	attributes = ("index", "entity")
 	timestamp = False
 
-	def export(self):
-		return int(self.entity or 0)
+	# SubSpellTargetNode is virtual and cannot be exported
+	export = None
