@@ -28,8 +28,6 @@ def toxml(root, pretty):
 		xml = ElementTree.tostring(root, **kwargs)
 		return xml.decode("utf-8")
 
-	xml = ElementTree.tostring(root)
-
 	if pretty:
 		return pretty_xml(root)
 	return ElementTree.tostring(root).decode("utf-8")
