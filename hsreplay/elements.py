@@ -450,3 +450,15 @@ class SubSpellTargetNode(Node):
 
 	# SubSpellTargetNode is virtual and cannot be exported
 	export = None
+
+
+class CachedTagForDormantChangeNode(Node):
+	tagname = "CachedTagForDormantChange"
+	attributes = ("entity", "tag", "value")
+	timestamp = False
+	packet_class = packets.CachedTagForDormantChange
+
+	def export(self):
+		return self.packet_class(
+			self.ts, int(self.entity or 0), int(self.tag), int(self.value)
+		)

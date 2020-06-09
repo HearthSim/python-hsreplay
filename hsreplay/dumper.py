@@ -2,10 +2,9 @@ import logging
 
 from hearthstone.enums import MetaDataType
 from hslog import LogParser
-from hslog.packets import (Block, ChangeEntity, Choices, ChosenEntities,
-                           CreateGame, FullEntity, HideEntity, MetaData,
-                           Options, ResetGame, SendChoices, SendOption,
-                           ShowEntity, SubSpell, TagChange)
+from hslog.packets import (Block, CachedTagForDormantChange, ChangeEntity, Choices,
+                           ChosenEntities, CreateGame, FullEntity, HideEntity, MetaData, Options,
+                           ResetGame, SendChoices, SendOption, ShowEntity, SubSpell, TagChange)
 
 from . import elements
 
@@ -141,6 +140,10 @@ def add_packets_recursive(packets, entity_element):
                 e = elements.SubSpellTargetNode(ts, i, target)
                 packet_element.append(e)
             add_packets_recursive(packet.packets, packet_element)
+        elif isinstance(packet, CachedTagForDormantChange):
+            packet_element = elements.CachedTagForDormantChangeNode(
+                packet.ts, _ent, packet.tag, packet.value
+            )
         else:
             raise NotImplementedError(repr(packet))
         entity_element.append(packet_element)
