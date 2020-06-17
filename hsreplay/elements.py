@@ -462,3 +462,19 @@ class CachedTagForDormantChangeNode(Node):
 		return self.packet_class(
 			self.ts, int(self.entity or 0), int(self.tag), int(self.value)
 		)
+
+
+class VOSpellNode(Node):
+	tagname = "VOSpell"
+	attributes = ("brass_ring_guid", "vo_spell_prefab_guid", "blocking", "additional_delay_ms")
+	timestamp = False
+	packet_class = packets.VOSpell
+
+	def export(self):
+		return self.packet_class(
+			self.ts,
+			self.brass_ring_guid,
+			self.vo_spell_prefab_guid,
+			self.blocking == "True",
+			int(self.additional_delay_ms)
+		)
