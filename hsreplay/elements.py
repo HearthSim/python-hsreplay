@@ -478,3 +478,13 @@ class VOSpellNode(Node):
 			self.blocking == "True",
 			int(self.additional_delay_ms)
 		)
+
+
+class ShuffleDeckNode(Node):
+	tagname = "ShuffleDeck"
+	attributes = ("player_id",)
+	timestamp = False
+	packet_class = packets.ShuffleDeck
+
+	def export(self):
+		return self.packet_class(self.ts, int(self.player_id))

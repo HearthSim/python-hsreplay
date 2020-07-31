@@ -4,8 +4,8 @@ from hearthstone.enums import MetaDataType
 from hslog import LogParser
 from hslog.packets import (Block, CachedTagForDormantChange, ChangeEntity, Choices,
                            ChosenEntities, CreateGame, FullEntity, HideEntity, MetaData, Options,
-                           ResetGame, SendChoices, SendOption, ShowEntity, SubSpell, TagChange,
-                           VOSpell)
+                           ResetGame, SendChoices, SendOption, ShowEntity, ShuffleDeck, SubSpell,
+                           TagChange, VOSpell)
 
 from . import elements
 
@@ -149,6 +149,8 @@ def add_packets_recursive(packets, entity_element):
             packet_element = elements.VOSpellNode(
                 packet.ts, packet.brguid, packet.vospguid, packet.blocking, packet.delayms
             )
+        elif isinstance(packet, ShuffleDeck):
+            packet_element = elements.ShuffleDeckNode(packet.ts, packet.player_id)
         else:
             raise NotImplementedError(repr(packet))
         entity_element.append(packet_element)
