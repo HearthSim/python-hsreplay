@@ -251,7 +251,7 @@ class TagChangeNode(Node):
 	def has_change_def(self):
 		if not self.hasChangeDef:
 			return False
-		return True if self.hasChangeDef.lower() == "true" else False
+		return True if str(self.hasChangeDef).lower() == "true" else False
 
 
 class HideEntityNode(Node):
