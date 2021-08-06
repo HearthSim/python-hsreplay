@@ -1,20 +1,21 @@
 import logging
+from typing import Optional
 
 from hearthstone.enums import MetaDataType
 from hslog import LogParser
-from hslog.packets import (Block, CachedTagForDormantChange, ChangeEntity, Choices,
-                           ChosenEntities, CreateGame, FullEntity, HideEntity, MetaData, Options,
-                           ResetGame, SendChoices, SendOption, ShowEntity, ShuffleDeck, SubSpell,
-                           TagChange, VOSpell)
+from hslog.packets import (Block, CachedTagForDormantChange, ChangeEntity,
+                           Choices, ChosenEntities, CreateGame, FullEntity,
+                           HideEntity, MetaData, Options, ResetGame,
+                           SendChoices, SendOption, ShowEntity, ShuffleDeck,
+                           SubSpell, TagChange, VOSpell)
+from hslog.player import coerce_to_entity_id, PlayerManager
 
 from . import elements
 
 
 def serialize_entity(entity):
     if entity:
-        e = int(entity)
-        if e:
-            return e
+        return coerce_to_entity_id(entity)
 
 
 def add_initial_tags(ts, packet, packet_element):
@@ -165,7 +166,13 @@ def parse_log(fp, processor, date):
     return parser
 
 
-def game_to_xml(tree, game_meta=None, player_meta=None, decks=None):
+def game_to_xml(
+    tree,
+    game_meta=None,
+    player_manager: Optional[PlayerManager] = None,
+    player_meta=None,
+    decks=None
+):
     # game_tree = tree.export()
     game_element = elements.GameNode(tree.ts)
     add_packets_recursive(tree.packets, game_element)
@@ -182,9 +189,10 @@ def game_to_xml(tree, game_meta=None, player_meta=None, decks=None):
         for player, deck in zip(players, decks):
             player.deck = deck
 
-    # Set the player names
-    for player in players:
-        if not player.name:
-            player.name = tree.manager.get_player_by_id(player.id).name
+        if player_manager:
+            # Set the player names
+            for player in players:
+                if not player.name:
+                    player.name = player_manager.get_player_by_entity_id(player.id).name
 
     return game_element
