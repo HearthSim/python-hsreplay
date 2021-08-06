@@ -1,4 +1,5 @@
 from hslog import packets
+from hslog.player import PlayerReference
 
 from .utils import ElementTree, parse_datetime
 
@@ -21,7 +22,7 @@ class Node:
 			setattr(self, k, arg)
 
 	def __repr__(self):
-		return "<%s>" % (self.__class__.__name__)
+		return "<%s>" % self.__class__.__name__
 
 	@classmethod
 	def from_xml(cls, xml):
@@ -56,6 +57,8 @@ class Node:
 				elif isinstance(attrib, int):
 					# Check for enums
 					attrib = str(int(attrib))
+				elif isinstance(attrib, PlayerReference):
+					attrib = str(attrib.entity_id)
 				element.attrib[attr] = attrib
 		if self.timestamp and self.ts:
 			element.attrib["ts"] = self.ts.isoformat()
