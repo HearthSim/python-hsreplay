@@ -8,6 +8,7 @@ try:
 	from aniso8601 import parse_datetime
 except ImportError:
 	from dateutil.parser import parse as parse_datetime
+import enum
 from xml.dom import minidom
 
 from . import SYSTEM_DTD
@@ -77,7 +78,7 @@ def _get_card_name(db, card_id):
 def annotate_replay(infile, outfile):
 	from hearthstone import cardxml
 	from hearthstone.enums import (
-		BlockType, GameTag, MetaDataType, Mulligan, PlayState, State, Step, Zone
+		BlockType, GameTag, MetaDataType, Mulligan, PlayState, State, Step, Zone, TAG_TYPES
 	)
 	db, _ = cardxml.load()
 	entities = {}
@@ -137,15 +138,16 @@ def annotate_replay(infile, outfile):
 
 	for tag in root.iter("Tag"):
 		try:
-			name = GameTag(int(tag.attrib["tag"])).name
-			tag.set("GameTagName", name)
+			tag_enum = GameTag(int(tag.attrib["tag"]))
+			tag.set("GameTagName", tag_enum.name)
 
-			if name == "STEP":
-				tag.set("StepName", Step(int(tag.attrib["value"])).name)
-
-			if name == "ZONE":
-				tag.set("ZoneName", Zone(int(tag.attrib["value"])).name)
-
+			enum_or_type = TAG_TYPES.get(tag_enum)
+			if enum_or_type:
+				if enum_or_type.__class__ == enum.EnumMeta:
+					tag.set(
+						"%sName" % (enum_or_type.__name__),
+						enum_or_type(int(tag.attrib["value"])).name
+					)
 		except ValueError:
 			pass
 
@@ -168,31 +170,26 @@ def annotate_replay(infile, outfile):
 			tag_change.set("PlayStateName", PlayState(int(tag_change.attrib["value"])).name)
 
 		try:
-			name = GameTag(int(tag_change.attrib["tag"])).name
-			tag_change.set("GameTagName", name)
+			tag_enum = GameTag(int(tag_change.attrib["tag"]))
+			tag_change.set("GameTagName", tag_enum.name)
 
-			if name == "STEP":
-				tag_change.set("StepName", Step(int(tag_change.attrib["value"])).name)
-
-			if name == "NEXT_STEP":
-				tag_change.set("StepName", Step(int(tag_change.attrib["value"])).name)
-
-			if name == "ZONE":
-				tag_change.set("ZoneName", Zone(int(tag_change.attrib["value"])).name)
-
-			if name == "MULLIGAN_STATE":
-				tag_change.set("MulliganStateName", Mulligan(int(tag_change.attrib["value"])).name)
-
+			enum_or_type = TAG_TYPES.get(tag_enum)
+			if enum_or_type:
+				if enum_or_type.__class__ == enum.EnumMeta:
+					tag_change.set(
+						"%sName" % (enum_or_type.__name__),
+						enum_or_type(int(tag_change.attrib["value"])).name
+					)
 		except ValueError:
 			pass
 
 	for block in root.iter("Block"):
 		try:
-			name = BlockType(int(block.attrib["type"])).name
+			tag_enum = BlockType(int(block.attrib["type"]))
 		except ValueError:
-			name = block.attrib["type"]
+			tag_enum = block.attrib["type"]
 
-		block.set("BlockTypeName", name)
+		block.set("BlockTypeName", tag_enum.name)
 
 	for option in root.iter("Option"):
 		if "entity" in option.attrib and option.attrib["entity"] in entities:
