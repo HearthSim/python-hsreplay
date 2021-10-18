@@ -101,7 +101,8 @@ def annotate_replay(infile, outfile):
 		entities[tag.attrib["id"]] = ResolvedString("GameEntity")
 
 	for tag in root.iter("Player"):
-		entities[tag.attrib["id"]] = ResolvedString(tag.attrib["name"])
+		if "name" in tag.attrib:
+			entities[tag.attrib["id"]] = ResolvedString(tag.attrib["name"])
 
 	for tag in root.iter("ShowEntity"):
 		if "cardID" in tag.attrib:
