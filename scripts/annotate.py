@@ -3,6 +3,7 @@
 A command line tool for annotating .hsreplay files with GameTag data to
 facilitate development activities.
 """
+import os
 import sys
 from argparse import ArgumentParser, ArgumentTypeError, FileType
 from datetime import datetime
@@ -23,12 +24,10 @@ def main():
 		"infile", nargs="?", type=FileType("r"), default=sys.stdin,
 		help="the input replay data"
 	)
-	parser.add_argument(
-		"outfile", nargs="?", help="the annotated replay data"
-	)
 
 	args = parser.parse_args()
-	annotate_replay(args.infile, open(args.outfile, "wb"))
+	with os.fdopen(sys.stdout.fileno(), "wb", closefd=False) as outfile:
+		annotate_replay(args.infile, outfile)
 
 
 if __name__ == "__main__":
