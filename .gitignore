@@ -3,4 +3,6 @@
 .mypy_cache/
 *.egg-info/
 .pytest_cache/
+__pycache__/
 /tests/logdata/
+.vscode/*
