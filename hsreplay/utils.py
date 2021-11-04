@@ -78,7 +78,7 @@ def _get_card_name(db, card_id):
 def annotate_replay(infile, outfile):
 	from hearthstone import cardxml
 	from hearthstone.enums import (
-		BlockType, GameTag, MetaDataType, Mulligan, PlayState, State, Step, Zone, TAG_TYPES
+		BlockType, GameTag, MetaDataType, PlayState, State, TAG_TYPES
 	)
 	db, _ = cardxml.load()
 	entities = {}
