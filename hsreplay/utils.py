@@ -8,6 +8,7 @@ try:
 	from aniso8601 import parse_datetime
 except ImportError:
 	from dateutil.parser import parse as parse_datetime
+
 import enum
 from xml.dom import minidom
 
@@ -77,9 +78,8 @@ def _get_card_name(db, card_id):
 
 def annotate_replay(infile, outfile):
 	from hearthstone import cardxml
-	from hearthstone.enums import (
-		BlockType, GameTag, MetaDataType, PlayState, State, TAG_TYPES
-	)
+	from hearthstone.enums import (TAG_TYPES, BlockType, GameTag, MetaDataType,
+	                               PlayState, State)
 	db, _ = cardxml.load()
 	entities = {}
 

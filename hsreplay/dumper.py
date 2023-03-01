@@ -8,7 +8,7 @@ from hslog.packets import (Block, CachedTagForDormantChange, ChangeEntity,
                            HideEntity, MetaData, Options, ResetGame,
                            SendChoices, SendOption, ShowEntity, ShuffleDeck,
                            SubSpell, TagChange, VOSpell)
-from hslog.player import coerce_to_entity_id, PlayerManager
+from hslog.player import PlayerManager, coerce_to_entity_id
 
 from . import elements
 

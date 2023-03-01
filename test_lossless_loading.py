@@ -6,7 +6,6 @@ from io import BytesIO
 
 from hsreplay.document import HSReplayDocument
 
-
 BUILD = 12345
 
 
