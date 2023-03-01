@@ -15,7 +15,7 @@ from .dumper import serialize_entity
 
 
 @contextmanager
-def element_context(xf, elt: elements.Node):
+def element_context(xf, elt: elements.Node, indent: int = 0):
     attributes = {}
     for attr in elt.attributes:
         attrib = getattr(elt, attr, None)
@@ -34,25 +34,33 @@ def element_context(xf, elt: elements.Node):
     for k, v in elt._attributes.items():
         attributes[k] = v
 
+    xf.write(" " * indent)
+
     with xf.element(elt.tagname, attrib=attributes):
+        xf.write("\n")
         yield
+        xf.write(" " * indent)
+
+    xf.write("\n")
 
 
-def write_element(xf, elt: elements.Node):
+def write_element(xf, elt: elements.Node, indent: int = 0):
+    xf.write(" " * indent)
     xf.write(elt.xml())
+    xf.write("\n")
 
 
-def write_initial_tags(xf, ts, packet):
+def write_initial_tags(xf, ts, packet, indent: int = 0):
     for tag, value in packet.tags:
-        write_element(xf, elements.TagNode(ts, tag, value))
+        write_element(xf, elements.TagNode(ts, tag, value), indent=indent)
 
 
-def write_choices(xf, ts, packet):
+def write_choices(xf, ts, packet, indent: int = 0):
     for i, entity_id in enumerate(packet.choices):
-        write_element(xf, elements.ChoiceNode(ts, i, entity_id))
+        write_element(xf, elements.ChoiceNode(ts, i, entity_id), indent=indent)
 
 
-def write_options(xf, ts, packet):
+def write_options(xf, ts, packet, indent: int = 0):
     for i, option in enumerate(packet.options):
         if option.optype == "option":
             cls = elements.OptionNode
@@ -69,14 +77,18 @@ def write_options(xf, ts, packet):
             # Real names are shoved in the options, not used anywhere else...
             entity = None
         option_element = cls(ts, i, entity, option.error, option.error_param, option.type)
-        with element_context(xf, option_element.tagname):
 
-            # Handle suboptions
+        if option.options:
+            with element_context(xf, option_element, indent=indent):
 
-            write_options(xf, ts, option)
+                # Handle suboptions
+
+                write_options(xf, ts, option, indent=indent + 2)
+        else:
+            write_element(xf, option_element, indent=indent)
 
 
-def write_packets_recursive(xf, packets):
+def write_packets_recursive(xf, packets, indent: int = 0):
     for packet in packets:
         if hasattr(packet, "entity"):
             _ent = serialize_entity(packet.entity)
@@ -84,8 +96,8 @@ def write_packets_recursive(xf, packets):
 
         if isinstance(packet, CreateGame):
             game_element = elements.GameEntityNode(ts, _ent)
-            with element_context(xf, game_element):
-                write_initial_tags(xf, ts, packet)
+            with element_context(xf, game_element, indent=indent):
+                write_initial_tags(xf, ts, packet, indent=indent + 2)
 
             for player in packet.players:
                 entity_id = serialize_entity(player.entity)
@@ -93,8 +105,8 @@ def write_packets_recursive(xf, packets):
                     ts, entity_id, player.player_id,
                     player.hi, player.lo, player.name
                 )
-                with element_context(xf, player_element):
-                    write_initial_tags(xf, ts, player)
+                with element_context(xf, player_element, indent=indent):
+                    write_initial_tags(xf, ts, player, indent=indent + 2)
             continue
         elif isinstance(packet, Block):
             effect_index = int(packet.effectindex or 0)
@@ -107,8 +119,11 @@ def write_packets_recursive(xf, packets):
                 packet.suboption if packet.suboption != -1 else None,
                 packet.trigger_keyword if packet.trigger_keyword else None
             )
-            with element_context(xf, packet_element):
-                write_packets_recursive(xf, packet.packets)
+            if packet.packets:
+                with element_context(xf, packet_element, indent=indent):
+                    write_packets_recursive(xf, packet.packets, indent=indent + 2)
+            else:
+                write_element(xf, packet_element, indent=indent)
         elif isinstance(packet, MetaData):
             # With verbose=false, we always have 0 packet.info :(
             if len(packet.info) not in (0, packet.count):
@@ -120,71 +135,107 @@ def write_packets_recursive(xf, packets):
                 data = packet.data
 
             metadata_element = elements.MetaDataNode(ts, packet.meta, data, packet.count)
-            with element_context(xf, metadata_element):
-                for i, info in enumerate(packet.info):
-                    write_element(xf, elements.MetaDataInfoNode(packet.ts, i, info))
+            if packet.info:
+                with element_context(xf, metadata_element, indent=indent):
+                    for i, info in enumerate(packet.info):
+                        write_element(
+                            xf,
+                            elements.MetaDataInfoNode(packet.ts, i, info),
+                            indent=indent + 2
+                        )
+            else:
+                write_element(xf, metadata_element, indent=indent)
         elif isinstance(packet, TagChange):
             write_element(
                 xf,
                 elements.TagChangeNode(
                     packet.ts, _ent, packet.tag, packet.value,
                     packet.has_change_def if packet.has_change_def else None
-                )
+                ),
+                indent=indent
             )
         elif isinstance(packet, HideEntity):
-            write_element(xf, elements.HideEntityNode(ts, _ent, packet.zone))
+            write_element(xf, elements.HideEntityNode(ts, _ent, packet.zone), indent=indent)
         elif isinstance(packet, ShowEntity):
-            with element_context(xf, elements.ShowEntityNode(ts, _ent, packet.card_id)):
-                write_initial_tags(xf, ts, packet)
+            with element_context(
+                xf,
+                elements.ShowEntityNode(ts, _ent, packet.card_id),
+                indent=indent
+            ):
+                write_initial_tags(xf, ts, packet, indent=indent + 2)
         elif isinstance(packet, FullEntity):
-            with element_context(xf, elements.FullEntityNode(ts, _ent, packet.card_id)):
-                write_initial_tags(xf, ts, packet)
+            with element_context(
+                xf,
+                elements.FullEntityNode(ts, _ent, packet.card_id),
+                indent=indent
+            ):
+                write_initial_tags(xf, ts, packet, indent=indent + 2)
         elif isinstance(packet, ChangeEntity):
-            with element_context(xf, elements.ChangeEntityNode(ts, _ent, packet.card_id)):
-                write_initial_tags(xf, ts, packet)
+            with element_context(
+                xf,
+                elements.ChangeEntityNode(ts, _ent, packet.card_id),
+                indent=indent
+            ):
+                write_initial_tags(xf, ts, packet, indent=indent + 2)
         elif isinstance(packet, Choices):
             with element_context(
                 xf,
                 elements.ChoicesNode(
                     ts, _ent, packet.id, packet.tasklist, packet.type,
                     packet.min, packet.max, serialize_entity(packet.source)
-                )
+                ),
+                indent=indent
             ):
-                write_choices(xf, ts, packet)
+                write_choices(xf, ts, packet, indent=indent + 2)
         elif isinstance(packet, SendChoices):
-            with element_context(xf, elements.SendChoicesNode(ts, packet.id, packet.type)):
-                write_choices(xf, ts, packet)
+            with element_context(
+                xf,
+                elements.SendChoicesNode(ts, packet.id, packet.type),
+                indent=indent
+            ):
+                write_choices(xf, ts, packet, indent=indent + 2)
         elif isinstance(packet, ChosenEntities):
-            with element_context(xf, elements.ChosenEntitiesNode(ts, _ent, packet.id)):
-                write_choices(xf, ts, packet)
+            with element_context(
+                xf,
+                elements.ChosenEntitiesNode(ts, _ent, packet.id),
+                indent=indent
+            ):
+                write_choices(xf, ts, packet, indent=indent + 2)
         elif isinstance(packet, Options):
-            with element_context(xf, elements.OptionsNode(ts, packet.id)):
-                write_options(xf, ts, packet)
+            with element_context(xf, elements.OptionsNode(ts, packet.id), indent=indent):
+                write_options(xf, ts, packet, indent=indent + 2)
         elif isinstance(packet, SendOption):
             write_element(
                 xf,
                 elements.SendOptionNode(
                     ts, packet.option, packet.suboption, packet.target, packet.position
-                )
+                ),
+                indent=indent
             )
         elif isinstance(packet, ResetGame):
-            write_element(xf, elements.ResetGameNode(ts))
+            write_element(xf, elements.ResetGameNode(ts), indent=indent)
         elif isinstance(packet, SubSpell):
-            with element_context(
-                xf,
-                elements.SubSpellNode(
-                    ts, packet.spell_prefab_guid, packet.source, packet.target_count
-                )
-            ):
-                for i, target in enumerate(packet.targets):
-                    write_element(xf, elements.SubSpellTargetNode(ts, i, target))
-                write_packets_recursive(xf, packet.packets)
+            subspell_elements = elements.SubSpellNode(
+                ts, packet.spell_prefab_guid, packet.source, packet.target_count
+            )
+            if packet.packets or packet.targets:
+                with element_context(xf, subspell_elements, indent=indent):
+                    for i, target in enumerate(packet.targets):
+                        write_element(
+                            xf,
+                            elements.SubSpellTargetNode(ts, i, target),
+                            indent=indent + 2
+                        )
+                    write_packets_recursive(xf, packet.packets, indent=indent + 2)
+            else:
+                write_element(xf, subspell_elements, indent=indent)
         elif isinstance(packet, CachedTagForDormantChange):
             write_element(
                 xf,
                 elements.CachedTagForDormantChangeNode(
                     packet.ts, _ent, packet.tag, packet.value
-                )
+                ),
+                indent=indent
             )
         elif isinstance(packet, VOSpell):
             write_element(
@@ -195,10 +246,15 @@ def write_packets_recursive(xf, packets):
                     packet.vospguid,
                     packet.blocking,
                     packet.delayms
-                )
+                ),
+                indent=indent
             )
         elif isinstance(packet, ShuffleDeck):
-            write_element(xf, elements.ShuffleDeckNode(packet.ts, packet.player_id))
+            write_element(
+                xf,
+                elements.ShuffleDeckNode(packet.ts, packet.player_id),
+                indent=indent
+            )
         else:
             raise NotImplementedError(repr(packet))
 
@@ -209,7 +265,8 @@ def game_to_xml_stream(
     game_meta=None,
     player_manager: Optional[PlayerManager] = None,
     player_meta=None,
-    decks=None
+    decks=None,
+    indent: int = 0,
 ):
     game_element = elements.GameNode(tree.ts)
     players = game_element.players
@@ -231,5 +288,5 @@ def game_to_xml_stream(
                 if not player.name:
                     player.name = player_manager.get_player_by_entity_id(player.id).name
 
-    with element_context(xf, game_element):
-        write_packets_recursive(xf, tree.packets)
+    with element_context(xf, game_element, indent=indent):
+        write_packets_recursive(xf, tree.packets, indent=indent + 2)
