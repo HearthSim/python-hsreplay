@@ -1,6 +1,6 @@
 import logging
 from contextlib import contextmanager
-from typing import Optional
+from typing import Dict, Optional
 
 from hearthstone.enums import MetaDataType
 from hslog.packets import (Block, CachedTagForDormantChange, ChangeEntity,
@@ -88,7 +88,45 @@ def write_options(xf, ts, packet, indent: int = 0):
             write_element(xf, option_element, indent=indent)
 
 
-def write_packets_recursive(xf, packets, indent: int = 0):
+def write_player(
+    xf,
+    ts,
+    player,
+    indent: int = 0,
+    player_manager: Optional[PlayerManager] = None,
+    player_meta: Optional[Dict] = None
+):
+    entity_id = serialize_entity(player.entity)
+    player_element = elements.PlayerNode(
+        ts, entity_id, player.player_id, player.hi, player.lo, player.name
+    )
+
+    if player_meta and player.player_id in player_meta:
+        this_player_meta = player_meta.pop(player.player_id)
+
+        if this_player_meta.get("cardback") is not None:
+            player_element._attributes["cardback"] = str(this_player_meta["cardback"])
+        if this_player_meta.get("legendRank") is not None:
+            player_element._attributes["legendRank"] = str(this_player_meta["legend_rank"])
+        if this_player_meta.get("rank") is not None:
+            player_element._attributes["rank"] = str(this_player_meta["rank"])
+
+    if player_manager:
+        if not hasattr(player_element, "name"):
+            player_record = player_manager.get_player_by_entity_id(entity_id)
+            player_element._attributes["name"] = player_record.name
+
+    with element_context(xf, player_element, indent=indent):
+        write_initial_tags(xf, ts, player, indent=indent + 2)
+
+
+def write_packets_recursive(
+    xf,
+    packets,
+    indent: int = 0,
+    player_manager: Optional[PlayerManager] = None,
+    player_meta: Optional[Dict] = None
+):
     for packet in packets:
         if hasattr(packet, "entity"):
             _ent = serialize_entity(packet.entity)
@@ -100,13 +138,14 @@ def write_packets_recursive(xf, packets, indent: int = 0):
                 write_initial_tags(xf, ts, packet, indent=indent + 2)
 
             for player in packet.players:
-                entity_id = serialize_entity(player.entity)
-                player_element = elements.PlayerNode(
-                    ts, entity_id, player.player_id,
-                    player.hi, player.lo, player.name
+                write_player(
+                    xf,
+                    ts,
+                    player,
+                    indent=indent,
+                    player_manager=player_manager,
+                    player_meta=player_meta
                 )
-                with element_context(xf, player_element, indent=indent):
-                    write_initial_tags(xf, ts, player, indent=indent + 2)
             continue
         elif isinstance(packet, Block):
             effect_index = int(packet.effectindex or 0)
@@ -121,7 +160,13 @@ def write_packets_recursive(xf, packets, indent: int = 0):
             )
             if packet.packets:
                 with element_context(xf, packet_element, indent=indent):
-                    write_packets_recursive(xf, packet.packets, indent=indent + 2)
+                    write_packets_recursive(
+                        xf,
+                        packet.packets,
+                        indent=indent + 2,
+                        player_manager=player_manager,
+                        player_meta=player_meta
+                    )
             else:
                 write_element(xf, packet_element, indent=indent)
         elif isinstance(packet, MetaData):
@@ -226,7 +271,13 @@ def write_packets_recursive(xf, packets, indent: int = 0):
                             elements.SubSpellTargetNode(ts, i, target),
                             indent=indent + 2
                         )
-                    write_packets_recursive(xf, packet.packets, indent=indent + 2)
+                    write_packets_recursive(
+                        xf,
+                        packet.packets,
+                        indent=indent + 2,
+                        player_manager=player_manager,
+                        player_meta=player_meta,
+                    )
             else:
                 write_element(xf, subspell_elements, indent=indent)
         elif isinstance(packet, CachedTagForDormantChange):
@@ -262,31 +313,31 @@ def write_packets_recursive(xf, packets, indent: int = 0):
 def game_to_xml_stream(
     tree,
     xf,
-    game_meta=None,
+    game_meta: Optional[Dict] = None,
     player_manager: Optional[PlayerManager] = None,
-    player_meta=None,
-    decks=None,
+    player_meta: Optional[Dict] = None,
     indent: int = 0,
 ):
     game_element = elements.GameNode(tree.ts)
-    players = game_element.players
 
     if game_meta is not None:
-        game_element._attributes = game_meta
+        if game_meta.get("id") is not None:
+            game_element._attributes["id"] = str(game_meta["id"])
+        if game_meta.get("format") is not None:
+            game_element._attributes["format"] = str(game_meta["format"])
+        if game_meta.get("hs_game_type") is not None:
+            game_element._attributes["type"] = str(game_meta["hs_game_type"])
+        if game_meta.get("scenario_id") is not None:
+            game_element._attributes["scenarioID"] = str(game_meta["scenario_id"])
 
-    if player_meta is not None:
-        for player, meta in zip(players, player_meta):
-            player._attributes = meta
-
-    if decks is not None:
-        for player, deck in zip(players, decks):
-            player.deck = deck
-
-        if player_manager:
-            # Set the player names
-            for player in players:
-                if not player.name:
-                    player.name = player_manager.get_player_by_entity_id(player.id).name
+        if "reconnecting" in game_meta:
+            game_element._attributes["reconnecting"] = str(game_meta["reconnecting"])
 
     with element_context(xf, game_element, indent=indent):
-        write_packets_recursive(xf, tree.packets, indent=indent + 2)
+        write_packets_recursive(
+            xf,
+            tree.packets,
+            player_manager=player_manager,
+            player_meta=player_meta,
+            indent=indent + 2
+        )

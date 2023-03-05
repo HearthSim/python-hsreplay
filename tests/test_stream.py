@@ -1,5 +1,6 @@
 import filecmp
 import tempfile
+from io import BytesIO, StringIO
 from typing import Optional, Type
 
 import lxml
@@ -61,3 +62,50 @@ def test_game_to_xml_stream_compat_battlegrounds():
 
 def test_game_to_xml_stream_compat_mercenaries():
     assert_game_to_xml_equal(logfile("93227_mercenaries_solo_bounty.power.log"))
+
+
+def test_game_to_xml_stream_annotations():
+    sio = BytesIO()
+    with lxml.etree.xmlfile(sio, encoding="utf-8") as xf:
+        parser = LogParser()
+        with open(logfile("88998_missing_player_hash.power.log")) as f:
+            parser.read(f)
+            game_meta = {
+                "id": 4390995,
+                "hs_game_type": 7,
+                "format": 2,
+                "scenario_id": 2
+            }
+            player_meta = {
+                1: {"rank": 25, "cardback": 157},
+                2: {"rank": 24, "cardback": 157},
+            }
+
+            with xf.element("HSReplay", attrib={"version": "1.7"}):
+                xf.write("\n")
+                game_to_xml_stream(
+                    parser.games[0],
+                    xf,
+                    game_meta=game_meta,
+                    player_manager=parser.player_manager,
+                    player_meta=player_meta,
+                )
+
+    lines = StringIO(sio.getvalue().decode("utf-8")).readlines()
+    game_line = lines[1]
+    player_1_line = lines[17]
+    player_2_line = lines[50]
+
+    assert game_line.strip() == (
+        '<Game ts="20:24:43.065598" id="4390995" format="2" type="7" scenarioID="2">'
+    )
+
+    assert player_1_line.strip() == (
+        '<Player id="2" playerID="1" accountHi="144115193835963207" '
+        'accountLo="66765537" cardback="157" rank="25">'
+    )
+
+    assert player_2_line.strip() == (
+        '<Player id="3" playerID="2" accountHi="144115193835963207" accountLo="28673911" '
+        'cardback="157" rank="24">'
+    )
