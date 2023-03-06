@@ -77,7 +77,17 @@ def test_game_to_xml_stream_annotations():
                 "scenario_id": 2
             }
             player_meta = {
-                1: {"rank": 25, "cardback": 157},
+                1: {
+                    "rank": 25,
+                    "cardback": 157,
+                    "deck": [
+                        "RLK_042", "RLK_042", "NX2_036", "NX2_036", "RLK_505", "RLK_505",
+                        "RLK_121", "RLK_121", "RLK_516", "RLK_516", "RLK_503", "RLK_503",
+                        "RLK_833", "RLK_833", "RLK_834", "RLK_834", "RLK_824", "RLK_824",
+                        "TSC_052", "TSC_052", "RLK_511", "RLK_511", "RLK_063", "RLK_063",
+                        "RLK_224", "RLK_958", "RLK_958", "RLK_025", "RLK_025", "RLK_223"
+                    ]
+                },
                 2: {"rank": 24, "cardback": 157},
             }
 
@@ -94,7 +104,7 @@ def test_game_to_xml_stream_annotations():
     lines = StringIO(sio.getvalue().decode("utf-8")).readlines()
     game_line = lines[1]
     player_1_line = lines[17]
-    player_2_line = lines[50]
+    player_2_line = lines[82]
 
     assert game_line.strip() == (
         '<Game ts="20:24:43.065598" id="4390995" format="2" type="7" scenarioID="2">'

@@ -88,6 +88,12 @@ def write_options(xf, ts, packet, indent: int = 0):
             write_element(xf, option_element, indent=indent)
 
 
+def write_deck(xf, ts, deck, indent: int = 0):
+    with element_context(xf, elements.DeckNode(ts), indent=indent):
+        for card in deck:
+            write_element(xf, elements.CardNode(ts, card), indent=indent + 2)
+
+
 def write_player(
     xf,
     ts,
@@ -101,15 +107,16 @@ def write_player(
         ts, entity_id, player.player_id, player.hi, player.lo, player.name
     )
 
+    this_player_meta = {}
     if player_meta and player.player_id in player_meta:
         this_player_meta = player_meta.pop(player.player_id)
 
-        if this_player_meta.get("cardback") is not None:
-            player_element._attributes["cardback"] = str(this_player_meta["cardback"])
-        if this_player_meta.get("legendRank") is not None:
-            player_element._attributes["legendRank"] = str(this_player_meta["legend_rank"])
-        if this_player_meta.get("rank") is not None:
-            player_element._attributes["rank"] = str(this_player_meta["rank"])
+    if this_player_meta.get("cardback") is not None:
+        player_element._attributes["cardback"] = str(this_player_meta["cardback"])
+    if this_player_meta.get("legendRank") is not None:
+        player_element._attributes["legendRank"] = str(this_player_meta["legend_rank"])
+    if this_player_meta.get("rank") is not None:
+        player_element._attributes["rank"] = str(this_player_meta["rank"])
 
     if player_manager:
         if not hasattr(player_element, "name"):
@@ -117,6 +124,8 @@ def write_player(
             player_element._attributes["name"] = player_record.name
 
     with element_context(xf, player_element, indent=indent):
+        if this_player_meta.get("deck") is not None:
+            write_deck(xf, ts, this_player_meta["deck"], indent=indent + 2)
         write_initial_tags(xf, ts, player, indent=indent + 2)
 
 
