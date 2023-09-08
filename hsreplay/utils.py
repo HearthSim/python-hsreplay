@@ -224,3 +224,20 @@ def annotate_replay(infile, outfile):
 			target.set("EntityName", _get_card_name(db, entities[target.attrib["entity"]]))
 
 	tree.write(outfile, pretty_print=True)
+
+
+def set_game_meta_on_game(game_meta, game_element):
+	if game_meta is None:
+		return
+
+	if game_meta.get("id") is not None:
+		game_element._attributes["id"] = str(game_meta["id"])
+	if game_meta.get("format") is not None:
+		game_element._attributes["format"] = str(game_meta["format"])
+	if game_meta.get("hs_game_type") is not None:
+		game_element._attributes["type"] = str(game_meta["hs_game_type"])
+	if game_meta.get("scenario_id") is not None:
+		game_element._attributes["scenarioID"] = str(game_meta["scenario_id"])
+
+	if "reconnecting" in game_meta:
+		game_element._attributes["reconnecting"] = str(game_meta["reconnecting"])

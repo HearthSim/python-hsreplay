@@ -11,6 +11,7 @@ from hslog.packets import (Block, CachedTagForDormantChange, ChangeEntity,
 from hslog.player import coerce_to_entity_id, PlayerManager
 
 from . import elements
+from .utils import set_game_meta_on_game
 
 
 def serialize_entity(entity):
@@ -179,7 +180,7 @@ def game_to_xml(
     players = game_element.players
 
     if game_meta is not None:
-        game_element._attributes = game_meta
+        set_game_meta_on_game(game_meta, game_element)
 
     if player_meta is not None:
         for player, meta in zip(players, player_meta):
