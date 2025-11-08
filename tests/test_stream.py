@@ -112,10 +112,10 @@ def test_game_to_xml_stream_annotations():
 
     assert player_1_line.strip() == (
         '<Player id="2" playerID="1" accountHi="144115193835963207" '
-        'accountLo="66765537" cardback="157" rank="25">'
+        'accountLo="66765537" cardback="157" rank="25" name="Maievs#11864">'
     )
 
     assert player_2_line.strip() == (
         '<Player id="3" playerID="2" accountHi="144115193835963207" accountLo="28673911" '
-        'cardback="157" rank="24">'
+        'cardback="157" rank="24" name="Frost#11839">'
     )

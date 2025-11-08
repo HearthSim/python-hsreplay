@@ -120,7 +120,7 @@ def write_player(
         player_element._attributes["rank"] = str(this_player_meta["rank"])
 
     if player_manager:
-        if not hasattr(player_element, "name"):
+        if not getattr(player_element, "name", None):
             player_record = player_manager.get_player_by_entity_id(entity_id)
             player_element._attributes["name"] = player_record.name
 
